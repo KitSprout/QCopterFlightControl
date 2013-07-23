@@ -15,12 +15,7 @@ https://github.com/Hom19910422/QCopterFlightControl/wiki
 ．12個PWM通道　連接電調、LED、PPM
 ．1個USART接口　可擴充GPS模組、藍芽模組、電腦傳輸RS232
 
-Program
-
-．QcopterFC FlightControl
-．QcopterFC FlightRecorder
-
-TEST
+Test
 ．QCopterFC LED
 ．QCopterFC USART
 ．QCopterFC PWM
@@ -29,3 +24,7 @@ TEST
 ．QCopterFC IMU
 ．QCopterFC NRF
 ．QCopterFC SDIO
+
+Program
+．QcopterFC FlightControl
+．QcopterFC FlightRecorder
