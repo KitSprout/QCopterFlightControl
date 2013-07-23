@@ -1,7 +1,7 @@
 QCopterFlightControl
 ====================
 
-***Wiki
+Wiki
 https://github.com/Hom19910422/QCopterFlightControl/wiki
 
 飛控板　FlightControl
