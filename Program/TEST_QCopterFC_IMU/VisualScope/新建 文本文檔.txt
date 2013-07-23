@@ -1,0 +1,236 @@
+the communication adapt 2 communication protocol,one is check sum,the other is CRC16.
+
+if check sum is used,when RUN button is pressed,17 bytes is sent from COM?,
+
+//-------------------------------------------------------------------------------------------
+the data format is like this
+Ch1_Addr_LL，Ch1_Addr_LH，
+Ch1_Addr_HL，Ch1_Addr_HH，
+Ch2_Addr_LL，Ch2_Addr_LH，
+Ch2_Addr_HL，Ch2_Addr_HH，
+Ch3_Addr_LL，Ch3_Addr_LH，
+Ch3_Addr_HL，Ch3_Addr_HH，
+Ch4_Addr_LL，Ch4_Addr_LH，
+Ch4_Addr_HL，Ch4_Addr_HH，
+ChkSum
+//-------------------------------------------------------------------------------------------
+The data from MPU to computer should be like this:
+//-------------------------------------------------------------------------------------------
+Ch1Data_L，Ch1Data_H，
+Ch2Data_L，Ch2Data_H，
+Ch3Data_L，Ch3Data_H，
+Ch4Data_L，Ch4Data_H，
+ChkSum
+
+//-------------------------------------------------------------------------------------------
+if CRC16 verification is used ,when RUN button is pressed,18 bytes is sent from COM?,
+//-------------------------------------------------------------------------------------------
+The data from computer to MPU is like this:
+Ch1_Addr_LL，Ch1_Addr_LH，
+Ch1_Addr_HL，Ch1_Addr_HH，
+Ch2_Addr_LL，Ch2_Addr_LH，
+Ch2_Addr_HL，Ch2_Addr_HH，
+Ch3_Addr_LL，Ch3_Addr_LH，
+Ch3_Addr_HL，Ch3_Addr_HH，
+Ch4_Addr_LL，Ch4_Addr_LH，
+Ch4_Addr_HL，Ch4_Addr_HH，
+CRC16_L，CRC16_H
+//-------------------------------------------------------------------------------------------
+The data from computer to MPU should be like this:
+Ch1_Addr_LL，Ch1_Addr_LH，
+Ch1_Addr_HL，Ch1_Addr_HH，
+Ch2_Addr_LL，Ch2_Addr_LH，
+Ch2_Addr_HL，Ch2_Addr_HH，
+Ch3_Addr_LL，Ch3_Addr_LH，
+Ch3_Addr_HL，Ch3_Addr_HH，
+Ch4_Addr_LL，Ch4_Addr_LH，
+Ch4_Addr_HL，Ch4_Addr_HH，
+CRC16_L，CRC16_H
+
+//-------------------------------------------------------------------------------------------
+//The following is the function of CRC16,please refer
+//-------------------------------------------------------------------------------------------
+unsigned short CRC_CHECK(unsigned char *Buf, unsigned char CRC_CNT)
+{
+    unsigned short CRC_Temp;
+    unsigned char i,j;
+    CRC_Temp = 0xffff;
+
+    for (i=0;i<CRC_CNT; i++){      
+        CRC_Temp ^= Buf[i];
+        for (j=0;j<8;j++) {
+            if (CRC_Temp & 0x01)
+                CRC_Temp = (CRC_Temp >>1 ) ^ 0xa001;
+            else
+                CRC_Temp = CRC_Temp >> 1;
+        }
+    }
+    return(CRC_Temp);
+}
+//-------------------------------------------------------------------------------------------
+//The above is the function of CRC16,please refer     把上段代碼加入就可以 了
+//-------------------------------------------------------------------------------------------
+
+
+
+//-------------------------------------------------------------------------------------------
+//the following is MCU code for Check sum,please refer.
+//-------------------------------------------------------------------------------------------
+#define RxCountMax 17
+unsigned short RxBuf[RxCountMax];
+unsigned short TxBuf[10];
+unsigned short RxCnt;
+unsigned short TxCnt;
+unsigned short Rx50msCnt;
+unsigned long pAddr1,pAddr2,pAddr3,pAddr4;
+
+//Receive interrupt routine
+void voRxIsr(void)	
+{
+	unsigned short i,CRC_RX,CRC_Tmp;
+	RxBuf[RxCnt] = Rx.data;				//acquire data
+	RxCnt++;
+        
+	if(RxCnt == RxCountMax) {
+		CRC_Tmp = 0;
+		for(i = 0; i < 16; i++)  CRC_Tmp += RxBuf[i]; //Check Sum calculation	
+		CRC_RX = RxBuf[16];
+		if(CRC_Tmp == CRC_RX){
+			pAddr1 = ((ULONG)(RxBuf[0x3])<<24)|((ULONG)(RxBuf[0x2])<<16)|((ULONG)(RxBuf[0x1])<<8)|RxBuf[0x0];
+			pAddr2 = ((ULONG)(RxBuf[0x7])<<24)|((ULONG)(RxBuf[0x6])<<16)|((ULONG)(RxBuf[0x5])<<8)|RxBuf[0x4];
+			pAddr3 = ((ULONG)(RxBuf[0xB])<<24)|((ULONG)(RxBuf[0xA])<<16)|((ULONG)(RxBuf[0x9])<<8)|RxBuf[0x8];
+			pAddr4 = ((ULONG)(RxBuf[0xF])<<24)|((ULONG)(RxBuf[0xE])<<16)|((ULONG)(RxBuf[0xD])<<8)|RxBuf[0xC];		
+		}
+		RxCnt = 0;  
+	}
+	Rx50msCnt = 0;
+        //to add--Clear Receive Data Register Fll flag;
+}
+//-------------------------------------------------------------------------------------------
+//Transfer interrupt routine
+void voTxIsr(void)
+{
+     if(TxCnt <= 8){
+		Tx.Register = TxBuf[TxCnt];
+		//Clear Tx interrupt flag
+		TxCnt++;
+		if(TxCnt >= 9){
+			//send interrupt disable		
+		}
+     }
+}
+//-------------------------------------------------------------------------------------------
+//Monitor routine Execute every T Period time
+void voMonitor(void)
+{
+	unsigned short ChxData[4],CRC_Tmp,i;
+	Rx50msCnt++;
+	if(Rx50msCnt >=500) {
+		RxCnt = 0;
+		Rx50msCnt = 0;
+	}
+	
+	ChxData[0].sw = *(unsigned short *)pAddr1;
+	ChxData[1].sw = *(unsigned short *)pAddr2;
+	ChxData[2].sw = *(unsigned short *)pAddr3;		
+	ChxData[3].sw = *(unsigned short *)pAddr4;
+	
+	for(i=0;i<4;i++){				
+		TxBuf[2*i+0] = ChxData[i].sb.low; 	// ch[i] low byte
+		TxBuf[2*i+1] = ChxData[i].sb.hi;  	// ch[i] hi byte
+	}
+	
+	CRC_Tmp = 0;
+	for(i = 0; i < 8; i++) CRC_Tmp += TxBuf[i];
+	TxBuf[8] = CRC_Tmp ;
+
+	//send first data
+	Tx.Register = TxBuf[0]; 			//send begin
+	
+	//Enalbe TXD interrupt
+	TxCnt = 1;
+}
+//-------------------------------------------------------------------------------------------
+//The above is MCU code for Check sum,please refer.
+//-------------------------------------------------------------------------------------------
+
+
+
+//-------------------------------------------------------------------------------------------
+//the following is MCU code for CRC16 ,please refer.
+//-------------------------------------------------------------------------------------------
+#define RxCountMax 18
+unsigned short RxBuf[RxCountMax];
+unsigned short TxBuf[10];
+unsigned short RxCnt;
+unsigned short TxCnt;
+unsigned short Rx50msCnt;
+unsigned long pAddr1,pAddr2,pAddr3,pAddr4;
+
+//Receive interrupt routine
+void voRxIsr(void)	
+{
+	unsigned short i,CRC_RX,CRC_Tmp;
+	RxBuf[RxCnt] = Rx.data;				//acquire data
+	RxCnt++;
+        
+	if(RxCnt == RxCountMax) {
+		CRC_Tmp =  CRC_CHECK(RxBuf,16);  	//CRC Calculation
+		CRC_RX = ((unsigned short)RxBuf[RxCountMax-1]<<8) + RxBuf[RxCountMax-2];
+		if(CRC_Tmp == CRC_RX){
+			pAddr1 = ((ULONG)(RxBuf[0x3])<<24)|((ULONG)(RxBuf[0x2])<<16)|((ULONG)(RxBuf[0x1])<<8)|RxBuf[0x0];
+			pAddr2 = ((ULONG)(RxBuf[0x7])<<24)|((ULONG)(RxBuf[0x6])<<16)|((ULONG)(RxBuf[0x5])<<8)|RxBuf[0x4];
+			pAddr3 = ((ULONG)(RxBuf[0xB])<<24)|((ULONG)(RxBuf[0xA])<<16)|((ULONG)(RxBuf[0x9])<<8)|RxBuf[0x8];
+			pAddr4 = ((ULONG)(RxBuf[0xF])<<24)|((ULONG)(RxBuf[0xE])<<16)|((ULONG)(RxBuf[0xD])<<8)|RxBuf[0xC];		
+		}
+		RxCnt = 0;  
+	}
+	Rx50msCnt = 0;
+        //to add--Clear Receive Data Register Fll flag;
+}
+//-------------------------------------------------------------------------------------------
+//Transfer interrupt routine
+void voTxIsr(void)
+{
+     if(TxCnt <= 9){
+		Tx.Register = TxBuf[TxCnt];
+		//Clear Tx interrupt flag
+		TxCnt++;
+		if(TxCnt >= 10){
+			//send interrupt disable		
+		}
+     }
+}
+//-------------------------------------------------------------------------------------------
+//Monitor routine Execute every T Period time
+void voMonitor(void)
+{
+	unsigned short ChxData[4],CRC_Tmp,i;
+	Rx50msCnt++;
+	if(Rx50msCnt >=500) {
+		RxCnt = 0;
+		Rx50msCnt = 0;
+	}
+	
+	ChxData[0].sw = *(unsigned short *)pAddr1;
+	ChxData[1].sw = *(unsigned short *)pAddr2;
+	ChxData[2].sw = *(unsigned short *)pAddr3;		
+	ChxData[3].sw = *(unsigned short *)pAddr4;
+	
+	for(i=0;i<4;i++){				
+		TxBuf[2*i+0] = ChxData[i].sb.low; 	// ch[i] low byte
+		TxBuf[2*i+1] = ChxData[i].sb.hi;  	// ch[i] hi byte
+	}
+	
+	CRC_Tmp = CRC_CHECK(TxBuf,8);
+	TxBuf[8] = CRC_Tmp&0xff;
+	TxBuf[9] = CRC_Tmp>>8;
+	
+	//send first data
+	Tx.Register = TxBuf[0]; 			//send begin
+	//Enalbe TXD interrupt
+	TxCnt = 1;
+}
+//-------------------------------------------------------------------------------------------
+//above is MCU code for CRC16 ,please refer.
+//-------------------------------------------------------------------------------------------
