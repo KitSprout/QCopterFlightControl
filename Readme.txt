@@ -25,7 +25,7 @@ TEST
 ．QCopterFC USART
 ．QCopterFC PWM
 ．QCopterFC ADC
-．QCopterFC CamSPI
+．QCopterFC CamSPI-Master
 ．QCopterFC IMU
 ．QCopterFC NRF
 ．QCopterFC SDIO
