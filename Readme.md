@@ -1,6 +1,6 @@
 ﻿QCopter Flight Control
 ========
-* File Name   : README.md
+* File Name   : Readme.md
 * Author      : Hom19910422
 * Version     : v1.1
 * Date        : 2013/08/01
@@ -23,18 +23,18 @@ Hardware
 ========
 * Use Altium Designer 13
 
+Program
+========
+* QcopterFC FlightControl Pre-Alpha
+* QcopterFC FlightRecorder Pre-Alpha
+
 Test
 ========
 * QCopterFC LED
 * QCopterFC USART
-* QCopterFC PWM
+* QCopterFC PWM (( TIM8目前無法輸出PWM
 * QCopterFC ADC
 * QCopterFC CamSPI-Master
 * QCopterFC IMU
 * QCopterFC NRF
 * QCopterFC SDIO
-
-Program
-========
-* QcopterFC FlightControl
-* QcopterFC FlightRecorder
