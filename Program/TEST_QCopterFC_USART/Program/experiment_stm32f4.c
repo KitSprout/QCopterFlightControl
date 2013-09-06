@@ -27,14 +27,15 @@ int main( void )
     LED_G = ~LED_G;
 
     i++;
-    if(i==255)  i = 0;
 
     NumToChar(Type_D, 3, TrData, i);
-    RS232_Print(USART3, (u8*)"i = ");
-    RS232_Print(USART3, TrData);
-    RS232_Print(USART3, (u8*)"\r\n");
+    RS232_SendStr(USART3, (u8*)"i = ");
+    RS232_SendNum(USART3, Type_D, 3, i);
+    RS232_SendStr(USART3, (u8*)"\r\n");
 
-    Delay_100ms(2);
+    if(i==255)  i = 0;
+
+    Delay_100ms(1);
 	}
 }
 /*=====================================================================================================*/
