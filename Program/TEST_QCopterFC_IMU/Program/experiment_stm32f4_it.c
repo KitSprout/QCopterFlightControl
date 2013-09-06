@@ -5,27 +5,26 @@
 #include "module_sensor.h"
 #include "module_mpu6050.h"
 #include "module_hmc5883.h"
-#include "module_ms5611.h"
 /*=====================================================================================================*/
 /*=====================================================================================================*/
 void SysTick_Handler( void )
 {
-	u8 IMU_Buf[20] = {0};
+  u8 IMU_Buf[20] = {0};
 
-	/* 400Hz */
+  /* 400Hz */
   I2C_DMA_ReadReg(MPU6050_I2C_ADDR, MPU6050_ACCEL_XOUT_H, IMU_Buf,   14);
   I2C_DMA_ReadReg(HMC5883_I2C_ADDR, HMC5883_REG_DATA_X_H, IMU_Buf+14, 6);
 
-	Acc.X = (s16)((IMU_Buf[0]  << 8) | IMU_Buf[1]);
-	Acc.Y = (s16)((IMU_Buf[2]  << 8) | IMU_Buf[3]);
-	Acc.Z = (s16)((IMU_Buf[4]  << 8) | IMU_Buf[5]);
+  Acc.X = (s16)((IMU_Buf[0]  << 8) | IMU_Buf[1]);
+  Acc.Y = (s16)((IMU_Buf[2]  << 8) | IMU_Buf[3]);
+  Acc.Z = (s16)((IMU_Buf[4]  << 8) | IMU_Buf[5]);
 //	Tmp   = (s16)((IMU_Buf[6]  << 8) | IMU_Buf[7]);
-	Gyr.X = (s16)((IMU_Buf[8]  << 8) | IMU_Buf[9]);
-	Gyr.Y = (s16)((IMU_Buf[10] << 8) | IMU_Buf[11]);
-	Gyr.Z = (s16)((IMU_Buf[12] << 8) | IMU_Buf[13]);
-	Mag.X = (s16)((IMU_Buf[14] << 8) | IMU_Buf[15]);
-	Mag.Y = (s16)((IMU_Buf[16] << 8) | IMU_Buf[17]);
-	Mag.Z = (s16)((IMU_Buf[18] << 8) | IMU_Buf[19]);
+  Gyr.X = (s16)((IMU_Buf[8]  << 8) | IMU_Buf[9]);
+  Gyr.Y = (s16)((IMU_Buf[10] << 8) | IMU_Buf[11]);
+  Gyr.Z = (s16)((IMU_Buf[12] << 8) | IMU_Buf[13]);
+  Mag.X = (s16)((IMU_Buf[14] << 8) | IMU_Buf[15]);
+  Mag.Y = (s16)((IMU_Buf[16] << 8) | IMU_Buf[17]);
+  Mag.Z = (s16)((IMU_Buf[18] << 8) | IMU_Buf[19]);
 }
 /*=====================================================================================================*/
 /*=====================================================================================================*/

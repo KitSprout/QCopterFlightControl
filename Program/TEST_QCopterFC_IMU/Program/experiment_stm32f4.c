@@ -52,21 +52,21 @@ int main( void )
 {
   u8 USART_BUF[24] = {0};
 
-	SystemInit();
-	GPIO_Config();
-	RS232_Config();
- 	I2C_Config();
+  SystemInit();
+  GPIO_Config();
+  RS232_Config();
+  I2C_Config();
 
   MPU6050_Init();
   HMC5883_Init();
 //  MS5611_Init(&Baro);
 
- 	if(SysTick_Config(420000)) {		// 168MHz / 420000 = 400Hz = 2.5ms
-		while(1);
-	}
+  if(SysTick_Config(420000)) {		// 168MHz / 420000 = 400Hz = 2.5ms
+    while(1);
+  }
 
-	while(1) {
-		LED_G = ~LED_G;
+  while(1) {
+    LED_G = ~LED_G;
 
     USART_BUF[0]  = (u8)(Acc.X);
     USART_BUF[1]  = (u8)(Acc.X >> 8);
@@ -87,11 +87,11 @@ int main( void )
     USART_BUF[16] = (u8)(Mag.Z);
     USART_BUF[17] = (u8)(Mag.Z >> 8);
 
-		if(KEY == 0)
-			RS232_VisualScope(USART3, USART_BUF, 8);
-		else
-			RS232_VisualScope(USART3, USART_BUF+10, 8);
-	}
+    if(KEY == 0)
+      RS232_VisualScope(USART3, USART_BUF, 8);
+    else
+      RS232_VisualScope(USART3, USART_BUF+10, 8);
+  }
 }
 /*=====================================================================================================*/
 /*=====================================================================================================*/
