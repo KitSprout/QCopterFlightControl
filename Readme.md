@@ -2,8 +2,8 @@
 ========
 * File Name   : Readme.md
 * Author      : Hom19910422
-* Version     : v1.1 (2.0 Design)
-* Update      : 2013/09/13
+* Version     : v2.0
+* Update      : 2013/09/14
 * Description : QCopterFlightControl Information
 * Wiki        : https://github.com/Hom19910422/QCopterFlightControl/wiki
 
