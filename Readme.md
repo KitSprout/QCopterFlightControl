@@ -3,13 +3,13 @@
 * File Name   : Readme.md
 * Author      : Hom19910422
 * Version     : v2.0
-* Update      : 2013/09/14
+* Update      : 2013/09/20
 * Description : QCopterFlightControl Information
 * Wiki        : https://github.com/Hom19910422/QCopterFlightControl/wiki
 
 飛控板　FlightControl
 ========
-* 控制器　STM32F405RG 64Pin 168MHz DSP FPU
+* 控制器　STM32F405R 64Pin 168MHz DSP FPU
 * 感測器　IMU_10-DOF (MPU-9150 + MS5611)
 * 無線傳輸　nRF24L01P + PA + LNA
 * 儲存紀錄　SD卡，使用SDIO操作
