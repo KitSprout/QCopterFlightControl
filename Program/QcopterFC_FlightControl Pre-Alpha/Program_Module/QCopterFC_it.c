@@ -212,7 +212,7 @@ SensorMode = Mode_Algorithm;
       Pitch = (s16)PID_AHRS_Cal(&PID_Pitch, AngE.Pitch, Gyr.TrueY);
       Yaw   = (s16)PID_AHRS_Cal(&PID_Yaw,   AngE.Yaw,   Gyr.TrueZ);
 
-//      Yaw = (s16)(PID_Yaw.Kd*Gyr.TrueZ);
+     Yaw = (s16)(PID_Yaw.Kd*Gyr.TrueZ);
 
 //      Thr = (s16)Exp_Thr;
 

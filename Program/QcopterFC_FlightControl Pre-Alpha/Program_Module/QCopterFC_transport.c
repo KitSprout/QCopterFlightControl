@@ -100,12 +100,12 @@ void Transport_Send( u8* SendBuf )
   SendBuf[17] = (u8)(Mag.Y >> 8);
   SendBuf[18] = (u8)(Mag.Z);
   SendBuf[19] = (u8)(Mag.Z >> 8);
- SendBuf[20] = (u8)(Ang.X);
- SendBuf[21] = (u8)(Ang.X >> 8);
- SendBuf[22] = (u8)(Ang.Y);
- SendBuf[23] = (u8)(Ang.Y >> 8);
- SendBuf[24] = (u8)(Ang.Z);
- SendBuf[25] = (u8)(Ang.Z >> 8);
+  SendBuf[20] = (u8)(Ang.X);
+  SendBuf[21] = (u8)(Ang.X >> 8);
+  SendBuf[22] = (u8)(Ang.Y);
+  SendBuf[23] = (u8)(Ang.Y >> 8);
+  SendBuf[24] = (u8)(Ang.Z);
+  SendBuf[25] = (u8)(Ang.Z >> 8);
   SendBuf[30] = (u8)(Time_Sec);
   SendBuf[31] = (u8)(Time_Min);
 }
