@@ -5,6 +5,7 @@
 #include "QCopterFC_transport.h"
 #include "module_sensor.h"
 #include "module_nrf24l01.h"
+#include "algorithm_quaternion.h"
 /*=====================================================================================================*/
 /*=====================================================================================================*/
 vu16 RecvData[KeyNums] = {0};
@@ -62,18 +63,18 @@ void Transport_Recv( u8* RecvBuf )
 /*=====================================================================================================*/
 void Transport_Send( u8* SendBuf )
 {
-//  Acc.X = (s16)(Acc.TrueX*1000);  // 1 mg/LSB
-//  Acc.Y = (s16)(Acc.TrueY*1000);  // 1 mg/LSB
-//  Acc.Z = (s16)(Acc.TrueZ*1000);  // 1 mg/LSB
-//  Gyr.X = (s16)(Gyr.TrueX*100);   // 10 mdps/LSB
-//  Gyr.Y = (s16)(Gyr.TrueY*100);   // 10 mdps/LSB
-//  Gyr.Z = (s16)(Gyr.TrueZ*100);   // 10 mdps/LSB
-//  Mag.X = (s16)(Mag.TrueX*10000); // 100 ugauss/LSB
-//  Mag.Y = (s16)(Mag.TrueY*10000); // 100 ugauss/LSB
-//  Mag.Z = (s16)(Mag.TrueZ*10000); // 100 ugauss/LSB
-//  Ang.X = (s16)(AngE.Pitch*100);  // 10 mdeg/LSB
-//  Ang.Y = (s16)(AngE.Roll*100);   // 10 mdeg/LSB
-//  Ang.Z = (s16)(AngE.Yaw*10);     // 100 mdeg/LSB
+ Acc.X = (s16)(Acc.TrueX*1000);  // 1 mg/LSB
+ Acc.Y = (s16)(Acc.TrueY*1000);  // 1 mg/LSB
+ Acc.Z = (s16)(Acc.TrueZ*1000);  // 1 mg/LSB
+ Gyr.X = (s16)(Gyr.TrueX*100);   // 10 mdps/LSB
+ Gyr.Y = (s16)(Gyr.TrueY*100);   // 10 mdps/LSB
+ Gyr.Z = (s16)(Gyr.TrueZ*100);   // 10 mdps/LSB
+ Mag.X = (s16)(Mag.TrueX*10000); // 100 ugauss/LSB
+ Mag.Y = (s16)(Mag.TrueY*10000); // 100 ugauss/LSB
+ Mag.Z = (s16)(Mag.TrueZ*10000); // 100 ugauss/LSB
+ Ang.X = (s16)(AngE.Pitch*100);  // 10 mdeg/LSB
+ Ang.Y = (s16)(AngE.Roll*100);   // 10 mdeg/LSB
+ Ang.Z = (s16)(AngE.Yaw*10);     // 100 mdeg/LSB
 
 //  Mag.X = (s16)(Mag.X*100); // 100 ugauss/LSB
 //  Mag.Y = (s16)(Mag.Y*100); // 100 ugauss/LSB
@@ -99,12 +100,12 @@ void Transport_Send( u8* SendBuf )
   SendBuf[17] = (u8)(Mag.Y >> 8);
   SendBuf[18] = (u8)(Mag.Z);
   SendBuf[19] = (u8)(Mag.Z >> 8);
-//  SendBuf[20] = (u8)(Ang.X);
-//  SendBuf[21] = (u8)(Ang.X >> 8);
-//  SendBuf[22] = (u8)(Ang.Y);
-//  SendBuf[23] = (u8)(Ang.Y >> 8);
-//  SendBuf[24] = (u8)(Ang.Z);
-//  SendBuf[25] = (u8)(Ang.Z >> 8);
+ SendBuf[20] = (u8)(Ang.X);
+ SendBuf[21] = (u8)(Ang.X >> 8);
+ SendBuf[22] = (u8)(Ang.Y);
+ SendBuf[23] = (u8)(Ang.Y >> 8);
+ SendBuf[24] = (u8)(Ang.Z);
+ SendBuf[25] = (u8)(Ang.Z >> 8);
   SendBuf[30] = (u8)(Time_Sec);
   SendBuf[31] = (u8)(Time_Min);
 }

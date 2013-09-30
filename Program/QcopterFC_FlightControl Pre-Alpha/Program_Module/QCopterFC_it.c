@@ -60,7 +60,7 @@ void SysTick_Handler( void )
 
 	/* Read Sensor 400Hz */
   I2C_DMA_ReadReg(MPU6050_I2C_ADDR, MPU6050_ACCEL_XOUT_H, IMU_Buf,   14);
-  I2C_DMA_ReadReg(HMC5883_I2C_ADDR, HMC5883_REG_DATA_X_H, IMU_Buf+14, 6);
+//   I2C_DMA_ReadReg(HMC5883_I2C_ADDR, HMC5883_REG_DATA_X_H, IMU_Buf+14, 6);
 
 	Acc.X = (s16)((IMU_Buf[0]  << 8) | IMU_Buf[1]);
 	Acc.Y = (s16)((IMU_Buf[2]  << 8) | IMU_Buf[3]);
