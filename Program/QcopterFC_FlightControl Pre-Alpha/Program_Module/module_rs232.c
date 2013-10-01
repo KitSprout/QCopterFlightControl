@@ -6,39 +6,39 @@
 /*=====================================================================================================*/
 void RS232_Config( void )
 {
-	GPIO_InitTypeDef GPIO_InitStruct;
-	USART_InitTypeDef USART_InitStruct;
+  GPIO_InitTypeDef GPIO_InitStruct;
+  USART_InitTypeDef USART_InitStruct;
 
   RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB,  ENABLE);
-	RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART3, ENABLE);
+  RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART3, ENABLE);
 
-	GPIO_PinAFConfig(GPIOB, GPIO_PinSource10, GPIO_AF_USART3);
-	GPIO_PinAFConfig(GPIOB, GPIO_PinSource11, GPIO_AF_USART3);
+  GPIO_PinAFConfig(GPIOB, GPIO_PinSource10, GPIO_AF_USART3);
+  GPIO_PinAFConfig(GPIOB, GPIO_PinSource11, GPIO_AF_USART3);
 
- 	/* USART1 Tx PB10 */	/* USART1 Rx PB11 */
-	GPIO_InitStruct.GPIO_Pin = GPIO_Pin_10 | GPIO_Pin_11;
-	GPIO_InitStruct.GPIO_Mode = GPIO_Mode_AF;
-	GPIO_InitStruct.GPIO_OType = GPIO_OType_PP;
-	GPIO_InitStruct.GPIO_PuPd = GPIO_PuPd_UP;
-	GPIO_InitStruct.GPIO_Speed = GPIO_Speed_50MHz;
-	GPIO_Init(GPIOB, &GPIO_InitStruct);
+  /* USART1 Tx PB10 */	/* USART1 Rx PB11 */
+  GPIO_InitStruct.GPIO_Pin = GPIO_Pin_10 | GPIO_Pin_11;
+  GPIO_InitStruct.GPIO_Mode = GPIO_Mode_AF;
+  GPIO_InitStruct.GPIO_OType = GPIO_OType_PP;
+  GPIO_InitStruct.GPIO_PuPd = GPIO_PuPd_UP;
+  GPIO_InitStruct.GPIO_Speed = GPIO_Speed_50MHz;
+  GPIO_Init(GPIOB, &GPIO_InitStruct);
 
-	USART_InitStruct.USART_BaudRate = 9600;
-	USART_InitStruct.USART_WordLength = USART_WordLength_8b;
-	USART_InitStruct.USART_StopBits = USART_StopBits_1;
-	USART_InitStruct.USART_Parity = USART_Parity_No;
-	USART_InitStruct.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
-	USART_InitStruct.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;
-	USART_Init(USART3, &USART_InitStruct);
-	USART_Cmd(USART3, ENABLE);
+  USART_InitStruct.USART_BaudRate = 9600;
+  USART_InitStruct.USART_WordLength = USART_WordLength_8b;
+  USART_InitStruct.USART_StopBits = USART_StopBits_1;
+  USART_InitStruct.USART_Parity = USART_Parity_No;
+  USART_InitStruct.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
+  USART_InitStruct.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;
+  USART_Init(USART3, &USART_InitStruct);
+  USART_Cmd(USART3, ENABLE);
 }
 /*=====================================================================================================*/
 /*=====================================================================================================*
-**¨ç¼Æ : RS232_Print
-**¥\¯à : 
-**¿é¤J : 
-**¿é¥X : 
-**¨Ï¥Î : 
+**å‡½æ•¸ : RS232_Print
+**åŠŸèƒ½ : 
+**è¼¸å…¥ : 
+**è¼¸å‡º : 
+**ä½¿ç”¨ : 
 **=====================================================================================================*/
 /*=====================================================================================================*/
 void RS232_Print( USART_TypeDef* USARTx, u8 *pWord )
@@ -51,11 +51,11 @@ void RS232_Print( USART_TypeDef* USARTx, u8 *pWord )
 }
 /*=====================================================================================================*/
 /*=====================================================================================================*
-**¨ç¼Æ : RS232_VisualScope_CRC16
-**¥\¯à : 
-**¿é¤J : 
-**¿é¥X : 
-**¨Ï¥Î : 
+**å‡½æ•¸ : RS232_VisualScope_CRC16
+**åŠŸèƒ½ : 
+**è¼¸å…¥ : 
+**è¼¸å‡º : 
+**ä½¿ç”¨ : 
 **=====================================================================================================*/
 /*=====================================================================================================*/
 static u16 RS232_VisualScope_CRC16( u8 *Array, u16 Len )
@@ -76,11 +76,11 @@ static u16 RS232_VisualScope_CRC16( u8 *Array, u16 Len )
 }
 /*=====================================================================================================*/
 /*=====================================================================================================*
-**¨ç¼Æ : USART_VisualScope
-**¥\¯à : 
-**¿é¤J : 
-**¿é¥X : 
-**¨Ï¥Î : 
+**å‡½æ•¸ : USART_VisualScope
+**åŠŸèƒ½ : 
+**è¼¸å…¥ : 
+**è¼¸å‡º : 
+**ä½¿ç”¨ : 
 **=====================================================================================================*/
 /*=====================================================================================================*/
 void RS232_VisualScope( USART_TypeDef* USARTx, u8 *pWord, u16 Len )

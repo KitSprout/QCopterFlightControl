@@ -23,10 +23,10 @@
 #define PWM7 TIM8->CCR2
 #define PWM8 TIM2->CCR3
 
-#define PWM_Motor1 TIM3->CCR1   // µL¨ê PWM
-#define PWM_Motor2 TIM3->CCR2	  // µL¨ê PWM
-#define PWM_Motor3 TIM3->CCR3	  // µL¨ê PWM
-#define PWM_Motor4 TIM3->CCR4	  // µL¨ê PWM
+#define PWM_Motor1 TIM3->CCR1   // ç„¡åˆ· PWM
+#define PWM_Motor2 TIM3->CCR2	  // ç„¡åˆ· PWM
+#define PWM_Motor3 TIM3->CCR3	  // ç„¡åˆ· PWM
+#define PWM_Motor4 TIM3->CCR4	  // ç„¡åˆ· PWM
 /*=====================================================================================================*/
 /*=====================================================================================================*/
 void Motor_Config( void );

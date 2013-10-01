@@ -9,11 +9,11 @@ Quaternion NumQ = {1, 0, 0, 0};
 EulerAngle AngE = {0};
 /*=====================================================================================================*/
 /*=====================================================================================================*
-**¨ç¼Æ : Quaternion_ToNumQ
-**¥\¯à : ¤×©Ô¨¤Âà¥|¤¸¼Æ
-**¿é¤J : *pNumQ, *pAngE
-**¿é¥X : None
-**¨Ï¥Î : Quaternion_ToNumQ(&NumQ, &AngE);
+**å‡½æ•¸ : Quaternion_ToNumQ
+**åŠŸèƒ½ : å°¤æ‹‰è§’è½‰å››å…ƒæ•¸
+**è¼¸å…¥ : *pNumQ, *pAngE
+**è¼¸å‡º : None
+**ä½¿ç”¨ : Quaternion_ToNumQ(&NumQ, &AngE);
 **=====================================================================================================*/
 /*=====================================================================================================*/
 void Quaternion_ToNumQ( Quaternion *pNumQ, EulerAngle *pAngE )
@@ -29,81 +29,81 @@ void Quaternion_ToNumQ( Quaternion *pNumQ, EulerAngle *pAngE )
   float sinY = arm_sin_f32(halfY);
   float cosY = arm_cos_f32(halfY);
 
-	pNumQ->q0 = cosY*cosR*cosP + sinY*sinR*sinP;
-	pNumQ->q1 = cosY*cosR*sinP - sinY*sinR*cosP;
-	pNumQ->q2 = cosY*sinR*cosP + sinY*cosR*sinP;
-	pNumQ->q3 = sinY*cosR*cosP - cosY*sinR*sinP;
+  pNumQ->q0 = cosY*cosR*cosP + sinY*sinR*sinP;
+  pNumQ->q1 = cosY*cosR*sinP - sinY*sinR*cosP;
+  pNumQ->q2 = cosY*sinR*cosP + sinY*cosR*sinP;
+  pNumQ->q3 = sinY*cosR*cosP - cosY*sinR*sinP;
 }
 /*=====================================================================================================*/
 /*=====================================================================================================*
-**¨ç¼Æ : Quaternion_ToAngE
-**¥\¯à : ¥|¤¸¼ÆÂà¤×©Ô¨¤
-**¿é¤J : *pNumQ, *pAngE
-**¿é¥X : None
-**¨Ï¥Î : Quaternion_ToAngE(&NumQ, &AngE);
+**å‡½æ•¸ : Quaternion_ToAngE
+**åŠŸèƒ½ : å››å…ƒæ•¸è½‰å°¤æ‹‰è§’
+**è¼¸å…¥ : *pNumQ, *pAngE
+**è¼¸å‡º : None
+**ä½¿ç”¨ : Quaternion_ToAngE(&NumQ, &AngE);
 **=====================================================================================================*/
 /*=====================================================================================================*/
 void Quaternion_ToAngE( Quaternion *pNumQ, EulerAngle *pAngE )
 {
-	float NumQ_T11 = pNumQ->q0*pNumQ->q0 + pNumQ->q1*pNumQ->q1 - pNumQ->q2*pNumQ->q2 - pNumQ->q3*pNumQ->q3;
-	float NumQ_T12 = 2.0f*(pNumQ->q0*pNumQ->q3 + pNumQ->q1*pNumQ->q2);
-	float NumQ_T13 = 2.0f*(pNumQ->q1*pNumQ->q3 - pNumQ->q0*pNumQ->q2);
-	float NumQ_T23 = 2.0f*(pNumQ->q0*pNumQ->q1 + pNumQ->q2*pNumQ->q3);
-	float NumQ_T33 = pNumQ->q0*pNumQ->q0 - pNumQ->q1*pNumQ->q1 - pNumQ->q2*pNumQ->q2 + pNumQ->q3*pNumQ->q3;
+  float NumQ_T11 = pNumQ->q0*pNumQ->q0 + pNumQ->q1*pNumQ->q1 - pNumQ->q2*pNumQ->q2 - pNumQ->q3*pNumQ->q3;
+  float NumQ_T12 = 2.0f*(pNumQ->q0*pNumQ->q3 + pNumQ->q1*pNumQ->q2);
+  float NumQ_T13 = 2.0f*(pNumQ->q1*pNumQ->q3 - pNumQ->q0*pNumQ->q2);
+  float NumQ_T23 = 2.0f*(pNumQ->q0*pNumQ->q1 + pNumQ->q2*pNumQ->q3);
+  float NumQ_T33 = pNumQ->q0*pNumQ->q0 - pNumQ->q1*pNumQ->q1 - pNumQ->q2*pNumQ->q2 + pNumQ->q3*pNumQ->q3;
 
-	pAngE->Pitch = -asinf(NumQ_T13);
-	pAngE->Roll  = atan2f(NumQ_T23, NumQ_T33);
-	pAngE->Yaw   = atan2f(NumQ_T12, NumQ_T11);
+  pAngE->Pitch = -asinf(NumQ_T13);
+  pAngE->Roll  = atan2f(NumQ_T23, NumQ_T33);
+  pAngE->Yaw   = atan2f(NumQ_T12, NumQ_T11);
 }
 /*=====================================================================================================*/
 /*=====================================================================================================*
-**¨ç¼Æ : Quaternion_Multiply
-**¥\¯à : ¥|¤¸¼Æ­¼ªk
-**¿é¤J : NowQ, OldQ
-**¿é¥X : NewQ
-**¨Ï¥Î : NewQ = Quaternion_Multiply(NowQ, OldQ);
+**å‡½æ•¸ : Quaternion_Multiply
+**åŠŸèƒ½ : å››å…ƒæ•¸ä¹˜æ³•
+**è¼¸å…¥ : NowQ, OldQ
+**è¼¸å‡º : NewQ
+**ä½¿ç”¨ : NewQ = Quaternion_Multiply(NowQ, OldQ);
 **=====================================================================================================*/
 /*=====================================================================================================*/
 Quaternion Quaternion_Multiply( Quaternion NowQ, Quaternion OldQ )
 {
-	Quaternion NewQ;
+  Quaternion NewQ;
 
-	NewQ.q0 = NowQ.q0*OldQ.q0 - NowQ.q1*OldQ.q1 - NowQ.q2*OldQ.q2 - NowQ.q3*OldQ.q3;
-	NewQ.q1 = NowQ.q0*OldQ.q1 + NowQ.q1*OldQ.q0 + NowQ.q2*OldQ.q3 - NowQ.q3*OldQ.q2;
-	NewQ.q2 = NowQ.q0*OldQ.q2 - NowQ.q1*OldQ.q3 + NowQ.q2*OldQ.q0 + NowQ.q3*OldQ.q1;
-	NewQ.q3 = NowQ.q0*OldQ.q3 + NowQ.q1*OldQ.q2 - NowQ.q2*OldQ.q1 + NowQ.q3*OldQ.q0;
+  NewQ.q0 = NowQ.q0*OldQ.q0 - NowQ.q1*OldQ.q1 - NowQ.q2*OldQ.q2 - NowQ.q3*OldQ.q3;
+  NewQ.q1 = NowQ.q0*OldQ.q1 + NowQ.q1*OldQ.q0 + NowQ.q2*OldQ.q3 - NowQ.q3*OldQ.q2;
+  NewQ.q2 = NowQ.q0*OldQ.q2 - NowQ.q1*OldQ.q3 + NowQ.q2*OldQ.q0 + NowQ.q3*OldQ.q1;
+  NewQ.q3 = NowQ.q0*OldQ.q3 + NowQ.q1*OldQ.q2 - NowQ.q2*OldQ.q1 + NowQ.q3*OldQ.q0;
 
-	Quaternion_Normalize(&NewQ);
+  Quaternion_Normalize(&NewQ);
 
-	return NewQ;
+  return NewQ;
 }
 /*=====================================================================================================*/
 /*=====================================================================================================*
-**¨ç¼Æ : Quaternion_Normalize
-**¥\¯à : ¥|¤¸¼ÆÂk¤@¤Æ
-**¿é¤J : *pNumQ
-**¿é¥X : None
-**¨Ï¥Î : Quaternion_Normalize(&NewQ);
+**å‡½æ•¸ : Quaternion_Normalize
+**åŠŸèƒ½ : å››å…ƒæ•¸æ­¸ä¸€åŒ–
+**è¼¸å…¥ : *pNumQ
+**è¼¸å‡º : None
+**ä½¿ç”¨ : Quaternion_Normalize(&NewQ);
 **=====================================================================================================*/
 /*=====================================================================================================*/
 void Quaternion_Normalize( Quaternion *pNumQ )
 {
-	float Normalize = 0.0f;
+  float Normalize = 0.0f;
 
-	Normalize = invSqrtf(squa(pNumQ->q0) + squa(pNumQ->q1) + squa(pNumQ->q2) + squa(pNumQ->q3));
+  Normalize = invSqrtf(squa(pNumQ->q0) + squa(pNumQ->q1) + squa(pNumQ->q2) + squa(pNumQ->q3));
 
-	pNumQ->q0 = pNumQ->q0*Normalize;
-	pNumQ->q1 = pNumQ->q1*Normalize;
-	pNumQ->q2 = pNumQ->q2*Normalize;
-	pNumQ->q3 = pNumQ->q3*Normalize;
+  pNumQ->q0 = pNumQ->q0*Normalize;
+  pNumQ->q1 = pNumQ->q1*Normalize;
+  pNumQ->q2 = pNumQ->q2*Normalize;
+  pNumQ->q3 = pNumQ->q3*Normalize;
 }
 /*=====================================================================================================*/
 /*=====================================================================================================*
-**¨ç¼Æ : Quaternion_RungeKutta
-**¥\¯à : ¤@¶¥Às®æ-®w¶ğªk, §ó·s¥|¤¸¼Æ
-**¿é¤J : *pNumQ, GyrX, GyrY, GyrZ, helfTimes
-**¿é¥X : None
-**¨Ï¥Î : Quaternion_RungeKutta(&NumQ, GyrX, GyrY, GyrZ, helfT);
+**å‡½æ•¸ : Quaternion_RungeKutta
+**åŠŸèƒ½ : ä¸€éšé¾æ ¼-åº«å¡”æ³•, æ›´æ–°å››å…ƒæ•¸
+**è¼¸å…¥ : *pNumQ, GyrX, GyrY, GyrZ, helfTimes
+**è¼¸å‡º : None
+**ä½¿ç”¨ : Quaternion_RungeKutta(&NumQ, GyrX, GyrY, GyrZ, helfT);
 **=====================================================================================================*/
 /*=====================================================================================================*/
 void Quaternion_RungeKutta( Quaternion *pNumQ, float GyrX, float GyrY, float GyrZ, float helfTimes )

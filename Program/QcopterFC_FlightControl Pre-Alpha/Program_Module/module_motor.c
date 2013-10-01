@@ -4,11 +4,11 @@
 #include "module_motor.h"
 /*=====================================================================================================*/
 /*=====================================================================================================*
-**¨ç¼Æ : Motor_Config
-**¥\¯à : ³]©wPWM¿é¥X°T¸¹
-**¿é¤J : None
-**¿é¥X : None
-**¨Ï¥Î : Motor_Config();
+**å‡½æ•¸ : Motor_Config
+**åŠŸèƒ½ : è¨­å®šPWMè¼¸å‡ºè¨Šè™Ÿ
+**è¼¸å…¥ : None
+**è¼¸å‡º : None
+**ä½¿ç”¨ : Motor_Config();
 **=====================================================================================================*/
 /*=====================================================================================================*/
 void Motor_Config( void )
@@ -63,68 +63,68 @@ void Motor_Config( void )
   TIM_DeInit(TIM8);
 
   /************************** PWM Output **************************************/
-  /* ³]©w TIM2 TIM3 TIM4 Time Base */
-  TIM_TimeBaseStruct.TIM_Period = (u16)(2500-1);              // ¶g´Á = 2.5ms, 400Hz
-  TIM_TimeBaseStruct.TIM_Prescaler = (u16)(84-1);             // °£ÀW84 = 1M ( 1us )
+  /* è¨­å®š TIM2 TIM3 TIM4 Time Base */
+  TIM_TimeBaseStruct.TIM_Period = (u16)(2500-1);              // é€±æœŸ = 2.5ms, 400Hz
+  TIM_TimeBaseStruct.TIM_Prescaler = (u16)(84-1);             // é™¤é »84 = 1M ( 1us )
   TIM_TimeBaseStruct.TIM_ClockDivision = TIM_CKD_DIV1;
-  TIM_TimeBaseStruct.TIM_CounterMode = TIM_CounterMode_Up;		// ¤W¼Æ
+  TIM_TimeBaseStruct.TIM_CounterMode = TIM_CounterMode_Up;		// ä¸Šæ•¸
   TIM_TimeBaseInit(TIM2, &TIM_TimeBaseStruct);
   TIM_TimeBaseInit(TIM3, &TIM_TimeBaseStruct);
   TIM_TimeBaseInit(TIM4, &TIM_TimeBaseStruct);
-  /* ³]©wTIM8 Time Base */
-  TIM_TimeBaseStruct.TIM_Period = (u16)(2500-1);							// ¶g´Á = 2.5ms, 400kHz
-  TIM_TimeBaseStruct.TIM_Prescaler = (u16)(168-1);						// °£ÀW42 = 1M ( 1us )
+  /* è¨­å®šTIM8 Time Base */
+  TIM_TimeBaseStruct.TIM_Period = (u16)(2500-1);							// é€±æœŸ = 2.5ms, 400kHz
+  TIM_TimeBaseStruct.TIM_Prescaler = (u16)(168-1);						// é™¤é »42 = 1M ( 1us )
   TIM_TimeBaseStruct.TIM_ClockDivision = TIM_CKD_DIV1;
-  TIM_TimeBaseStruct.TIM_CounterMode = TIM_CounterMode_Up;		// ¤W¼Æ
+  TIM_TimeBaseStruct.TIM_CounterMode = TIM_CounterMode_Up;		// ä¸Šæ•¸
   TIM_TimeBaseInit(TIM8, &TIM_TimeBaseStruct);
 
-  /* ³]©w TIM2 TIM3 TIM4 TIM8 OC */
-  TIM_OCInitStruct.TIM_OCMode = TIM_OCMode_PWM1;							// °t¸m¬° PWM1 ¼Ò¦¡
-  TIM_OCInitStruct.TIM_OutputState = TIM_OutputState_Enable;	// ­P¯à OC
-  TIM_OCInitStruct.TIM_Pulse = PWM_MOTOR_MAX;									// ³]¸m¸õÅÜ­È
-  TIM_OCInitStruct.TIM_OCPolarity = TIM_OCPolarity_High;			// ·í­p¼Æ­È¤p©ó PWM_MOTOR_MIN ®É¬°°ª¹q¥­
-  TIM_OC1Init(TIM2, &TIM_OCInitStruct);												// ªì©l¤Æ TIM2 OC1
-  TIM_OC2Init(TIM2, &TIM_OCInitStruct);												// ªì©l¤Æ TIM2 OC2
-  TIM_OC3Init(TIM2, &TIM_OCInitStruct);												// ªì©l¤Æ TIM2 OC3
-  TIM_OC4Init(TIM2, &TIM_OCInitStruct);												// ªì©l¤Æ TIM2 OC4
-  TIM_OC1Init(TIM3, &TIM_OCInitStruct);												// ªì©l¤Æ TIM3 OC1
-  TIM_OC2Init(TIM3, &TIM_OCInitStruct);												// ªì©l¤Æ TIM3 OC2
-  TIM_OC3Init(TIM3, &TIM_OCInitStruct);												// ªì©l¤Æ TIM3 OC3
-  TIM_OC4Init(TIM3, &TIM_OCInitStruct);												// ªì©l¤Æ TIM3 OC4
-  TIM_OC1Init(TIM4, &TIM_OCInitStruct);												// ªì©l¤Æ TIM4 OC1
-  TIM_OC2Init(TIM4, &TIM_OCInitStruct);												// ªì©l¤Æ TIM4 OC2
-  TIM_OC1Init(TIM8, &TIM_OCInitStruct);												// ªì©l¤Æ TIM8 OC1
-  TIM_OC2Init(TIM8, &TIM_OCInitStruct);												// ªì©l¤Æ TIM8 OC2
-  TIM_OC1PreloadConfig(TIM2, TIM_OCPreload_Enable);						// ­P¯à TIM2 OC1 ¹w¸Ë¸ü
-  TIM_OC2PreloadConfig(TIM2, TIM_OCPreload_Enable);						// ­P¯à TIM2 OC2 ¹w¸Ë¸ü
-  TIM_OC3PreloadConfig(TIM2, TIM_OCPreload_Enable);						// ­P¯à TIM2 OC3 ¹w¸Ë¸ü
-  TIM_OC4PreloadConfig(TIM2, TIM_OCPreload_Enable);						// ­P¯à TIM2 OC4 ¹w¸Ë¸ü
-  TIM_OC1PreloadConfig(TIM3, TIM_OCPreload_Enable);						// ­P¯à TIM3 OC1 ¹w¸Ë¸ü
-  TIM_OC2PreloadConfig(TIM3, TIM_OCPreload_Enable);						// ­P¯à TIM3 OC2 ¹w¸Ë¸ü
-  TIM_OC3PreloadConfig(TIM3, TIM_OCPreload_Enable);						// ­P¯à TIM3 OC3 ¹w¸Ë¸ü
-  TIM_OC4PreloadConfig(TIM3, TIM_OCPreload_Enable);						// ­P¯à TIM3 OC4 ¹w¸Ë¸ü
-  TIM_OC1PreloadConfig(TIM4, TIM_OCPreload_Enable);						// ­P¯à TIM4 OC1 ¹w¸Ë¸ü
-  TIM_OC2PreloadConfig(TIM4, TIM_OCPreload_Enable);						// ­P¯à TIM4 OC2 ¹w¸Ë¸ü
-  TIM_OC1PreloadConfig(TIM8, TIM_OCPreload_Enable);						// ­P¯à TIM8 OC1 ¹w¸Ë¸ü
-  TIM_OC2PreloadConfig(TIM8, TIM_OCPreload_Enable);						// ­P¯à TIM8 OC2 ¹w¸Ë¸ü
+  /* è¨­å®š TIM2 TIM3 TIM4 TIM8 OC */
+  TIM_OCInitStruct.TIM_OCMode = TIM_OCMode_PWM1;							// é…ç½®ç‚º PWM1 æ¨¡å¼
+  TIM_OCInitStruct.TIM_OutputState = TIM_OutputState_Enable;	// è‡´èƒ½ OC
+  TIM_OCInitStruct.TIM_Pulse = PWM_MOTOR_MAX;									// è¨­ç½®è·³è®Šå€¼
+  TIM_OCInitStruct.TIM_OCPolarity = TIM_OCPolarity_High;			// ç•¶è¨ˆæ•¸å€¼å°æ–¼ PWM_MOTOR_MIN æ™‚ç‚ºé«˜é›»å¹³
+  TIM_OC1Init(TIM2, &TIM_OCInitStruct);												// åˆå§‹åŒ– TIM2 OC1
+  TIM_OC2Init(TIM2, &TIM_OCInitStruct);												// åˆå§‹åŒ– TIM2 OC2
+  TIM_OC3Init(TIM2, &TIM_OCInitStruct);												// åˆå§‹åŒ– TIM2 OC3
+  TIM_OC4Init(TIM2, &TIM_OCInitStruct);												// åˆå§‹åŒ– TIM2 OC4
+  TIM_OC1Init(TIM3, &TIM_OCInitStruct);												// åˆå§‹åŒ– TIM3 OC1
+  TIM_OC2Init(TIM3, &TIM_OCInitStruct);												// åˆå§‹åŒ– TIM3 OC2
+  TIM_OC3Init(TIM3, &TIM_OCInitStruct);												// åˆå§‹åŒ– TIM3 OC3
+  TIM_OC4Init(TIM3, &TIM_OCInitStruct);												// åˆå§‹åŒ– TIM3 OC4
+  TIM_OC1Init(TIM4, &TIM_OCInitStruct);												// åˆå§‹åŒ– TIM4 OC1
+  TIM_OC2Init(TIM4, &TIM_OCInitStruct);												// åˆå§‹åŒ– TIM4 OC2
+  TIM_OC1Init(TIM8, &TIM_OCInitStruct);												// åˆå§‹åŒ– TIM8 OC1
+  TIM_OC2Init(TIM8, &TIM_OCInitStruct);												// åˆå§‹åŒ– TIM8 OC2
+  TIM_OC1PreloadConfig(TIM2, TIM_OCPreload_Enable);						// è‡´èƒ½ TIM2 OC1 é è£è¼‰
+  TIM_OC2PreloadConfig(TIM2, TIM_OCPreload_Enable);						// è‡´èƒ½ TIM2 OC2 é è£è¼‰
+  TIM_OC3PreloadConfig(TIM2, TIM_OCPreload_Enable);						// è‡´èƒ½ TIM2 OC3 é è£è¼‰
+  TIM_OC4PreloadConfig(TIM2, TIM_OCPreload_Enable);						// è‡´èƒ½ TIM2 OC4 é è£è¼‰
+  TIM_OC1PreloadConfig(TIM3, TIM_OCPreload_Enable);						// è‡´èƒ½ TIM3 OC1 é è£è¼‰
+  TIM_OC2PreloadConfig(TIM3, TIM_OCPreload_Enable);						// è‡´èƒ½ TIM3 OC2 é è£è¼‰
+  TIM_OC3PreloadConfig(TIM3, TIM_OCPreload_Enable);						// è‡´èƒ½ TIM3 OC3 é è£è¼‰
+  TIM_OC4PreloadConfig(TIM3, TIM_OCPreload_Enable);						// è‡´èƒ½ TIM3 OC4 é è£è¼‰
+  TIM_OC1PreloadConfig(TIM4, TIM_OCPreload_Enable);						// è‡´èƒ½ TIM4 OC1 é è£è¼‰
+  TIM_OC2PreloadConfig(TIM4, TIM_OCPreload_Enable);						// è‡´èƒ½ TIM4 OC2 é è£è¼‰
+  TIM_OC1PreloadConfig(TIM8, TIM_OCPreload_Enable);						// è‡´èƒ½ TIM8 OC1 é è£è¼‰
+  TIM_OC2PreloadConfig(TIM8, TIM_OCPreload_Enable);						// è‡´èƒ½ TIM8 OC2 é è£è¼‰
 
-  /* ±Ò°Ê */
-  TIM_ARRPreloadConfig(TIM2, ENABLE);													// ­P¯à TIM2 ­«¸ü±H¦s¾¹ARR
-  TIM_ARRPreloadConfig(TIM3, ENABLE);													// ­P¯à TIM3 ­«¸ü±H¦s¾¹ARR
-  TIM_ARRPreloadConfig(TIM4, ENABLE);													// ­P¯à TIM4 ­«¸ü±H¦s¾¹ARR
-  TIM_ARRPreloadConfig(TIM8, ENABLE);													// ­P¯à TIM8 ­«¸ü±H¦s¾¹ARR
-  TIM_Cmd(TIM2, ENABLE);																			// ­P¯à TIM2
-  TIM_Cmd(TIM3, ENABLE);																			// ­P¯à TIM3
-  TIM_Cmd(TIM4, ENABLE);																			// ­P¯à TIM4
-  TIM_Cmd(TIM8, ENABLE);																			// ­P¯à TIM8
+  /* å•Ÿå‹• */
+  TIM_ARRPreloadConfig(TIM2, ENABLE);													// è‡´èƒ½ TIM2 é‡è¼‰å¯„å­˜å™¨ARR
+  TIM_ARRPreloadConfig(TIM3, ENABLE);													// è‡´èƒ½ TIM3 é‡è¼‰å¯„å­˜å™¨ARR
+  TIM_ARRPreloadConfig(TIM4, ENABLE);													// è‡´èƒ½ TIM4 é‡è¼‰å¯„å­˜å™¨ARR
+  TIM_ARRPreloadConfig(TIM8, ENABLE);													// è‡´èƒ½ TIM8 é‡è¼‰å¯„å­˜å™¨ARR
+  TIM_Cmd(TIM2, ENABLE);																			// è‡´èƒ½ TIM2
+  TIM_Cmd(TIM3, ENABLE);																			// è‡´èƒ½ TIM3
+  TIM_Cmd(TIM4, ENABLE);																			// è‡´èƒ½ TIM4
+  TIM_Cmd(TIM8, ENABLE);																			// è‡´èƒ½ TIM8
 }
 /*=====================================================================================================*/
 /*=====================================================================================================*
-**¨ç¼Æ : Motor_Control
-**¥\¯à : µL¨ê°¨¹F±±¨î
-**¿é¤J : Motor1, Motor2, Motor3, Motor4
-**¿é¥X : None
-**¨Ï¥Î : Motor_Control( Motor1, Motor2, Motor3, Motor4 );
+**å‡½æ•¸ : Motor_Control
+**åŠŸèƒ½ : ç„¡åˆ·é¦¬é”æ§åˆ¶
+**è¼¸å…¥ : Motor1, Motor2, Motor3, Motor4
+**è¼¸å‡º : None
+**ä½¿ç”¨ : Motor_Control( Motor1, Motor2, Motor3, Motor4 );
 **=====================================================================================================*/
 /*=====================================================================================================*/
 void Motor_Control( u16 Motor1, u16 Motor2, u16 Motor3, u16 Motor4 )
@@ -145,11 +145,11 @@ void Motor_Control( u16 Motor1, u16 Motor2, u16 Motor3, u16 Motor4 )
 }
 /*=====================================================================================================*/
 /*=====================================================================================================*
-**¨ç¼Æ : Sevro_Control
-**¥\¯à : ¦øªA°¨¹F±±¨î
-**¿é¤J : SevroA, SevroB
-**¿é¥X : None
-**¨Ï¥Î : Sevro_Control( SevroA, SevroB );
+**å‡½æ•¸ : Sevro_Control
+**åŠŸèƒ½ : ä¼ºæœé¦¬é”æ§åˆ¶
+**è¼¸å…¥ : SevroA, SevroB
+**è¼¸å‡º : None
+**ä½¿ç”¨ : Sevro_Control( SevroA, SevroB );
 **=====================================================================================================*/
 /*=====================================================================================================*/
 void Sevro_Control( u16 SevroA, u16 SevroB )

@@ -93,11 +93,11 @@ void SysTick_Handler( void )
       Gyr.Y = (s16)MoveAve_SMA(Gyr.Y, GYR_FIFO[1], MovegAveFIFO_Size);
       Gyr.Z = (s16)MoveAve_SMA(Gyr.Z, GYR_FIFO[2], MovegAveFIFO_Size);
 
-			Correction_Time++;	// µ•´›FIFO∂Ò∫°™≈≠» or ∂Ò∫°¿R∫A∏ÍÆ∆
+			Correction_Time++;	// Á≠âÂæÖFIFOÂ°´ÊªøÁ©∫ÂÄº or Â°´ÊªøÈùúÊÖãË≥áÊñô
 			if(Correction_Time == 400) {
-				Gyr.OffsetX = MPU6050G_X_Theoretic + Gyr.X;	// ®§≥t´◊¨∞ 0dps
-				Gyr.OffsetY = MPU6050G_Y_Theoretic + Gyr.Y;	// ®§≥t´◊¨∞ 0dps
-				Gyr.OffsetZ = MPU6050G_Z_Theoretic + Gyr.Z;	// ®§≥t´◊¨∞ 0dps
+				Gyr.OffsetX = MPU6050G_X_Theoretic + Gyr.X;	// ËßíÈÄüÂ∫¶ÁÇ∫ 0dps
+				Gyr.OffsetY = MPU6050G_Y_Theoretic + Gyr.Y;	// ËßíÈÄüÂ∫¶ÁÇ∫ 0dps
+				Gyr.OffsetZ = MPU6050G_Z_Theoretic + Gyr.Z;	// ËßíÈÄüÂ∫¶ÁÇ∫ 0dps
 
         Acc.TrueX = Acc.X*MPU6050A_4mg;      // g/LSB
         Acc.TrueY = Acc.Y*MPU6050A_4mg;      // g/LSB
@@ -168,7 +168,7 @@ SensorMode = Mode_Algorithm;
           EllipseFitting(Ellipse, MagDataX, MagDataY, 8);
           Mag.OffsetX = Ellipse[1];
           Mag.OffsetY = Ellipse[2];
-          SensorMode = Mode_Algorithm;  // §¡¥´¶‹πB∫‚º“¶°
+          SensorMode = Mode_Algorithm;  // ÂàáÊèõËá≥ÈÅãÁÆóÊ®°Âºè
           break;
       }
 
@@ -177,7 +177,7 @@ SensorMode = Mode_Algorithm;
 /************************** Algorithm Mode ****************************************/
 		case Mode_Algorithm:
 
-      /* •[≈v≤æ∞ •≠ß°™k Weighted Moving Average */
+      /* Âä†Ê¨äÁßªÂãïÂπ≥ÂùáÊ≥ï Weighted Moving Average */
       Acc.X = (s16)MoveAve_WMA(Acc.X, ACC_FIFO[0], 8);
       Acc.Y = (s16)MoveAve_WMA(Acc.Y, ACC_FIFO[1], 8);
       Acc.Z = (s16)MoveAve_WMA(Acc.Z, ACC_FIFO[2], 8);
@@ -201,20 +201,20 @@ SensorMode = Mode_Algorithm;
 
       AHRS_Update();
 
-//      PID_Pitch.ZeroErr = (float)((s16)Exp_Pitch/2.5f);
-//      PID_Roll.ZeroErr  = (float)((s16)Exp_Roll/2.5f);
-//      PID_Yaw.ZeroErr   = 180.0f+(float)((s16)Exp_Yaw);
+      PID_Pitch.ZeroErr = (float)((s16)Exp_Pitch/2.5f);
+      PID_Roll.ZeroErr  = (float)((s16)Exp_Roll/2.5f);
+      PID_Yaw.ZeroErr   = 180.0f+(float)((s16)Exp_Yaw);
 
-//      PID_Yaw.Kp = 0.0f;
-//      PID_Yaw.Ki = 0.0f;
-//      PID_Yaw.Kd = -0.45f;
+      PID_Yaw.Kp = 0.0f;
+      PID_Yaw.Ki = 0.0f;
+      PID_Yaw.Kd = -0.45f;
       Roll  = (s16)PID_AHRS_Cal(&PID_Roll,  AngE.Roll,  Gyr.TrueX);
       Pitch = (s16)PID_AHRS_Cal(&PID_Pitch, AngE.Pitch, Gyr.TrueY);
       Yaw   = (s16)PID_AHRS_Cal(&PID_Yaw,   AngE.Yaw,   Gyr.TrueZ);
 
-//      Yaw = (s16)(PID_Yaw.Kd*Gyr.TrueZ);
+      Yaw = (s16)(PID_Yaw.Kd*Gyr.TrueZ);
 
-//      Thr = (s16)Exp_Thr;
+      Thr = (s16)Exp_Thr;
 
       /* Motor Ctrl */
       Final_M1 = PWM_M1 /*+ Thr + Pitch + Roll + Yaw*/;

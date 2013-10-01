@@ -7,141 +7,141 @@
 #include "algorithm_quaternion.h"
 /*=====================================================================================================*/
 /*=====================================================================================================*
-**¨ç¼Æ : PID_Init
-**¥\¯à : PID Initialize
-**¿é¤J : PID
-**¿é¥X : None
-**¨Ï¥Î : PID_Init(&PID)
+**å‡½æ•¸ : PID_Init
+**åŠŸèƒ½ : PID Initialize
+**è¼¸å…¥ : PID
+**è¼¸å‡º : None
+**ä½¿ç”¨ : PID_Init(&PID)
 **=====================================================================================================*/
 /*=====================================================================================================*/
 void PID_Init( PID_Struct *PID )
 {
-	PID->Kp      = 2.5f;
-	PID->Ki      = 0.0f;
-	PID->Kd      = 0.45f;
+  PID->Kp      = 2.5f;
+  PID->Ki      = 0.0f;
+  PID->Kd      = 0.45f;
 
-	PID->Err0    = 0.0f;
-	PID->Err1    = 0.0f;
-	PID->Err2    = 0.0f;
-	PID->SumErr  = 0.0f;
-	PID->ZeroErr = 0.0f;
-	PID->Output  = 0.0f;
-	PID->KiMax   = 400.0f;
-	PID->KiMin   = -400.0f;
-	PID->OutMax  = 800.0f;
-	PID->OutMin  = -800.0f;
+  PID->Err0    = 0.0f;
+  PID->Err1    = 0.0f;
+  PID->Err2    = 0.0f;
+  PID->SumErr  = 0.0f;
+  PID->ZeroErr = 0.0f;
+  PID->Output  = 0.0f;
+  PID->KiMax   = 400.0f;
+  PID->KiMin   = -400.0f;
+  PID->OutMax  = 800.0f;
+  PID->OutMin  = -800.0f;
 }
 /*=====================================================================================================*/
 /*=====================================================================================================*
-**¨ç¼Æ : PID_IncCal
-**¥\¯à : Calculate Incremental PID
-**¿é¤J : PID, CurrentVal
-**¿é¥X : None
-**¨Ï¥Î : PID_IncCal(&PID, CurrentVal)
+**å‡½æ•¸ : PID_IncCal
+**åŠŸèƒ½ : Calculate Incremental PID
+**è¼¸å…¥ : PID, CurrentVal
+**è¼¸å‡º : None
+**ä½¿ç”¨ : PID_IncCal(&PID, CurrentVal)
 **=====================================================================================================*/
 /*=====================================================================================================*/
 float PID_IncCal( PID_Struct *PID, float CurrentVal )
 {
-	float Value_Kp;	// ¤ñ¨Ò
-	float Value_Ki;	// ¿n¤À
-	float Value_Kd;	// ·L¤À
+  float Value_Kp;	// æ¯”ä¾‹
+  float Value_Ki;	// ç©åˆ†
+  float Value_Kd;	// å¾®åˆ†
 
-	PID->Err0 = PID->Err1;
-	PID->Err1 = PID->Err2;
-	PID->Err2 = CurrentVal - PID->ZeroErr;
+  PID->Err0 = PID->Err1;
+  PID->Err1 = PID->Err2;
+  PID->Err2 = CurrentVal - PID->ZeroErr;
 
-	Value_Kp    = PID->Kp*(PID->Err2 - PID->Err1);
-	Value_Ki    = PID->Ki*PID->Err2;
-	Value_Kd    = PID->Kd*(PID->Err2 - 2.0f*PID->Err1 + PID->Err0);
-	PID->Output = Value_Kp + Value_Ki + Value_Kd;
+  Value_Kp    = PID->Kp*(PID->Err2 - PID->Err1);
+  Value_Ki    = PID->Ki*PID->Err2;
+  Value_Kd    = PID->Kd*(PID->Err2 - 2.0f*PID->Err1 + PID->Err0);
+  PID->Output = Value_Kp + Value_Ki + Value_Kd;
 
-	if(PID->Output>PID->OutMax)
-		PID->Output = PID->OutMax;
-	if(PID->Output<PID->OutMin)
-		PID->Output = PID->OutMin;
+  if(PID->Output>PID->OutMax)
+    PID->Output = PID->OutMax;
+  if(PID->Output<PID->OutMin)
+    PID->Output = PID->OutMin;
 
-	return (PID->Output);
+  return (PID->Output);
 }
 /*=====================================================================================================*/
 /*=====================================================================================================*
-**¨ç¼Æ : PID_IncCal
-**¥\¯à : Calculate Positional PID
-**¿é¤J : PID, CurrentVal
-**¿é¥X : None
-**¨Ï¥Î : PID_PosCal(&PID, CurrentVal)
+**å‡½æ•¸ : PID_IncCal
+**åŠŸèƒ½ : Calculate Positional PID
+**è¼¸å…¥ : PID, CurrentVal
+**è¼¸å‡º : None
+**ä½¿ç”¨ : PID_PosCal(&PID, CurrentVal)
 **=====================================================================================================*/
 /*=====================================================================================================*/
 float PID_PosCal( PID_Struct *PID, float CurrentVal )
 {
-	float Value_Kp;	// ¤ñ¨Ò
-	float Value_Ki;	// ¿n¤À
-	float Value_Kd;	// ·L¤À
+  float Value_Kp;	// æ¯”ä¾‹
+  float Value_Ki;	// ç©åˆ†
+  float Value_Kd;	// å¾®åˆ†
 
-	PID->Err1 = PID->Err2;
-	PID->Err2 = CurrentVal - PID->ZeroErr;
+  PID->Err1 = PID->Err2;
+  PID->Err2 = CurrentVal - PID->ZeroErr;
 
-	PID->SumErr += PID->Err2;
+  PID->SumErr += PID->Err2;
 
-	Value_Kp = PID->Kp*PID->Err2;
-	Value_Ki = PID->Ki*PID->SumErr;
-	Value_Kd = PID->Kd*(PID->Err2 - PID->Err1);
+  Value_Kp = PID->Kp*PID->Err2;
+  Value_Ki = PID->Ki*PID->SumErr;
+  Value_Kd = PID->Kd*(PID->Err2 - PID->Err1);
 
-	if(Value_Ki>PID->KiMax) {
-		PID->SumErr -= PID->Err2;
-		Value_Ki = PID->KiMax;
-	}
-	if(Value_Ki<PID->KiMin) {
-		PID->SumErr -= PID->Err2;
-		Value_Ki = PID->KiMin;
-	}
+  if(Value_Ki>PID->KiMax) {
+    PID->SumErr -= PID->Err2;
+    Value_Ki = PID->KiMax;
+  }
+  if(Value_Ki<PID->KiMin) {
+    PID->SumErr -= PID->Err2;
+    Value_Ki = PID->KiMin;
+  }
 
-	PID->Output = Value_Kp + Value_Ki + Value_Kd;
+  PID->Output = Value_Kp + Value_Ki + Value_Kd;
 
-	if(PID->Output>PID->OutMax)
-		PID->Output = PID->OutMax;
-	if(PID->Output<PID->OutMin)
-		PID->Output = PID->OutMin;
+  if(PID->Output>PID->OutMax)
+    PID->Output = PID->OutMax;
+  if(PID->Output<PID->OutMin)
+    PID->Output = PID->OutMin;
 
-	return (PID->Output);
+  return (PID->Output);
 }
 /*=====================================================================================================*/
 /*=====================================================================================================*
-**¨ç¼Æ : PID_IncCal
-**¥\¯à : Calculate Positional PID
-**¿é¤J : PID, CurrentVal
-**¿é¥X : None
-**¨Ï¥Î : PID_PosCal(&PID, CurrentVal)
+**å‡½æ•¸ : PID_IncCal
+**åŠŸèƒ½ : Calculate Positional PID
+**è¼¸å…¥ : PID, CurrentVal
+**è¼¸å‡º : None
+**ä½¿ç”¨ : PID_PosCal(&PID, CurrentVal)
 **=====================================================================================================*/
 /*=====================================================================================================*/
 float PID_AHRS_Cal( PID_Struct *PID, float Angle, float Gyroscope )
 {
-	float Value_Kp;	// ¤ñ¨Ò
-	float Value_Ki;	// ¿n¤À
-	float Value_Kd;	// ·L¤À
+  float Value_Kp;	// æ¯”ä¾‹
+  float Value_Ki;	// ç©åˆ†
+  float Value_Kd;	// å¾®åˆ†
 
-	PID->Err1 = PID->ZeroErr - Angle;
+  PID->Err1 = PID->ZeroErr - Angle;
 
-//   if(Angle>-0.1f && Angle<0.1f)
-//     PID->SumErr = 0.0f;
+//  if(Angle>-0.1f && Angle<0.1f)
+//    PID->SumErr = 0.0f;
   PID->SumErr = PID->SumErr + PID->Err1;
 
-	Value_Kp = PID->Kp*PID->Err1;
-	Value_Ki = PID->Ki*PID->SumErr;
-	Value_Kd = PID->Kd*Gyroscope;
+  Value_Kp = PID->Kp*PID->Err1;
+  Value_Ki = PID->Ki*PID->SumErr;
+  Value_Kd = PID->Kd*Gyroscope;
 
-	if(Value_Ki>PID->KiMax)
-		Value_Ki = PID->KiMax;
-	if(Value_Ki<PID->KiMin)
-		Value_Ki = PID->KiMin;
+  if(Value_Ki>PID->KiMax)
+    Value_Ki = PID->KiMax;
+  if(Value_Ki<PID->KiMin)
+    Value_Ki = PID->KiMin;
 
-	PID->Output = Value_Kp + Value_Ki - Value_Kd;
+  PID->Output = Value_Kp + Value_Ki - Value_Kd;
 
-	if(PID->Output>PID->OutMax)
-		PID->Output = PID->OutMax;
-	if(PID->Output<PID->OutMin)
-		PID->Output = PID->OutMin;
+  if(PID->Output>PID->OutMax)
+    PID->Output = PID->OutMax;
+  if(PID->Output<PID->OutMin)
+    PID->Output = PID->OutMin;
 
-	return (-PID->Output);
+  return (-PID->Output);
 }
 /*=====================================================================================================*/
 /*=====================================================================================================*/

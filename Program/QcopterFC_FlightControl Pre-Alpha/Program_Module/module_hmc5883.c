@@ -5,23 +5,24 @@
 #include "module_hmc5883.h"
 /*==============================================================================================*/
 /*==============================================================================================*
-**®Áº∆ : HMC5883_Init
-**•\Ø‡ : ™Ï©l§∆HMC5883
-**øÈ§J : None
-**øÈ•X : None
-**®œ•Œ : HMC5883_Init()
+**ÂáΩÊï∏ : HMC5883_Init
+**ÂäüËÉΩ : ÂàùÂßãÂåñHMC5883
+**Ëº∏ÂÖ• : None
+**Ëº∏Âá∫ : None
+**‰ΩøÁî® : HMC5883_Init()
 **==============================================================================================*/
 /*==============================================================================================*/
 void HMC5883_Init( void )
 {
-	u8 HMC5883_Init_Data[3] = {
-			0x70, /* HMC5883_REG_CONF_A */
-			0xA0, /* HMC5883_REG_CONF_B */
-			0x00  /* HMC5883_REG_MODE */
-		};
-	I2C_DMA_WriteReg(HMC5883_I2C_ADDR, HMC5883_REG_CONF_A, HMC5883_Init_Data,   1); Delay_1ms(10);
-	I2C_DMA_WriteReg(HMC5883_I2C_ADDR, HMC5883_REG_CONF_B, HMC5883_Init_Data+1, 1); Delay_1ms(10);
-	I2C_DMA_WriteReg(HMC5883_I2C_ADDR, HMC5883_REG_MODE,   HMC5883_Init_Data+2, 1); Delay_1ms(10);
+  u8 HMC5883_Init_Data[3] = {
+      0x70, /* HMC5883_REG_CONF_A */
+      0xA0, /* HMC5883_REG_CONF_B */
+      0x00  /* HMC5883_REG_MODE */
+    };
+
+  I2C_DMA_WriteReg(HMC5883_I2C_ADDR, HMC5883_REG_CONF_A, HMC5883_Init_Data,   1); Delay_1ms(10);
+  I2C_DMA_WriteReg(HMC5883_I2C_ADDR, HMC5883_REG_CONF_B, HMC5883_Init_Data+1, 1); Delay_1ms(10);
+  I2C_DMA_WriteReg(HMC5883_I2C_ADDR, HMC5883_REG_MODE,   HMC5883_Init_Data+2, 1); Delay_1ms(10);
 }
 /*==============================================================================================*/
 /*==============================================================================================*/

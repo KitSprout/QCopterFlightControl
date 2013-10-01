@@ -4,61 +4,61 @@
 #include "algorithm_moveAve.h"
 /*=====================================================================================================*/
 /*=====================================================================================================*
-**¨ç¼Æ : MoveAve_SMA
-**¥\¯à : Simple Moving Average
-**¿é¤J : NewData, MoveAve_FIFO, SampleNum
-**¿é¥X : AveData
-**¨Ï¥Î : MoveAve_SMA(NewData, MoveAve_FIFO, SampleNum)
+**å‡½æ•¸ : MoveAve_SMA
+**åŠŸèƒ½ : Simple Moving Average
+**è¼¸å…¥ : NewData, MoveAve_FIFO, SampleNum
+**è¼¸å‡º : AveData
+**ä½¿ç”¨ : MoveAve_SMA(NewData, MoveAve_FIFO, SampleNum)
 **=====================================================================================================*/
 /*=====================================================================================================*/
 s16 MoveAve_SMA( s16 NewData, s16 *MoveAve_FIFO, u8 SampleNum )
 {
-	u8 i = 0;
-	s16 AveData = 0;
-	s32 MoveAve_Sum = 0;
+  u8 i = 0;
+  s16 AveData = 0;
+  s32 MoveAve_Sum = 0;
 
-	for(i=0; i<SampleNum-1; i++)							// °}¦C²¾°Ê
-		MoveAve_FIFO[i] = MoveAve_FIFO[i+1];
-	MoveAve_FIFO[SampleNum-1] = NewData;			// ¥[¤J·s¼Æ¾Ú
-	for(i=0; i<SampleNum; i++)								// ¨D©M
-		MoveAve_Sum += MoveAve_FIFO[i];
-	AveData = (s16)(MoveAve_Sum/SampleNum);		// ­pºâ¥­§¡­È
+  for(i=0; i<SampleNum-1; i++)              // é™£åˆ—ç§»å‹•
+    MoveAve_FIFO[i] = MoveAve_FIFO[i+1];
+  MoveAve_FIFO[SampleNum-1] = NewData;      // åŠ å…¥æ–°æ•¸æ“š
+  for(i=0; i<SampleNum; i++)                // æ±‚å’Œ
+    MoveAve_Sum += MoveAve_FIFO[i];
+  AveData = (s16)(MoveAve_Sum/SampleNum);   // è¨ˆç®—å¹³å‡å€¼
 
-	return AveData;
+  return AveData;
 }
 /*=====================================================================================================*/
 /*=====================================================================================================*
-**¨ç¼Æ : MoveAve_WMA
-**¥\¯à : Weighted Moving Average
-**¿é¤J : NewData, MoveAve_FIFO, SampleNum
-**¿é¥X : AveData
-**¨Ï¥Î : MoveAve_WMA(NewData, MoveAve_FIFO, SampleNum)
+**å‡½æ•¸ : MoveAve_WMA
+**åŠŸèƒ½ : Weighted Moving Average
+**è¼¸å…¥ : NewData, MoveAve_FIFO, SampleNum
+**è¼¸å‡º : AveData
+**ä½¿ç”¨ : MoveAve_WMA(NewData, MoveAve_FIFO, SampleNum)
 **=====================================================================================================*/
 /*=====================================================================================================*/
 s16 MoveAve_WMA( s16 NewData, s16 *MoveAve_FIFO, u8 SampleNum )
 {
-	u8 i = 0;
-	s16 AveData = 0;
-	u16 SampleSum = 0;
-	s32 MoveAve_Sum = 0;
+  u8 i = 0;
+  s16 AveData = 0;
+  u16 SampleSum = 0;
+  s32 MoveAve_Sum = 0;
 
-	for(i=0; i<SampleNum-1; i++)							// °}¦C²¾°Ê
-		MoveAve_FIFO[i] = MoveAve_FIFO[i+1];
-	MoveAve_FIFO[SampleNum-1] = NewData;			// ¥[¤J·s¼Æ¾Ú
-	for(i=0; i<SampleNum; i++)								// ¨D©M & ¥[Åv
-		MoveAve_Sum += MoveAve_FIFO[i]*(i+1);
-	SampleSum = (SampleNum*(SampleNum+1))/2;	// ­pºâ¥[Åv°£¼Æ
-	AveData = (s16)(MoveAve_Sum/SampleSum);		// ­pºâ¥­§¡­È
+  for(i=0; i<SampleNum-1; i++)                // é™£åˆ—ç§»å‹•
+    MoveAve_FIFO[i] = MoveAve_FIFO[i+1];
+  MoveAve_FIFO[SampleNum-1] = NewData;        // åŠ å…¥æ–°æ•¸æ“š
+  for(i=0; i<SampleNum; i++)                  // æ±‚å’Œ & åŠ æ¬Š
+    MoveAve_Sum += MoveAve_FIFO[i]*(i+1);
+  SampleSum = (SampleNum*(SampleNum+1))/2;    // è¨ˆç®—åŠ æ¬Šé™¤æ•¸
+  AveData = (s16)(MoveAve_Sum/SampleSum);     // è¨ˆç®—å¹³å‡å€¼
 
-	return AveData;
+  return AveData;
 }
 /*=====================================================================================================*/
 /*=====================================================================================================*
-**¨ç¼Æ : MoveAve_EMA
-**¥\¯à : Exponential Moving Average
-**¿é¤J : NewData, MoveAve_FIFO, SampleNum
-**¿é¥X : AveData
-**¨Ï¥Î : MoveAve_EMA(NewData, MoveAve_FIFO, SampleNum)
+**å‡½æ•¸ : MoveAve_EMA
+**åŠŸèƒ½ : Exponential Moving Average
+**è¼¸å…¥ : NewData, MoveAve_FIFO, SampleNum
+**è¼¸å‡º : AveData
+**ä½¿ç”¨ : MoveAve_EMA(NewData, MoveAve_FIFO, SampleNum)
 **=====================================================================================================*/
 /*=====================================================================================================*/
 

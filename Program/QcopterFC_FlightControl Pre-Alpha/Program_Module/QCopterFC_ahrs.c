@@ -107,7 +107,7 @@ void AHRS_Update( void )
 	AngE.Roll  = toDeg(AngE.Roll);
 	AngE.Yaw   = toDeg(AngE.Yaw)+180.0f;
 
-  /* ¤¬¸ÉÂoªi Complementary Filter */
+  /* äº’è£œæ¿¾æ³¢ Complementary Filter */
   #define CF_A 0.985f
   #define CF_B 0.015f
   #define CF_dt 0.0025f

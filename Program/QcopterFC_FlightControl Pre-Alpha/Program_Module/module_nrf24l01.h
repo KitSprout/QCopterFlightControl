@@ -6,22 +6,22 @@
 #include "stm32f4xx.h"
 /*=====================================================================================================*/
 /*=====================================================================================================*/
-#define nRF_SPI					SPI2	// nRF¨Ï¥ÎSPI2
+#define nRF_SPI					SPI2	// nRFä½¿ç”¨SPI2
 
 #define SendTimes				2
 #define ReadTimes				2
 #define TxBufSize				32
 #define RxBufSize				32
 
-#define TX_ADR_WIDTH		5  	// µo®g¦a§}¼e«×
-#define TX_PLOAD_WIDTH	32  // µo®g¼Æ¾Ú³q¹D¦³®Ä¼Æ¾Ú¼e«×0~32Byte
+#define TX_ADR_WIDTH		5  	// ç™¼å°„åœ°å€å¯¬åº¦
+#define TX_PLOAD_WIDTH	32  // ç™¼å°„æ•¸æ“šé€šé“æœ‰æ•ˆæ•¸æ“šå¯¬åº¦0~32Byte
 
 #define RX_ADR_WIDTH		5
 #define RX_PLOAD_WIDTH	32
 
-#define CHANAL					40	// ÀW¹D¿ï¾Ü
+#define CHANAL					40	// é »é“é¸æ“‡
 
-// SPI(nRF24L01) commands ,	NRFªºSPI©R¥O§»©w¸q¡A¸Ô¨£NRF¥\¯à¨Ï¥Î¤åÀÉ
+// SPI(nRF24L01) commands ,	NRFçš„SPIå‘½ä»¤å®å®šç¾©ï¼Œè©³è¦‹NRFåŠŸèƒ½ä½¿ç”¨æ–‡æª”
 #define NRF_READ			0x00  // Define read command to register
 #define NRF_WRITE			0x20  // Define write command to register
 #define RD_RX_PLOAD		0x61  // Define RX payload register address
@@ -31,7 +31,7 @@
 #define REUSE_TX_PL		0xE3  // Define reuse TX payload register command
 #define NOP						0xFF  // Define No Operation, might be used to read status register
 
-// SPI(nRF24L01) registers(addresses) ¡ANRF24L01 ¬ÛÃö±H¦s¾¹¦a§}ªº§»©w¸q
+// SPI(nRF24L01) registers(addresses) ï¼ŒNRF24L01 ç›¸é—œå¯„å­˜å™¨åœ°å€çš„å®å®šç¾©
 #define CONFIG    	  0x00  // 'Config' register address
 #define EN_AA       	0x01  // 'Enable Auto Acknowledgment' register address
 #define EN_RXADDR   	0x02  // 'Enabled RX addresses' register address
@@ -57,10 +57,10 @@
 #define RX_PW_P5    	0x16  // 'RX payload width, pipe5' register address
 #define FIFO_STATUS 	0x17  // 'FIFO Status Register' register address
 
-#define MAX_RT  			0x10	// ¹F¨ì³Ì¤j­«µo¦¸¼Æ¤¤Â_¼Ğ»x¦ì
-#define TX_DS					0x20 	// µo°e§¹¦¨¤¤Â_¼Ğ»x¦ì
+#define MAX_RT  			0x10	// é”åˆ°æœ€å¤§é‡ç™¼æ¬¡æ•¸ä¸­æ–·æ¨™èªŒä½
+#define TX_DS					0x20 	// ç™¼é€å®Œæˆä¸­æ–·æ¨™èªŒä½
 
-#define RX_DR					0x40	// ±µ¦¬¨ì¼Æ¾Ú¤¤Â_¼Ğ»x¦ì
+#define RX_DR					0x40	// æ¥æ”¶åˆ°æ•¸æ“šä¸­æ–·æ¨™èªŒä½
 /*=====================================================================================================*/
 /*=====================================================================================================*/
 #define NRF_CSN		PBO(12)		// PB12
