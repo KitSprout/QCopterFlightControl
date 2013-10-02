@@ -351,7 +351,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F40XX, USE_STDPERIPH_DRIVER, __FPU_PRESENT=1, __FPU_USED =1, ARM_MATH_CM4, __CC_ARM</Define>
               <Undefine></Undefine>
-              <IncludePath>..\;..\Libraries\CMSIS;..\Libraries\CMSIS\startup;..\Libraries\STM32F4xx_StdPeriph_Driver\inc;..\Libraries\STM32F4xx_StdPeriph_Driver\src;..\Program_Dirver;..\Program_Algorithm;..\Program_Module</IncludePath>
+              <IncludePath>..\;..\Libraries\CMSIS;..\Libraries\CMSIS\startup;..\Libraries\STM32F4xx_StdPeriph_Driver\inc;..\Libraries\STM32F4xx_StdPeriph_Driver\src;..\Program_Dirver;..\Program_Algorithm;..\Program_System;..\Program_Module</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -505,27 +505,27 @@
             <File>
               <FileName>QCopterFC.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Program_Module\QCopterFC.c</FilePath>
+              <FilePath>..\Program_System\QCopterFC.c</FilePath>
             </File>
             <File>
               <FileName>QCopterFC_it.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Program_Module\QCopterFC_it.c</FilePath>
+              <FilePath>..\Program_System\QCopterFC_it.c</FilePath>
             </File>
             <File>
               <FileName>QCopterFC_ctrl.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Program_Module\QCopterFC_ctrl.c</FilePath>
+              <FilePath>..\Program_System\QCopterFC_ctrl.c</FilePath>
             </File>
             <File>
               <FileName>QCopterFC_ahrs.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Program_Module\QCopterFC_ahrs.c</FilePath>
+              <FilePath>..\Program_System\QCopterFC_ahrs.c</FilePath>
             </File>
             <File>
               <FileName>QCopterFC_transport.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Program_Module\QCopterFC_transport.c</FilePath>
+              <FilePath>..\Program_System\QCopterFC_transport.c</FilePath>
             </File>
           </Files>
         </Group>

@@ -129,14 +129,17 @@ void Motor_Config( void )
 /*=====================================================================================================*/
 void Motor_Control( u16 Motor1, u16 Motor2, u16 Motor3, u16 Motor4 )
 {
-  if(Motor1>PWM_MOTOR_MAX)  Motor1 = PWM_MOTOR_MAX;
-  if(Motor2>PWM_MOTOR_MAX)  Motor2 = PWM_MOTOR_MAX;
-  if(Motor3>PWM_MOTOR_MAX)  Motor3 = PWM_MOTOR_MAX;
-  if(Motor4>PWM_MOTOR_MAX)  Motor4 = PWM_MOTOR_MAX;
-  if(Motor1<PWM_MOTOR_MIN)  Motor1 = PWM_MOTOR_MIN;
-  if(Motor2<PWM_MOTOR_MIN)  Motor2 = PWM_MOTOR_MIN;
-  if(Motor3<PWM_MOTOR_MIN)  Motor3 = PWM_MOTOR_MIN;
-  if(Motor4<PWM_MOTOR_MIN)  Motor4 = PWM_MOTOR_MIN;
+  if(Motor1>PWM_MOTOR_MAX)      Motor1 = PWM_MOTOR_MAX;
+  else if(Motor1<PWM_MOTOR_MIN) Motor1 = PWM_MOTOR_MIN;
+
+  if(Motor2>PWM_MOTOR_MAX)      Motor2 = PWM_MOTOR_MAX;
+  else if(Motor2<PWM_MOTOR_MIN) Motor2 = PWM_MOTOR_MIN;
+
+  if(Motor3>PWM_MOTOR_MAX)      Motor3 = PWM_MOTOR_MAX;
+  else if(Motor3<PWM_MOTOR_MIN) Motor3 = PWM_MOTOR_MIN;
+
+  if(Motor4>PWM_MOTOR_MAX)      Motor4 = PWM_MOTOR_MAX;
+  else if(Motor4<PWM_MOTOR_MIN) Motor4 = PWM_MOTOR_MIN;
 
   PWM_Motor1 = Motor1;
   PWM_Motor2 = Motor2;
@@ -154,13 +157,13 @@ void Motor_Control( u16 Motor1, u16 Motor2, u16 Motor3, u16 Motor4 )
 /*=====================================================================================================*/
 void Sevro_Control( u16 SevroA, u16 SevroB )
 {
-//	if(SevroA>PWM_SEVRO_MAX)	SevroA = PWM_SEVRO_MAX;
-//	if(SevroB>PWM_SEVRO_MAX)	SevroB = PWM_SEVRO_MAX;
-//	if(SevroA<PWM_SEVRO_MIN)	SevroA = PWM_SEVRO_MIN;
-//	if(SevroB<PWM_SEVRO_MIN)	SevroB = PWM_SEVRO_MIN;
-//	
-//	PWM_SevroA = SevroA;
-//	PWM_SevroB = SevroB;
+//  if(SevroA>PWM_SEVRO_MAX)      SevroA = PWM_SEVRO_MAX;
+//  else if(SevroA<PWM_SEVRO_MIN) SevroA = PWM_SEVRO_MIN;
+//  if(SevroB>PWM_SEVRO_MAX)      SevroB = PWM_SEVRO_MAX;
+//  else if(SevroB<PWM_SEVRO_MIN) SevroB = PWM_SEVRO_MIN;
+
+//  PWM_SevroA = SevroA;
+//  PWM_SevroB = SevroB;
 }
 /*=====================================================================================================*/
 /*=====================================================================================================*/

@@ -93,7 +93,7 @@ void SysTick_Handler( void )
       Gyr.Y = (s16)MoveAve_SMA(Gyr.Y, GYR_FIFO[1], MovegAveFIFO_Size);
       Gyr.Z = (s16)MoveAve_SMA(Gyr.Z, GYR_FIFO[2], MovegAveFIFO_Size);
 
-			Correction_Time++;	// 等待FIFO填滿空值 or 填滿靜態資料
+			Correction_Time++;	// 等待 FIFO 填滿空值 or 填滿靜態資料
 			if(Correction_Time == 400) {
 				Gyr.OffsetX = MPU6050G_X_Theoretic + Gyr.X;	// 角速度為 0dps
 				Gyr.OffsetY = MPU6050G_Y_Theoretic + Gyr.Y;	// 角速度為 0dps

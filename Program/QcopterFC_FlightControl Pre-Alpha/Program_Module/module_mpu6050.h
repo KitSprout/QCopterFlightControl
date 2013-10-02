@@ -93,13 +93,15 @@
 #define	MPU6050_FIFO_R_W            ((u8)0x74)
 #define MPU6050_WHO_AM_I				    ((u8)0x75)	// 0x68
 
-#define MPU6050A_2mg                ((float)0.00006250f)  // 0.00006250 g/LSB
-#define MPU6050A_4mg                ((float)0.00012500f)  // 0.00012500 g/LSB
-#define MPU6050A_8mg                ((float)0.00025000f)  // 0.00025000 g/LSB
+#define MPU6050A_2mg                ((float)0.0004882813f)  // 0.0004882813 g/LSB
+#define MPU6050A_4mg                ((float)0.0002441406f)  // 0.0002441406 g/LSB
+#define MPU6050A_8mg                ((float)0.0001220703f)  // 0.0001220703 g/LSB
+#define MPU6050A_16mg               ((float)0.0000610352f)  // 0.0000610352 g/LSB
 
-#define MPU6050G_s250dps            ((float)0.0087500f)  // 0.0087500 dps/LSB
-#define MPU6050G_s500dps            ((float)0.0175000f)  // 0.0175000 dps/LSB
-#define MPU6050G_s2000dps           ((float)0.0700000f)  // 0.0700000 dps/LSB
+#define MPU6050G_s250dps            ((float)0.007633587786f)  // 0.007633587786 dps/LSB
+#define MPU6050G_s500dps            ((float)0.015267175572f)  // 0.015267175572 dps/LSB
+#define MPU6050G_s1000dps           ((float)0.030487804878f)  // 0.030487804878 dps/LSB
+#define MPU6050G_s2000dps           ((float)0.060975609756f)  // 0.060975609756 dps/LSB
 /*=====================================================================================================*/
 /*=====================================================================================================*/
 void MPU6050_Init( void );
