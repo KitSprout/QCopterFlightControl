@@ -26,9 +26,9 @@ void Sensor_Init( void )
 	Acc.X = 0;
 	Acc.Y = 0;
 	Acc.Z = 0;
-  Acc.OffsetX = +540;
-  Acc.OffsetY = -32;
-  Acc.OffsetZ = +427;
+  Acc.OffsetX = +0;
+  Acc.OffsetY = -0;
+  Acc.OffsetZ = +0;
  	Acc.TrueX = 0.0f;
 	Acc.TrueY = 0.0f;
 	Acc.TrueZ = 0.0f;
@@ -66,7 +66,7 @@ void Sensor_Init( void )
 	Ang.TrueZ = 0.0f;
 
   MPU6050_Init();
-  HMC5883_Init();
+//   HMC5883_Init();
 }
 /*=====================================================================================================*/
 /*=====================================================================================================*
