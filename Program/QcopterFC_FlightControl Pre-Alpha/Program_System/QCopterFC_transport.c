@@ -46,9 +46,9 @@ void Transport_Recv( u8* RecvBuf )
   JSL_X     = (u16)((RecvBuf[21] << 8) | RecvBuf[20]);
   JSL_Y     = (u16)((RecvBuf[23] << 8) | RecvBuf[22]);
   JSL_Z     = (u16)((RecvBuf[25] << 8) | RecvBuf[24]);
-//  Exp_Pitch = (u16)((RecvBuf[27] << 8) | RecvBuf[26]);
-//  Exp_Roll  = (u16)((RecvBuf[29] << 8) | RecvBuf[28]);
-//  Exp_Thr   = (u16)((RecvBuf[31] << 8) | RecvBuf[30]);
+  Exp_Pitch = (u16)((RecvBuf[27] << 8) | RecvBuf[26]);
+  Exp_Roll  = (u16)((RecvBuf[29] << 8) | RecvBuf[28]);
+  Exp_Thr   = (u16)((RecvBuf[31] << 8) | RecvBuf[30]);
   RecvTime_Sec = (u8)(RecvBuf[30]);
   RecvTime_Min = (u8)(RecvBuf[31]);
 }
