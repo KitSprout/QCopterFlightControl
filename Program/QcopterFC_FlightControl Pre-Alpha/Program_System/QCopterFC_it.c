@@ -210,14 +210,20 @@ SensorMode = Mode_Algorithm;
       PID_Roll.ZeroErr  = (float)((s16)Exp_Roll/2.5f);
       PID_Yaw.ZeroErr   = 180.0f+(float)((s16)Exp_Yaw);
 
-			if(KEYL_U == 0)	{	PID_Roll.Kp += 0.001f;	PID_Pitch.Kp += 0.001f;  }
-			if(KEYL_L == 0)	{	PID_Roll.Kp -= 0.001f;	PID_Pitch.Kp -= 0.001f;  }
-			if(KEYL_R == 0)	{	PID_Roll.Ki += 0.0001f;	PID_Pitch.Ki += 0.0001f; }
-			if(KEYL_D == 0)	{	PID_Roll.Ki -= 0.0001f;	PID_Pitch.Ki -= 0.0001f; }
-			if(KEYR_R == 0)	{	PID_Roll.Kd += 0.0001f;	PID_Pitch.Kd += 0.0001f; }
-			if(KEYR_D == 0)	{	PID_Roll.Kd -= 0.0001f;	PID_Pitch.Kd -= 0.0001f; }
-			if(KEYR_L == 0)	{	PID_Roll.SumErr = 0.0f;	PID_Pitch.SumErr = 0.0f; }
-
+//       if(KEYL_U == 0)	{	PID_Roll.Kp += 0.001f;	PID_Pitch.Kp += 0.001f;  }
+//       if(KEYL_L == 0)	{	PID_Roll.Kp -= 0.001f;	PID_Pitch.Kp -= 0.001f;  }
+//       if(KEYL_R == 0)	{	PID_Roll.Ki += 0.0001f;	PID_Pitch.Ki += 0.0001f; }
+//       if(KEYL_D == 0)	{	PID_Roll.Ki -= 0.0001f;	PID_Pitch.Ki -= 0.0001f; }
+//       if(KEYR_R == 0)	{	PID_Roll.Kd += 0.0001f;	PID_Pitch.Kd += 0.0001f; }
+//       if(KEYR_D == 0)	{	PID_Roll.Kd -= 0.0001f;	PID_Pitch.Kd -= 0.0001f; }
+//       if(KEYR_L == 0)	{	PID_Roll.SumErr = 0.0f;	PID_Pitch.SumErr = 0.0f; }
+			if(KEYL_U == 0)	{	PID_Yaw.Kp += 0.001f;    }
+			if(KEYL_L == 0)	{	PID_Yaw.Kp -= 0.001f;    }
+			if(KEYL_R == 0)	{	PID_Yaw.Ki += 0.0001f;	 }
+			if(KEYL_D == 0)	{	PID_Yaw.Ki -= 0.0001f;	 }
+			if(KEYR_R == 0)	{	PID_Yaw.Kd += 0.0001f;	 }
+			if(KEYR_D == 0)	{	PID_Yaw.Kd -= 0.0001f;	 }
+			if(KEYR_L == 0)	{	PID_Roll.SumErr = 0.0f;	 }
 // 			PID_Pitch.Kp = 0.1f;
 //       PID_Pitch.Ki = 0.2f;
 //       PID_Pitch.Kd = 0.3f;
@@ -226,9 +232,9 @@ SensorMode = Mode_Algorithm;
 //       PID_Roll.Ki = 0.2f;
 //       PID_Roll.Kd = 0.3f;
 
-      PID_Yaw.Kp = 0.0f;
-      PID_Yaw.Ki = 0.0f;
-      PID_Yaw.Kd = -0.45f;
+//       PID_Yaw.Kp = 0.0f;
+//       PID_Yaw.Ki = 0.0f;
+//       PID_Yaw.Kd = -0.45f;
 
       Roll  = (s16)PID_AHRS_Cal(&PID_Roll,  AngE.Roll,  Gyr.TrueX);
       Pitch = (s16)PID_AHRS_Cal(&PID_Pitch, AngE.Pitch, Gyr.TrueY);
