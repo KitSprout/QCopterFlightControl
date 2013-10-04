@@ -8,6 +8,11 @@
 #include "algorithm_quaternion.h"
 /*=====================================================================================================*/
 /*=====================================================================================================*/
+extern vs16 Tmp_PID_KP;
+extern vs16 Tmp_PID_KI;
+extern vs16 Tmp_PID_KD;
+extern vs16 Tmp_PID_Pitch;
+
 vu16 RecvData[KeyNums] = {0};
 u8 TxBuf[SendTimes][TxBufSize] = {0};
 u8 RxBuf[ReadTimes][RxBufSize] = {0};
@@ -36,19 +41,19 @@ void Transport_Recv( u8* RecvBuf )
   KEYL_R    = (u16)RecvBuf[11];
   KEYL_S1   = (u16)RecvBuf[12];
   KEYL_S2   = (u16)RecvBuf[13];
-//  Exp_Pitch = (u16)((RecvBuf[15] << 8) | RecvBuf[14]);
-//  Exp_Roll  = (u16)((RecvBuf[17] << 8) | RecvBuf[16]);
-  JSR_X     = (u16)((RecvBuf[15] << 8) | RecvBuf[14]);
-  JSR_Y     = (u16)((RecvBuf[17] << 8) | RecvBuf[16]);
+  Exp_Pitch = (u16)((RecvBuf[15] << 8) | RecvBuf[14]);
+  Exp_Roll  = (u16)((RecvBuf[17] << 8) | RecvBuf[16]);
+//   JSR_X     = (u16)((RecvBuf[15] << 8) | RecvBuf[14]);
+//   JSR_Y     = (u16)((RecvBuf[17] << 8) | RecvBuf[16]);
   JSR_Z     = (u16)((RecvBuf[19] << 8) | RecvBuf[18]);
-//  Exp_Yaw   = (u16)((RecvBuf[21] << 8) | RecvBuf[20]);
-//  Exp_Thr   = (u16)((RecvBuf[23] << 8) | RecvBuf[22]);
-  JSL_X     = (u16)((RecvBuf[21] << 8) | RecvBuf[20]);
-  JSL_Y     = (u16)((RecvBuf[23] << 8) | RecvBuf[22]);
+  Exp_Yaw   = (u16)((RecvBuf[21] << 8) | RecvBuf[20]);
+  Exp_Thr   = (u16)((RecvBuf[23] << 8) | RecvBuf[22]);
+//   JSL_X     = (u16)((RecvBuf[21] << 8) | RecvBuf[20]);
+//   JSL_Y     = (u16)((RecvBuf[23] << 8) | RecvBuf[22]);
   JSL_Z     = (u16)((RecvBuf[25] << 8) | RecvBuf[24]);
-  Exp_Pitch = (u16)((RecvBuf[27] << 8) | RecvBuf[26]);
-  Exp_Roll  = (u16)((RecvBuf[29] << 8) | RecvBuf[28]);
-  Exp_Thr   = (u16)((RecvBuf[31] << 8) | RecvBuf[30]);
+//   Exp_Pitch = (u16)((RecvBuf[27] << 8) | RecvBuf[26]);
+//   Exp_Roll  = (u16)((RecvBuf[29] << 8) | RecvBuf[28]);
+//   Exp_Thr   = (u16)((RecvBuf[31] << 8) | RecvBuf[30]);
   RecvTime_Sec = (u8)(RecvBuf[30]);
   RecvTime_Min = (u8)(RecvBuf[31]);
 }
@@ -94,20 +99,30 @@ void Transport_Send( u8* SendBuf )
   SendBuf[11] = (u8)(Gyr.Y >> 8);
   SendBuf[12] = (u8)(Gyr.Z);
   SendBuf[13] = (u8)(Gyr.Z >> 8);
-  SendBuf[14] = (u8)(Mag.X);
-  SendBuf[15] = (u8)(Mag.X >> 8);
-  SendBuf[16] = (u8)(Mag.Y);
-  SendBuf[17] = (u8)(Mag.Y >> 8);
-  SendBuf[18] = (u8)(Mag.Z);
-  SendBuf[19] = (u8)(Mag.Z >> 8);
+//   SendBuf[14] = (u8)(Mag.X);
+//   SendBuf[15] = (u8)(Mag.X >> 8);
+//   SendBuf[16] = (u8)(Mag.Y);
+//   SendBuf[17] = (u8)(Mag.Y >> 8);
+//   SendBuf[18] = (u8)(Mag.Z);
+//   SendBuf[19] = (u8)(Mag.Z >> 8);
+	SendBuf[14] = (u8)(Tmp_PID_KP);
+	SendBuf[15] = (u8)(Tmp_PID_KP >> 8);
+	SendBuf[16] = (u8)(Tmp_PID_KI);
+	SendBuf[17] = (u8)(Tmp_PID_KI >> 8);
+	SendBuf[18] = (u8)(Tmp_PID_KD);
+	SendBuf[19] = (u8)(Tmp_PID_KD >> 8);
+
   SendBuf[20] = (u8)(Ang.X);
   SendBuf[21] = (u8)(Ang.X >> 8);
   SendBuf[22] = (u8)(Ang.Y);
   SendBuf[23] = (u8)(Ang.Y >> 8);
   SendBuf[24] = (u8)(Ang.Z);
   SendBuf[25] = (u8)(Ang.Z >> 8);
+  SendBuf[28] = (u8)(Tmp_PID_Pitch);
+  SendBuf[29] = (u8)(Tmp_PID_Pitch >> 8);
   SendBuf[30] = (u8)(Time_Sec);
   SendBuf[31] = (u8)(Time_Min);
+
 }
 /*=====================================================================================================*/
 /*=====================================================================================================*/
