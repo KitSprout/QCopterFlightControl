@@ -26,9 +26,9 @@ void Sensor_Init( void )
 	Acc.X = 0;
 	Acc.Y = 0;
 	Acc.Z = 0;
-  Acc.OffsetX = +0;
-  Acc.OffsetY = -0;
-  Acc.OffsetZ = +0;
+  Acc.OffsetX = +30;
+  Acc.OffsetY = +320;
+  Acc.OffsetZ = -70;
  	Acc.TrueX = 0.0f;
 	Acc.TrueY = 0.0f;
 	Acc.TrueZ = 0.0f;

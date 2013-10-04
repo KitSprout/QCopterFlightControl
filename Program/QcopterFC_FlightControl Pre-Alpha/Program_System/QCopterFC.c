@@ -22,6 +22,10 @@ void System_Init( void )
   Motor_Config();
   nRF24L01_Config();
 
+  PID_Init(&PID_Yaw);
+  PID_Init(&PID_Roll);
+  PID_Init(&PID_Pitch);
+
   Delay_10ms(2);
 }
 /*=====================================================================================================*/

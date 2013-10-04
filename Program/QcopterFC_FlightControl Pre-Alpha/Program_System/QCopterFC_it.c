@@ -23,6 +23,11 @@ vu8 RecvTime_Sec = 0;
 vu8 RecvTime_Min = 0;
 vu16 SysTick_Cnt = 0;
 
+vs16 Tmp_PID_KP;
+vs16 Tmp_PID_KI;
+vs16 Tmp_PID_KD;
+vs16 Tmp_PID_Pitch;
+
 vu8 SensorMode = Mode_OffSet;
 /*=====================================================================================================*/
 /*=====================================================================================================*/
@@ -205,9 +210,26 @@ SensorMode = Mode_Algorithm;
       PID_Roll.ZeroErr  = (float)((s16)Exp_Roll/2.5f);
       PID_Yaw.ZeroErr   = 180.0f+(float)((s16)Exp_Yaw);
 
+			if(KEYL_U == 0)	{	PID_Roll.Kp += 0.001f;	PID_Pitch.Kp += 0.001f;  }
+			if(KEYL_L == 0)	{	PID_Roll.Kp -= 0.001f;	PID_Pitch.Kp -= 0.001f;  }
+			if(KEYL_R == 0)	{	PID_Roll.Ki += 0.0001f;	PID_Pitch.Ki += 0.0001f; }
+			if(KEYL_D == 0)	{	PID_Roll.Ki -= 0.0001f;	PID_Pitch.Ki -= 0.0001f; }
+			if(KEYR_R == 0)	{	PID_Roll.Kd += 0.0001f;	PID_Pitch.Kd += 0.0001f; }
+			if(KEYR_D == 0)	{	PID_Roll.Kd -= 0.0001f;	PID_Pitch.Kd -= 0.0001f; }
+			if(KEYR_L == 0)	{	PID_Roll.SumErr = 0.0f;	PID_Pitch.SumErr = 0.0f; }
+
+// 			PID_Pitch.Kp = 0.1f;
+//       PID_Pitch.Ki = 0.2f;
+//       PID_Pitch.Kd = 0.3f;
+
+// 			PID_Roll.Kp = 0.1f;
+//       PID_Roll.Ki = 0.2f;
+//       PID_Roll.Kd = 0.3f;
+
       PID_Yaw.Kp = 0.0f;
       PID_Yaw.Ki = 0.0f;
       PID_Yaw.Kd = -0.45f;
+
       Roll  = (s16)PID_AHRS_Cal(&PID_Roll,  AngE.Roll,  Gyr.TrueX);
       Pitch = (s16)PID_AHRS_Cal(&PID_Pitch, AngE.Pitch, Gyr.TrueY);
       Yaw   = (s16)PID_AHRS_Cal(&PID_Yaw,   AngE.Yaw,   Gyr.TrueZ);
@@ -217,10 +239,22 @@ SensorMode = Mode_Algorithm;
       Thr = (s16)Exp_Thr;
 
       /* Motor Ctrl */
-      Final_M1 = PWM_M1 /*+ Thr + Pitch + Roll + Yaw*/;
-      Final_M2 = PWM_M2 /*+ Thr - Pitch + Roll - Yaw*/;
-      Final_M3 = PWM_M3 /*+ Thr - Pitch - Roll + Yaw*/;
-      Final_M4 = PWM_M4 /*+ Thr + Pitch - Roll - Yaw*/;
+//       Final_M1 = PWM_M1 /*+ Thr + Pitch + Roll + Yaw*/;
+//       Final_M2 = PWM_M2 /*+ Thr - Pitch + Roll - Yaw*/;
+//       Final_M3 = PWM_M3 /*+ Thr - Pitch - Roll + Yaw*/;
+//       Final_M4 = PWM_M4 /*+ Thr + Pitch - Roll - Yaw*/;
+			
+      /* Motor Ctrl */
+      Final_M1 = PWM_M1 + Thr + Pitch + Roll + Yaw;
+      Final_M2 = PWM_M2 + Thr - Pitch + Roll - Yaw;
+      Final_M3 = PWM_M3 + Thr - Pitch - Roll + Yaw;
+      Final_M4 = PWM_M4 + Thr + Pitch - Roll - Yaw;
+
+			Tmp_PID_KP = PID_Pitch.Kp*1000;
+			Tmp_PID_KI = PID_Pitch.Ki*1000;
+			Tmp_PID_KD = PID_Pitch.Kd*1000;
+      
+      Tmp_PID_Pitch = Roll;
 
 			/* Check Connection */
 #define NoSignal 1
