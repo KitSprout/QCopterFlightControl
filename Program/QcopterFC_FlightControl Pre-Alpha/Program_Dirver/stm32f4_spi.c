@@ -13,11 +13,11 @@
 /*=====================================================================================================*/
 u8 SPI_RW( SPI_TypeDef* SPIx, u8 WriteByte )
 {
-	while((SPIx->SR & SPI_I2S_FLAG_TXE) == (u16)RESET);
-	SPIx->DR = WriteByte;
-	while((SPIx->SR & SPI_I2S_FLAG_RXNE) == (u16)RESET);
+  while((SPIx->SR & SPI_I2S_FLAG_TXE) == (u16)RESET);
+  SPIx->DR = WriteByte;
+  while((SPIx->SR & SPI_I2S_FLAG_RXNE) == (u16)RESET);
 
-	return SPIx->DR;
+  return SPIx->DR;
 }
 /*=====================================================================================================*/
 /*=====================================================================================================*

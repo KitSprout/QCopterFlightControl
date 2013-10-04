@@ -19,7 +19,7 @@ u8 RxBuf[ReadTimes][RxBufSize] = {0};
 /*=====================================================================================================*/
 /*=====================================================================================================*
 **函數 : Transport_Recv
-**功能 : 
+**功能 : 紀錄接收資料
 **輸入 : Recv_Buf
 **輸出 : None
 **使用 : Transport_Recv(RxBuf[0]);
@@ -60,7 +60,7 @@ void Transport_Recv( u8* RecvBuf )
 /*=====================================================================================================*/
 /*=====================================================================================================*
 **函數 : Transport_Send
-**功能 : 接收
+**功能 : 紀錄發送資料
 **輸入 : SendBuf
 **輸出 : None
 **使用 : Transport_Send(TxBuf[0]);
@@ -80,10 +80,6 @@ void Transport_Send( u8* SendBuf )
   Ang.X = (s16)(AngE.Pitch*100);  // 10 mdeg/LSB
   Ang.Y = (s16)(AngE.Roll*100);   // 10 mdeg/LSB
   Ang.Z = (s16)(AngE.Yaw*10);     // 100 mdeg/LSB
-
-//  Mag.X = (s16)(Mag.X*100); // 100 ugauss/LSB
-//  Mag.Y = (s16)(Mag.Y*100); // 100 ugauss/LSB
-//  Mag.Z = (s16)(Mag.Z*100); // 100 ugauss/LSB
 
   SendBuf[0]  = (u8)(0x01);
   SendBuf[1]  = (u8)(0x02);
@@ -105,12 +101,12 @@ void Transport_Send( u8* SendBuf )
 //   SendBuf[17] = (u8)(Mag.Y >> 8);
 //   SendBuf[18] = (u8)(Mag.Z);
 //   SendBuf[19] = (u8)(Mag.Z >> 8);
-	SendBuf[14] = (u8)(Tmp_PID_KP);
-	SendBuf[15] = (u8)(Tmp_PID_KP >> 8);
-	SendBuf[16] = (u8)(Tmp_PID_KI);
-	SendBuf[17] = (u8)(Tmp_PID_KI >> 8);
-	SendBuf[18] = (u8)(Tmp_PID_KD);
-	SendBuf[19] = (u8)(Tmp_PID_KD >> 8);
+  SendBuf[14] = (u8)(Tmp_PID_KP);
+  SendBuf[15] = (u8)(Tmp_PID_KP >> 8);
+  SendBuf[16] = (u8)(Tmp_PID_KI);
+  SendBuf[17] = (u8)(Tmp_PID_KI >> 8);
+  SendBuf[18] = (u8)(Tmp_PID_KD);
+  SendBuf[19] = (u8)(Tmp_PID_KD >> 8);
 
   SendBuf[20] = (u8)(Ang.X);
   SendBuf[21] = (u8)(Ang.X >> 8);
@@ -122,7 +118,6 @@ void Transport_Send( u8* SendBuf )
   SendBuf[29] = (u8)(Tmp_PID_Pitch >> 8);
   SendBuf[30] = (u8)(Time_Sec);
   SendBuf[31] = (u8)(Time_Min);
-
 }
 /*=====================================================================================================*/
 /*=====================================================================================================*/

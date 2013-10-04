@@ -23,47 +23,47 @@ float Ellipse[5] = {0};
 /*=====================================================================================================*/
 void Sensor_Init( void )
 {
-	Acc.X = 0;
-	Acc.Y = 0;
-	Acc.Z = 0;
+  Acc.X = 0;
+  Acc.Y = 0;
+  Acc.Z = 0;
   Acc.OffsetX = +30;
   Acc.OffsetY = +320;
   Acc.OffsetZ = -70;
- 	Acc.TrueX = 0.0f;
-	Acc.TrueY = 0.0f;
-	Acc.TrueZ = 0.0f;
+  Acc.TrueX = 0.0f;
+  Acc.TrueY = 0.0f;
+  Acc.TrueZ = 0.0f;
 
-	Gyr.X = 0;
-	Gyr.Y = 0;
-	Gyr.Z = 0;
+  Gyr.X = 0;
+  Gyr.Y = 0;
+  Gyr.Z = 0;
   Gyr.OffsetX = 0;
   Gyr.OffsetY = 0;
   Gyr.OffsetZ = 0;
- 	Gyr.TrueX = 0.0f;
-	Gyr.TrueY = 0.0f;
-	Gyr.TrueZ = 0.0f;
+  Gyr.TrueX = 0.0f;
+  Gyr.TrueY = 0.0f;
+  Gyr.TrueZ = 0.0f;
 
-	Mag.X = 0;
-	Mag.Y = 0;
-	Mag.Z = 0;
+  Mag.X = 0;
+  Mag.Y = 0;
+  Mag.Z = 0;
   Mag.OffsetX = 0;
   Mag.OffsetY = 0;
   Mag.OffsetX = 0;
   Mag.OffsetY = 0;
   Mag.OffsetZ = 0;
- 	Mag.TrueX = 0.0f;
-	Mag.TrueY = 0.0f;
-	Mag.TrueZ = 0.0f;
+  Mag.TrueX = 0.0f;
+  Mag.TrueY = 0.0f;
+  Mag.TrueZ = 0.0f;
 
-	Ang.X = 0;
-	Ang.Y = 0;
-	Ang.Z = 0;
+  Ang.X = 0;
+  Ang.Y = 0;
+  Ang.Z = 0;
   Ang.OffsetX = 0;
   Ang.OffsetY = 0;
   Ang.OffsetZ = 0;
- 	Ang.TrueX = 0.0f;
-	Ang.TrueY = 0.0f;
-	Ang.TrueZ = 0.0f;
+  Ang.TrueX = 0.0f;
+  Ang.TrueY = 0.0f;
+  Ang.TrueZ = 0.0f;
 
   MPU6050_Init();
 //   HMC5883_Init();

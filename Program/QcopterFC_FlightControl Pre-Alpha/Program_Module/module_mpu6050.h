@@ -91,10 +91,10 @@
 #define	MPU6050_FIFO_COUNTH         ((u8)0x72)
 #define	MPU6050_FIFO_COUNTL         ((u8)0x73)
 #define	MPU6050_FIFO_R_W            ((u8)0x74)
-#define MPU6050_WHO_AM_I				    ((u8)0x75)	// 0x68
+#define MPU6050_WHO_AM_I            ((u8)0x75)	// 0x68
 
-#define MPU6050A_2mg               	((float)0.0000610352f)  // 0.0000610352 g/LSB
-#define MPU6050A_4mg              	((float)0.0001220703f)  // 0.0001220703 g/LSB
+#define MPU6050A_2mg                ((float)0.0000610352f)  // 0.0000610352 g/LSB
+#define MPU6050A_4mg                ((float)0.0001220703f)  // 0.0001220703 g/LSB
 #define MPU6050A_8mg                ((float)0.0002441406f)  // 0.0002441406 g/LSB
 #define MPU6050A_16mg               ((float)0.0004882813f)  // 0.0004882813 g/LSB
 

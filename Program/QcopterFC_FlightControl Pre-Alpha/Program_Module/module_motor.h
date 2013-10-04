@@ -24,9 +24,9 @@
 #define PWM8 TIM2->CCR3
 
 #define PWM_Motor1 TIM3->CCR1   // 無刷 PWM
-#define PWM_Motor2 TIM3->CCR2	  // 無刷 PWM
-#define PWM_Motor3 TIM3->CCR3	  // 無刷 PWM
-#define PWM_Motor4 TIM3->CCR4	  // 無刷 PWM
+#define PWM_Motor2 TIM3->CCR2   // 無刷 PWM
+#define PWM_Motor3 TIM3->CCR3   // 無刷 PWM
+#define PWM_Motor4 TIM3->CCR4   // 無刷 PWM
 /*=====================================================================================================*/
 /*=====================================================================================================*/
 void Motor_Config( void );

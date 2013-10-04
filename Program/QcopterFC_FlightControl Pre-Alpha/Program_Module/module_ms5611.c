@@ -15,37 +15,37 @@ MS5611_ST Baro;
 **使用 : I2C_Write(SlaveAddr, WriteCom);
 **=====================================================================================================*/
 /*=====================================================================================================*/
-// u32 MS5611_WriteCom( u8 SlaveAddr, u8 WriteCom )
-// {
-//   vu32 I2C_TimeCnt;
+//u32 MS5611_WriteCom( u8 SlaveAddr, u8 WriteCom )
+//{
+//  vu32 I2C_TimeCnt;
 
-// 	I2C_TimeCnt = I2C_TIME;
-// 	while(I2C_GetFlagStatus(I2C1, I2C_FLAG_BUSY))
-// 		if((I2C_TimeCnt--) == 0) return I2C_TimeOut();
+//  I2C_TimeCnt = I2C_TIME;
+//  while(I2C_GetFlagStatus(I2C1, I2C_FLAG_BUSY))
+//    if((I2C_TimeCnt--) == 0) return I2C_TimeOut();
 
-// 	I2C_GenerateSTART(I2C1, ENABLE);
+//  I2C_GenerateSTART(I2C1, ENABLE);
 
-// 	I2C_TimeCnt = I2C_TIME;
-// 	while(!I2C_CheckEvent(I2C1, I2C_EVENT_MASTER_MODE_SELECT))
-// 		if((I2C_TimeCnt--) == 0) return I2C_TimeOut();
+//  I2C_TimeCnt = I2C_TIME;
+//  while(!I2C_CheckEvent(I2C1, I2C_EVENT_MASTER_MODE_SELECT))
+//    if((I2C_TimeCnt--) == 0) return I2C_TimeOut();
 
-// 	I2C_TimeCnt = I2C_TIME;
-// 	I2C_Send7bitAddress(I2C1, SlaveAddr, I2C_Direction_Transmitter);
+//  I2C_TimeCnt = I2C_TIME;
+//  I2C_Send7bitAddress(I2C1, SlaveAddr, I2C_Direction_Transmitter);
 
-// 	I2C_TimeCnt = I2C_TIME;
-// 	while(!I2C_CheckEvent(I2C1, I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED))
-// 		if((I2C_TimeCnt--) == 0) return I2C_TimeOut();
+//  I2C_TimeCnt = I2C_TIME;
+//  while(!I2C_CheckEvent(I2C1, I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED))
+//    if((I2C_TimeCnt--) == 0) return I2C_TimeOut();
 
-// 	I2C_SendData(I2C1, WriteCom);
+//  I2C_SendData(I2C1, WriteCom);
 
-// 	I2C_TimeCnt = I2C_TIME;
-//   while(!I2C_CheckEvent(I2C1, I2C_EVENT_MASTER_BYTE_TRANSMITTED))
-// 		if((I2C_TimeCnt--) == 0) return I2C_TimeOut();
+//  I2C_TimeCnt = I2C_TIME;
+//  while(!I2C_CheckEvent(I2C1, I2C_EVENT_MASTER_BYTE_TRANSMITTED))
+//    if((I2C_TimeCnt--) == 0) return I2C_TimeOut();
 
-// 	I2C_GenerateSTOP(I2C1, ENABLE);
+//  I2C_GenerateSTOP(I2C1, ENABLE);
 
-//   return SUCCESS;
-// }
+//  return SUCCESS;
+//}
 /*=====================================================================================================*/
 /*=====================================================================================================*
 **函數 : MS5611_ReadData
@@ -55,39 +55,39 @@ MS5611_ST Baro;
 **使用 : I2C_MS5611_Read(ReadBuf, SlaveAddr, NumByte);
 **=====================================================================================================*/
 /*=====================================================================================================*/
-// u32 MS5611_ReadData( u8* ReadBuf, u8 SlaveAddr, u8 NumByte )
-// {
-//   vu32 I2C_TimeCnt;
+//u32 MS5611_ReadData( u8* ReadBuf, u8 SlaveAddr, u8 NumByte )
+//{
+//  vu32 I2C_TimeCnt;
 
-// 	I2C_TimeCnt = I2C_TIME;
-// 	while(I2C_GetFlagStatus(I2C1, I2C_FLAG_BUSY))
-// 		if((I2C_TimeCnt--) == 0) return I2C_TimeOut();
+//  I2C_TimeCnt = I2C_TIME;
+//  while(I2C_GetFlagStatus(I2C1, I2C_FLAG_BUSY))
+//    if((I2C_TimeCnt--) == 0) return I2C_TimeOut();
 
-// 	I2C_GenerateSTART(I2C1, ENABLE);
+//  I2C_GenerateSTART(I2C1, ENABLE);
 
-// 	I2C_TimeCnt = I2C_TIME;
-// 	while(!I2C_CheckEvent(I2C1, I2C_EVENT_MASTER_MODE_SELECT))
-// 		if((I2C_TimeCnt--) == 0)	return I2C_TimeOut();
+//  I2C_TimeCnt = I2C_TIME;
+//  while(!I2C_CheckEvent(I2C1, I2C_EVENT_MASTER_MODE_SELECT))
+//    if((I2C_TimeCnt--) == 0)	return I2C_TimeOut();
 
-// 	I2C_Send7bitAddress(I2C1, SlaveAddr, I2C_Direction_Receiver);
+//  I2C_Send7bitAddress(I2C1, SlaveAddr, I2C_Direction_Receiver);
 
-//   I2C_TimeCnt = I2C_TIME;
-//   while(!I2C_CheckEvent(I2C1, I2C_EVENT_MASTER_RECEIVER_MODE_SELECTED))
-//     if((I2C_TimeCnt--) == 0)	return I2C_TimeOut();
+//  I2C_TimeCnt = I2C_TIME;
+//  while(!I2C_CheckEvent(I2C1, I2C_EVENT_MASTER_RECEIVER_MODE_SELECTED))
+//    if((I2C_TimeCnt--) == 0)	return I2C_TimeOut();
 
-// 	while(NumByte) {
-// 		if(NumByte == 1) {
-// 			I2C_GenerateSTOP(I2C1, ENABLE);
-// 		}
-// 		if(I2C_CheckEvent(I2C1, I2C_EVENT_MASTER_BYTE_RECEIVED)) {      
-// 			*ReadBuf = I2C_ReceiveData(I2C1);
-// 			ReadBuf++;
-// 			NumByte--;
-// 		}
-// 	}
+//  while(NumByte) {
+//    if(NumByte == 1) {
+//      I2C_GenerateSTOP(I2C1, ENABLE);
+//    }
+//    if(I2C_CheckEvent(I2C1, I2C_EVENT_MASTER_BYTE_RECEIVED)) {
+//      *ReadBuf = I2C_ReceiveData(I2C1);
+//      ReadBuf++;
+//      NumByte--;
+//    }
+//  }
 
-//   return SUCCESS;
-// }
+//  return SUCCESS;
+//}
 /*==============================================================================================*/
 /*==============================================================================================*
 **函數 : MS5611_Init
@@ -106,17 +106,17 @@ void MS5611_Init( MS5611_ST* COEFF )
   Delay_1ms(10);
 
   MS5611_WriteCom(MS5611_I2C_ADDR, MS5611_PROM_COEFF_1);
-	MS5611_ReadData(ReadC[0], MS5611_I2C_ADDR, 2);
+  MS5611_ReadData(ReadC[0], MS5611_I2C_ADDR, 2);
   MS5611_WriteCom(MS5611_I2C_ADDR, MS5611_PROM_COEFF_2);
-	MS5611_ReadData(ReadC[1], MS5611_I2C_ADDR, 2);
+  MS5611_ReadData(ReadC[1], MS5611_I2C_ADDR, 2);
   MS5611_WriteCom(MS5611_I2C_ADDR, MS5611_PROM_COEFF_3);
-	MS5611_ReadData(ReadC[2], MS5611_I2C_ADDR, 2);
+  MS5611_ReadData(ReadC[2], MS5611_I2C_ADDR, 2);
   MS5611_WriteCom(MS5611_I2C_ADDR, MS5611_PROM_COEFF_4);
-	MS5611_ReadData(ReadC[3], MS5611_I2C_ADDR, 2);
+  MS5611_ReadData(ReadC[3], MS5611_I2C_ADDR, 2);
   MS5611_WriteCom(MS5611_I2C_ADDR, MS5611_PROM_COEFF_5);
-	MS5611_ReadData(ReadC[4], MS5611_I2C_ADDR, 2);
+  MS5611_ReadData(ReadC[4], MS5611_I2C_ADDR, 2);
   MS5611_WriteCom(MS5611_I2C_ADDR, MS5611_PROM_COEFF_6);
-	MS5611_ReadData(ReadC[5], MS5611_I2C_ADDR, 2);
+  MS5611_ReadData(ReadC[5], MS5611_I2C_ADDR, 2);
   Delay_1ms(10);
 
   COEFF->C[1] = (u16)((ReadC[0][0] << 7) | ReadC[0][1]);
@@ -129,12 +129,12 @@ void MS5611_Init( MS5611_ST* COEFF )
   MS5611_WriteCom(MS5611_I2C_ADDR, MS5611_D1_OSR_4096);
   Delay_1ms(10);
   MS5611_WriteCom(MS5611_I2C_ADDR, MS5611_ADC);
-	MS5611_ReadData(ReadD[0], MS5611_I2C_ADDR, 3);
+  MS5611_ReadData(ReadD[0], MS5611_I2C_ADDR, 3);
 
   MS5611_WriteCom(MS5611_I2C_ADDR, MS5611_D2_OSR_4096);
   Delay_1ms(10);
   MS5611_WriteCom(MS5611_I2C_ADDR, MS5611_ADC);
-	MS5611_ReadData(ReadD[1], MS5611_I2C_ADDR, 3);
+  MS5611_ReadData(ReadD[1], MS5611_I2C_ADDR, 3);
 
   COEFF->D[1] = (u32)((ReadD[0][0] << 15) | (ReadD[0][1] << 7) | ReadD[0][2]);
   COEFF->D[2] = (u32)((ReadD[1][0] << 15) | (ReadD[1][1] << 7) | ReadD[1][2]);
@@ -158,9 +158,9 @@ void MS5611_ReadADC( MS5611_ST* COEFF )
   Delay_1ms(10);
 
   MS5611_WriteCom(MS5611_I2C_ADDR, MS5611_PROM_COEFF_1);
-	MS5611_ReadData(ReadCoeff[0], MS5611_I2C_ADDR, 2);
+  MS5611_ReadData(ReadCoeff[0], MS5611_I2C_ADDR, 2);
   MS5611_WriteCom(MS5611_I2C_ADDR, MS5611_PROM_COEFF_2);
-	MS5611_ReadData(ReadCoeff[1], MS5611_I2C_ADDR, 2);
+  MS5611_ReadData(ReadCoeff[1], MS5611_I2C_ADDR, 2);
 
   COEFF->C[1] = (u16)((ReadCoeff[0][0] << 7) | ReadCoeff[0][1]);
   COEFF->C[2] = (u16)((ReadCoeff[1][0] << 7) | ReadCoeff[1][1]);

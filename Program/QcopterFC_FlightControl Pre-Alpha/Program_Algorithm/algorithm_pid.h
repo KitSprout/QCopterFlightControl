@@ -7,19 +7,19 @@
 /*=====================================================================================================*/
 /*=====================================================================================================*/
 typedef struct {
-	float Kp;
-	float Ki;
-	float Kd;
-	float Err0;
-	float Err1;
-	float Err2;
-	float SumErr;
-	float ZeroErr;
-	float Output;
-	float KiMax;
-	float KiMin;
-	float OutMax;
-	float OutMin;
+  float Kp;
+  float Ki;
+  float Kd;
+  float Err0;
+  float Err1;
+  float Err2;
+  float SumErr;
+  float ZeroErr;
+  float Output;
+  float KiMax;
+  float KiMin;
+  float OutMax;
+  float OutMin;
 } PID_Struct;
 /*=====================================================================================================*/
 /*=====================================================================================================*/

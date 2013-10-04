@@ -17,7 +17,7 @@ void System_Init( void )
   SystemInit();
   LED_Config();
   KEY_Config();
-	RS232_Config();
+  RS232_Config();
   I2C_Config();
   Motor_Config();
   nRF24L01_Config();
@@ -32,7 +32,7 @@ void System_Init( void )
 /*=====================================================================================================*/
 int main( void )
 {
-	u8 Sta = ERROR;
+  u8 Sta = ERROR;
   u8 FSM_Sta = FSM_Rx;
 
   /* System Init */
@@ -48,12 +48,15 @@ int main( void )
   Motor_Control(PWM_MOTOR_MIN, PWM_MOTOR_MIN, PWM_MOTOR_MIN, PWM_MOTOR_MIN);
 
   /* nRF Check */
-	while(Sta == ERROR)
-		Sta = nRF_Check();
+  while(Sta == ERROR)
+    Sta = nRF_Check();
 
   /* Sensor Init */
   Sensor_Init();
-  Delay_10ms(2);
+  Delay_10ms(10);
+
+  LED_B = 0;
+  Delay_10ms(10);
 
   /* Systick Config */
   if(SysTick_Config(420000)) {    // 168MHz / 420000 = 400Hz = 2.5ms
@@ -63,6 +66,8 @@ int main( void )
   /* Wait Correction */
   while(SensorMode == Mode_OffSet || SensorMode == Mode_Magnetic);
 
+  LED_B = 1;
+
   /* Lock */
   while(!KEY){
     LED_R = ~LED_R;
@@ -71,58 +76,58 @@ int main( void )
   LED_R = 1;
 
   /* Final State Machine */
-	while(1) {
-		LED_G = ~LED_G;
-		switch(FSM_Sta) {
+  while(1) {
+    LED_G = ~LED_G;
+    switch(FSM_Sta) {
 
-/************************** FSM Tx ****************************************/
-			case FSM_Tx:
-				// FSM_Tx
-				nRF_TX_Mode();
-				do {
-					Sta = nRF_Tx_Data(TxBuf[0]);
-				} while(Sta == MAX_RT);
-				// FSM_Tx End
-				FSM_Sta = FSM_Rx;
-				break;
+    /************************** FSM Tx ****************************************/
+    case FSM_Tx:
+      // FSM_Tx
+      nRF_TX_Mode();
+      do {
+        Sta = nRF_Tx_Data(TxBuf[0]);
+      } while(Sta == MAX_RT);
+      // FSM_Tx End
+      FSM_Sta = FSM_Rx;
+      break;
 
-/************************** FSM Rx ****************************************/
-			case FSM_Rx:
-				// FSM_Rx
-				nRF_RX_Mode();
-				Sta = nRF_Rx_Data(RxBuf[0]);
-				if(Sta == RX_DR) {
-          Transport_Recv(RxBuf[0]);
-				}
-				// FSM_Rx End
-				FSM_Sta = FSM_CTRL;
-				break;
+    /************************** FSM Rx ****************************************/
+    case FSM_Rx:
+      // FSM_Rx
+      nRF_RX_Mode();
+      Sta = nRF_Rx_Data(RxBuf[0]);
+      if(Sta == RX_DR) {
+        Transport_Recv(RxBuf[0]);
+      }
+      // FSM_Rx End
+      FSM_Sta = FSM_CTRL;
+      break;
 
-/************************** FSM CTRL **************************************/
-			case FSM_CTRL:
-				// FSM_CTRL
-        CTRL_FlightControl();
-				// FSM_CTRL End
-				FSM_Sta = FSM_UART;
-				break;
+    /************************** FSM CTRL **************************************/
+    case FSM_CTRL:
+      // FSM_CTRL
+      CTRL_FlightControl();
+      // FSM_CTRL End
+      FSM_Sta = FSM_UART;
+      break;
 
-/************************** FSM UART ***************************************/
-			case FSM_UART:
-				// FSM_USART
-        RS232_VisualScope(USART3, TxBuf[0]+2, 8);
-				// FSM_USART End
-				FSM_Sta = FSM_DATA;
-				break;
+    /************************** FSM UART ***************************************/
+    case FSM_UART:
+      // FSM_USART
+      RS232_VisualScope(USART3, TxBuf[0]+2, 8);
+      // FSM_USART End
+      FSM_Sta = FSM_DATA;
+      break;
 
-/************************** FSM DATA **************************************/
-			case FSM_DATA:
-				// FSM_DATA
-        Transport_Send(TxBuf[0]);
-				// FSM_DATA End
-				FSM_Sta = FSM_Tx;
-				break;
-		}
-	}
+    /************************** FSM DATA **************************************/
+    case FSM_DATA:
+      // FSM_DATA
+      Transport_Send(TxBuf[0]);
+      // FSM_DATA End
+      FSM_Sta = FSM_Tx;
+      break;
+    }
+  }
 }
 /*=====================================================================================================*/
 /*=====================================================================================================*/

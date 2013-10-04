@@ -103,9 +103,9 @@ void AHRS_Update( void )
   tempY = (-Mag.X*arm_sin_f32(Ellipse[0])+Mag.Y*arm_cos_f32(Ellipse[0]))/Ellipse[3];
   AngE.Yaw = atan2f(tempX, tempY);
 
-	AngE.Pitch = toDeg(AngE.Pitch);
-	AngE.Roll  = toDeg(AngE.Roll);
-	AngE.Yaw   = toDeg(AngE.Yaw)+180.0f;
+  AngE.Pitch = toDeg(AngE.Pitch);
+  AngE.Roll  = toDeg(AngE.Roll);
+  AngE.Yaw   = toDeg(AngE.Yaw)+180.0f;
 
   /* 互補濾波 Complementary Filter */
   #define CF_A 0.985f
