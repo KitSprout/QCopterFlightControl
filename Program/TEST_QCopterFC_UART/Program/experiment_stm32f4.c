@@ -17,18 +17,16 @@ void GPIO_Config( void );
 int main( void )
 {
   u8 i = 0;
-  u8 TrData[8] = {0};
 
-	SystemInit();
-	GPIO_Config();
-	RS232_Config();
+  SystemInit();
+  GPIO_Config();
+  RS232_Config();
 
   while(1) {
     LED_G = ~LED_G;
 
     i++;
 
-    NumToChar(Type_D, 3, TrData, i);
     RS232_SendStr(USART3, (u8*)"i = ");
     RS232_SendNum(USART3, Type_D, 3, i);
     RS232_SendStr(USART3, (u8*)"\r\n");
@@ -36,18 +34,18 @@ int main( void )
     if(i==255)  i = 0;
 
     Delay_100ms(1);
-	}
+  }
 }
 /*=====================================================================================================*/
 /*=====================================================================================================*/
 void GPIO_Config( void )
 {
-	GPIO_InitTypeDef GPIO_InitStruct;
+  GPIO_InitTypeDef GPIO_InitStruct;
 
   RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB | RCC_AHB1Periph_GPIOC, ENABLE);
 
   /* LED_R PC13 */  /* LED_G PC14 */  /* LED_B PC15 */
-	GPIO_InitStruct.GPIO_Pin = GPIO_Pin_13 | GPIO_Pin_14 | GPIO_Pin_15;
+  GPIO_InitStruct.GPIO_Pin = GPIO_Pin_13 | GPIO_Pin_14 | GPIO_Pin_15;
   GPIO_InitStruct.GPIO_Mode = GPIO_Mode_OUT;
   GPIO_InitStruct.GPIO_OType = GPIO_OType_PP;
   GPIO_InitStruct.GPIO_Speed = GPIO_Speed_50MHz;
@@ -55,7 +53,7 @@ void GPIO_Config( void )
   GPIO_Init(GPIOC, &GPIO_InitStruct);
 
   /* KEY PB2 */
-	GPIO_InitStruct.GPIO_Pin = GPIO_Pin_2;
+  GPIO_InitStruct.GPIO_Pin = GPIO_Pin_2;
   GPIO_InitStruct.GPIO_Mode = GPIO_Mode_IN;
   GPIO_InitStruct.GPIO_PuPd = GPIO_PuPd_NOPULL;
   GPIO_Init(GPIOB, &GPIO_InitStruct);
