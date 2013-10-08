@@ -23,7 +23,7 @@ void RS232_Config( void )
   GPIO_PinAFConfig(GPIOB, GPIO_PinSource10, GPIO_AF_USART3);
   GPIO_PinAFConfig(GPIOB, GPIO_PinSource11, GPIO_AF_USART3);
 
-  /* USART3 Tx PB10 */	/* USART3 Rx PB11 */
+  /* USART1 Tx PB10 */	/* USART1 Rx PB11 */
   GPIO_InitStruct.GPIO_Pin = GPIO_Pin_10 | GPIO_Pin_11;
   GPIO_InitStruct.GPIO_Mode = GPIO_Mode_AF;
   GPIO_InitStruct.GPIO_OType = GPIO_OType_PP;
@@ -39,6 +39,8 @@ void RS232_Config( void )
   USART_InitStruct.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;
   USART_Init(USART3, &USART_InitStruct);
   USART_Cmd(USART3, ENABLE);
+
+  USART_ClearFlag(USART1, USART_FLAG_TC);
 }
 /*=====================================================================================================*/
 /*=====================================================================================================*
@@ -155,7 +157,7 @@ static u16 RS232_VisualScope_CRC16( u8 *Array, u16 Len )
 }
 /*=====================================================================================================*/
 /*=====================================================================================================*
-**函數 : USART_VisualScope
+**函數 : RS232_VisualScope
 **功能 : 
 **輸入 : 
 **輸出 : 
@@ -179,4 +181,3 @@ void RS232_VisualScope( USART_TypeDef* USARTx, u8 *pWord, u16 Len )
 }
 /*=====================================================================================================*/
 /*=====================================================================================================*/
-

@@ -3,7 +3,7 @@
 * File Name   : Readme.md
 * Author      : Hom19910422
 * Version     : v2.0
-* Update      : 2013/10/03
+* Update      : 2013/10/08
 * Description : QCopterFlightControl Information
 * Wiki        : https://github.com/Hom19910422/QCopterFlightControl/wiki
 
@@ -17,7 +17,7 @@
 * 1個USB接口　與攝像板連接、外擴其他裝置
 * 2個ADC通道　測量電量
 * 12個PWM通道　連接電調、LED、PPM
-* 1個UART接口　可擴充GPS模組、藍芽模組、RS232
+* 1個UART接口　可擴充 GPS 模組、藍芽模組、RS232
 
 Hardware
 ========
@@ -32,7 +32,7 @@ Program
 Test
 ========
 * QCopterFC LED
-* QCopterFC USART
+* QCopterFC UART
 * QCopterFC PWM (( TIM8目前無法輸出PWM
 * QCopterFC ADC
 * QCopterFC CamSPI-Master
