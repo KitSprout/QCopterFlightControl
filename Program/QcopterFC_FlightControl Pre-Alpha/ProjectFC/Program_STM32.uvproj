@@ -558,14 +558,9 @@
               <FilePath>..\Program_Module\module_sensor.c</FilePath>
             </File>
             <File>
-              <FileName>module_mpu6050.c</FileName>
+              <FileName>module_mpu9150.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Program_Module\module_mpu6050.c</FilePath>
-            </File>
-            <File>
-              <FileName>module_hmc5883.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Program_Module\module_hmc5883.c</FilePath>
+              <FilePath>..\Program_Module\module_mpu9150.c</FilePath>
             </File>
             <File>
               <FileName>module_ms5611.c</FileName>

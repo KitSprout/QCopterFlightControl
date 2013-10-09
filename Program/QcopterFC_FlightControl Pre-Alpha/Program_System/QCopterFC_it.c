@@ -9,8 +9,7 @@
 #include "module_board.h"
 #include "module_motor.h"
 #include "module_sensor.h"
-#include "module_mpu6050.h"
-#include "module_hmc5883.h"
+#include "module_mpu9150.h"
 #include "algorithm_PID.h"
 #include "algorithm_moveAve.h"
 #include "algorithm_mathUnit.h"
@@ -64,7 +63,8 @@ void SysTick_Handler( void )
   }
 
   /* Read Sensor 400Hz */
-  I2C_DMA_ReadReg(MPU6050_I2C_ADDR, MPU6050_ACCEL_XOUT_H, IMU_Buf,   14);
+  MPU9150_Read(IMU_Buf);
+//  I2C_DMA_ReadReg(MPU6050_I2C_ADDR, MPU6050_ACCEL_XOUT_H, IMU_Buf,   14);
 //   I2C_DMA_ReadReg(HMC5883_I2C_ADDR, HMC5883_REG_DATA_X_H, IMU_Buf+14, 6);
 
   Acc.X = (s16)((IMU_Buf[0]  << 8) | IMU_Buf[1]);
@@ -105,9 +105,9 @@ void SysTick_Handler( void )
         Gyr.OffsetY = MPU6050G_Y_Theoretic + Gyr.Y;	// 角速度為 0dps
         Gyr.OffsetZ = MPU6050G_Z_Theoretic + Gyr.Z;	// 角速度為 0dps
 
-        Acc.TrueX = Acc.X*MPU6050A_4mg;      // g/LSB
-        Acc.TrueY = Acc.Y*MPU6050A_4mg;      // g/LSB
-        Acc.TrueZ = Acc.Z*MPU6050A_4mg;      // g/LSB
+        Acc.TrueX = Acc.X*MPU9150A_4mg;      // g/LSB
+        Acc.TrueY = Acc.Y*MPU9150A_4mg;      // g/LSB
+        Acc.TrueZ = Acc.Z*MPU9150A_4mg;      // g/LSB
 
         AngE.Pitch = atan2f(Acc.TrueY, Acc.TrueZ);
         AngE.Roll  = -asinf(Acc.TrueX);
@@ -194,15 +194,15 @@ void SysTick_Handler( void )
       Mag.Z = (s16)MoveAve_WMA(Mag.Z, MAG_FIFO[2], 8);
 
       /* To Physical */
-      Acc.TrueX = Acc.X*MPU6050A_4mg;       // g/LSB
-      Acc.TrueY = Acc.Y*MPU6050A_4mg;       // g/LSB
-      Acc.TrueZ = Acc.Z*MPU6050A_4mg;       // g/LSB
-      Gyr.TrueX = Gyr.X*MPU6050G_s500dps;   // dps/LSB
-      Gyr.TrueY = Gyr.Y*MPU6050G_s500dps;   // dps/LSB
-      Gyr.TrueZ = Gyr.Z*MPU6050G_s500dps;   // dps/LSB
-      Mag.TrueX = Mag.X*HMC5883_1p3G_XY;    // gauss/LSB
-      Mag.TrueY = Mag.Y*HMC5883_1p3G_XY;    // gauss/LSB
-      Mag.TrueZ = Mag.Z*HMC5883_1p3G_Z;     // gauss/LSB
+      Acc.TrueX = Acc.X*MPU9150A_4mg;       // g/LSB
+      Acc.TrueY = Acc.Y*MPU9150A_4mg;       // g/LSB
+      Acc.TrueZ = Acc.Z*MPU9150A_4mg;       // g/LSB
+      Gyr.TrueX = Gyr.X*MPU9150G_s500dps;   // dps/LSB
+      Gyr.TrueY = Gyr.Y*MPU9150G_s500dps;   // dps/LSB
+      Gyr.TrueZ = Gyr.Z*MPU9150G_s500dps;   // dps/LSB
+      Mag.TrueX = Mag.X*MPU9150M_1200uT;    // uT/LSB
+      Mag.TrueY = Mag.Y*MPU9150M_1200uT;    // uT/LSB
+      Mag.TrueZ = Mag.Z*MPU9150M_1200uT;    // uT/LSB
 
       AHRS_Update();
 

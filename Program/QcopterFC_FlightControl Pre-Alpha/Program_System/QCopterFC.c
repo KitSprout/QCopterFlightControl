@@ -52,7 +52,8 @@ int main( void )
     Sta = nRF_Check();
 
   /* Sensor Init */
-  Sensor_Init();
+  if(Sensor_Init() == SUCCESS)
+    LED_G = 0;
   Delay_10ms(10);
 
   LED_B = 0;
