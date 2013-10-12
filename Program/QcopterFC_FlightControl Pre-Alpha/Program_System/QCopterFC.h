@@ -6,23 +6,30 @@
 #include "stm32f4xx.h"
 /*=====================================================================================================*/
 /*=====================================================================================================*/
-#define FSM_Tx    0
-#define FSM_Rx    1
-#define FSM_CTRL  2
-#define FSM_UART  3
-#define FSM_DATA  4
+typedef __IO enum {
+  FSM_Tx,
+  FSM_Rx,
+  FSM_CTRL,
+  FSM_UART,
+  FSM_DATA
+} FSM_Mode;
 
-#define Mode_OffSet     0
-#define Mode_Magnetic   1
-#define Mode_Algorithm  2
+typedef __IO enum {
+  Mode_GyrCorrect,
+  Mode_AccCorrect,  // 僅在水平狀態下做校正
+  Mode_MagCorrect,
+  Mode_Quaternion,
+  Mode_Algorithm
+} Sensor_Mode;
 /*=====================================================================================================*/
 /*=====================================================================================================*/
 extern vu8 Time_Sec;
 extern vu8 Time_Min;
 extern vu8 RecvTime_Sec;
 extern vu8 RecvTime_Min;
-extern vu8 SensorMode;
 extern vu16 SysTick_Cnt;
+
+extern Sensor_Mode SensorMode;
 /*=====================================================================================================*/
 /*=====================================================================================================*/
 #endif	

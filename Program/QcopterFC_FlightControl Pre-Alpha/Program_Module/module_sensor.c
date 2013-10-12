@@ -28,9 +28,9 @@ u8 Sensor_Init( void )
   Acc.X = 0;
   Acc.Y = 0;
   Acc.Z = 0;
-  Acc.OffsetX = +30;
-  Acc.OffsetY = +320;
-  Acc.OffsetZ = -70;
+  Acc.OffsetX = -480;
+  Acc.OffsetY = +165;
+  Acc.OffsetZ = +550;
   Acc.TrueX = 0.0f;
   Acc.TrueY = 0.0f;
   Acc.TrueZ = 0.0f;
@@ -68,7 +68,7 @@ u8 Sensor_Init( void )
   Ang.TrueZ = 0.0f;
 
   Sta = MPU9150_Init();
-  MS5611_Init(&Baro);
+//  MS5611_Init(&Baro);
 
   return Sta;
 }

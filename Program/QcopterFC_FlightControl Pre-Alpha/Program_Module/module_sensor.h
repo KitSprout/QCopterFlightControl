@@ -6,15 +6,15 @@
 #include "stm32f4xx.h"
 /*=====================================================================================================*/
 /*=====================================================================================================*/
-#define MPU6050A_X_Theoretic 0
-#define MPU6050A_Y_Theoretic 0
-#define MPU6050A_Z_Theoretic 8000	// 1000mg/2mg = 500, 500<<4 = 8000
-#define MPU6050G_X_Theoretic 0
-#define MPU6050G_Y_Theoretic 0
-#define MPU6050G_Z_Theoretic 0
-#define HMC5883_X_Theoretic  0			// 36352.52nT = 0.3635252Gauss
-#define HMC5883_Y_Theoretic  0
-#define HMC5883_Z_Theoretic  0
+#define ACC_X_Horizontal 0
+#define ACC_Y_Horizontal 0
+#define ACC_Z_Horizontal 8192
+#define GYR_X_Horizontal 0
+#define GYR_Y_Horizontal 0
+#define GYR_Z_Horizontal 0
+#define MAG_X_Horizontal 0
+#define MAG_Y_Horizontal 0
+#define MAG_Z_Horizontal 0
 /*=====================================================================================================*/
 /*=====================================================================================================*/
 typedef struct {

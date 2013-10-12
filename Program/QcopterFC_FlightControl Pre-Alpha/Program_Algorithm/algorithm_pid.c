@@ -17,8 +17,8 @@
 void PID_Init( PID_Struct *PID )
 {
   PID->Kp      = 3.5f;
-  PID->Ki      = 0.0f;
-  PID->Kd      = 2.0f;
+  PID->Ki      = 0.004f;
+  PID->Kd      = 4.0f;
 
   PID->Err0    = 0.0f;
   PID->Err1    = 0.0f;

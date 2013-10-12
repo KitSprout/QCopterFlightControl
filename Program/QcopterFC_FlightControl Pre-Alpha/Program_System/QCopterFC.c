@@ -33,7 +33,7 @@ void System_Init( void )
 int main( void )
 {
   u8 Sta = ERROR;
-  u8 FSM_Sta = FSM_Rx;
+  FSM_Mode FSM_State = FSM_Rx;
 
   /* System Init */
   System_Init();
@@ -56,30 +56,30 @@ int main( void )
     LED_G = 0;
   Delay_10ms(10);
 
-  LED_B = 0;
-  Delay_10ms(10);
-
   /* Systick Config */
   if(SysTick_Config(420000)) {    // 168MHz / 420000 = 400Hz = 2.5ms
     while(1);
   }
 
   /* Wait Correction */
-  while(SensorMode == Mode_OffSet || SensorMode == Mode_Magnetic);
-
-  LED_B = 1;
+  while(SensorMode != Mode_Algorithm);
 
   /* Lock */
-  while(!KEY){
-    LED_R = ~LED_R;
-    Delay_100ms(5);
-  }
   LED_R = 1;
+  LED_G = 1;
+  LED_B = 1;
+  while(!KEY) {
+    LED_B = ~LED_B;
+    Delay_100ms(5);
+    Transport_Send(TxBuf[0]);
+    RS232_VisualScope(USART3, TxBuf[0]+2, 8);
+  }
+  LED_B = 1;
 
   /* Final State Machine */
   while(1) {
     LED_G = ~LED_G;
-    switch(FSM_Sta) {
+    switch(FSM_State) {
 
     /************************** FSM Tx ****************************************/
     case FSM_Tx:
@@ -89,7 +89,7 @@ int main( void )
         Sta = nRF_Tx_Data(TxBuf[0]);
       } while(Sta == MAX_RT);
       // FSM_Tx End
-      FSM_Sta = FSM_Rx;
+      FSM_State = FSM_Rx;
       break;
 
     /************************** FSM Rx ****************************************/
@@ -101,7 +101,7 @@ int main( void )
         Transport_Recv(RxBuf[0]);
       }
       // FSM_Rx End
-      FSM_Sta = FSM_CTRL;
+      FSM_State = FSM_CTRL;
       break;
 
     /************************** FSM CTRL **************************************/
@@ -109,7 +109,7 @@ int main( void )
       // FSM_CTRL
       CTRL_FlightControl();
       // FSM_CTRL End
-      FSM_Sta = FSM_UART;
+      FSM_State = FSM_UART;
       break;
 
     /************************** FSM UART ***************************************/
@@ -117,7 +117,7 @@ int main( void )
       // FSM_USART
       RS232_VisualScope(USART3, TxBuf[0]+2, 8);
       // FSM_USART End
-      FSM_Sta = FSM_DATA;
+      FSM_State = FSM_DATA;
       break;
 
     /************************** FSM DATA **************************************/
@@ -125,7 +125,7 @@ int main( void )
       // FSM_DATA
       Transport_Send(TxBuf[0]);
       // FSM_DATA End
-      FSM_Sta = FSM_Tx;
+      FSM_State = FSM_Tx;
       break;
     }
   }
