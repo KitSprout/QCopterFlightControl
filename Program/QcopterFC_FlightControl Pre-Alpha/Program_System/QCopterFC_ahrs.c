@@ -9,20 +9,18 @@
 /*=====================================================================================================*/
 #define Kp 5.0f
 #define Ki 0.025f
-
-#define halfT 0.00125f
 /*=====================================================================================================*/
 /*=====================================================================================================*/
-void AHRS_Init( void )
+void AHRS_Init( Quaternion *pNumQ, EulerAngle *pAngE )
 {
-  NumQ.q0 = 1.0f;
-  NumQ.q1 = 0.0f;
-  NumQ.q2 = 0.0f;
-  NumQ.q3 = 0.0f;
+  pNumQ->q0 = 1.0f;
+  pNumQ->q1 = 0.0f;
+  pNumQ->q2 = 0.0f;
+  pNumQ->q3 = 0.0f;
 
-  AngE.Pitch = 0.0f;
-  AngE.Roll  = 0.0f;
-  AngE.Yaw   = 0.0f;
+  pAngE->Pitch = 0.0f;
+  pAngE->Roll  = 0.0f;
+  pAngE->Yaw   = 0.0f;
 }
 /*=====================================================================================================*/
 /*=====================================================================================================*/
@@ -94,12 +92,12 @@ void AHRS_Update( void )
   GyrY = GyrY + Kp*ErrY + eyInt;
   GyrZ = GyrZ + Kp*ErrZ + ezInt;
 
-  Quaternion_RungeKutta(&NumQ, GyrX, GyrY, GyrZ, halfT);
+  Quaternion_RungeKutta(&NumQ, GyrX, GyrY, GyrZ, SampleRateHelf);
   Quaternion_Normalize(&NumQ);
   Quaternion_ToAngE(&NumQ, &AngE);
 
 //  AngE.Yaw = atan2f(Meg.TrueY, Meg.TrueX);
-  tempX = (Mag.X*arm_cos_f32(Ellipse[0])+Mag.Y*arm_sin_f32(Ellipse[0]))/Ellipse[4];
+  tempX = ( Mag.X*arm_cos_f32(Ellipse[0])+Mag.Y*arm_sin_f32(Ellipse[0]))/Ellipse[4];
   tempY = (-Mag.X*arm_sin_f32(Ellipse[0])+Mag.Y*arm_cos_f32(Ellipse[0]))/Ellipse[3];
   AngE.Yaw = atan2f(tempX, tempY);
 
@@ -110,8 +108,7 @@ void AHRS_Update( void )
   /* 互補濾波 Complementary Filter */
   #define CF_A 0.985f
   #define CF_B 0.015f
-  #define CF_dt 0.0025f
-  AngZ_Temp = AngZ_Temp + GyrZ*CF_dt;
+  AngZ_Temp = AngZ_Temp + GyrZ*SampleRate;
   AngZ_Temp = CF_A*AngZ_Temp + CF_B*AngE.Yaw;
   if(AngZ_Temp>360.0f)
     AngE.Yaw = AngZ_Temp - 360.0f;

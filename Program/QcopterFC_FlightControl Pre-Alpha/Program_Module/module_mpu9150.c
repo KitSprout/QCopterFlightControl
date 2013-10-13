@@ -26,7 +26,13 @@ u8 MPU9150_Init( void )
       {0x00, MPU6050_USER_CTRL},    // 
       {0x82, MPU6050_INT_PIN_CFG},  // 
     };
+//  u8 AK8975_Init_Data[3][2] = {
+//      {0x01, MPU6050_PWR_MGMT_1},   // 
+//      {0x18, MPU6050_GYRO_CONFIG},  // 
+//      {0x08, MPU6050_ACCEL_CONFIG}  // 
+//    };
 
+  /* MPU6050 */
   I2C_DMA_ReadReg(MPU6050_I2C_ADDR,  MPU6050_WHO_AM_I, &ReadID, 1);
   if(ReadID != MPU6050_Device_ID)
     return ERROR;
@@ -38,9 +44,15 @@ u8 MPU9150_Init( void )
     Delay_1ms(10);
   }
 
+//  /* AK8975 */
 //  I2C_DMA_ReadReg(AK8975_I2C_ADDR,  AK8975_WIA, &ReadID, 1);
 //  if(ReadID != AK8975_Device_ID)
 //    return ERROR;
+
+//  for(i=0; i<3; i++) {
+//    I2C_DMA_WriteReg(AK8975_I2C_ADDR, AK8975_Init_Data[i][1], AK8975_Init_Data[i], 1);
+//    Delay_1ms(10);
+//  }
 
   return SUCCESS;
 }
@@ -55,7 +67,8 @@ u8 MPU9150_Init( void )
 /*==============================================================================================*/
 void MPU9150_Read( u8* ReadBuf )
 {
-  I2C_DMA_ReadReg(MPU6050_I2C_ADDR, MPU6050_ACCEL_XOUT_H, ReadBuf, 14);
+  I2C_DMA_ReadReg(MPU6050_I2C_ADDR, MPU6050_ACCEL_XOUT_H, ReadBuf,    14);
+//  I2C_DMA_ReadReg(AK8975_I2C_ADDR,  AK8975_HXL,           ReadBuf+14,  6);
 }
 /*==============================================================================================*/
 /*==============================================================================================*
@@ -82,22 +95,6 @@ void MPU9150_Bypass( u8 Bypass )
     ReadBuf |= 0x02;
     I2C_DMA_WriteReg(MPU6050_I2C_ADDR, MPU6050_USER_CTRL, &ReadBuf, 1);
     Delay_1ms(5);
-
-//    i2c_read(st.hw->addr, st.reg->user_ctrl, 1, &tmp)
-//    if (st.chip_cfg.sensors & INV_XYZ_COMPASS)
-//      tmp |= BIT_AUX_IF_EN;
-//    else
-//      tmp &= ~BIT_AUX_IF_EN;
-//    i2c_write(st.hw->addr, st.reg->user_ctrl, 1, &tmp)
-
-//    delay_ms(3);
-//    if (st.chip_cfg.active_low_int)
-//      tmp = BIT_ACTL;
-//    else
-//      tmp = 0;
-//    if (st.chip_cfg.latched_int)
-//      tmp |= BIT_LATCH_EN | BIT_ANY_RD_CLR;
-//    i2c_write(st.hw->addr, st.reg->int_pin_cfg, 1, &tmp)
   }
 }
 /*==============================================================================================*/

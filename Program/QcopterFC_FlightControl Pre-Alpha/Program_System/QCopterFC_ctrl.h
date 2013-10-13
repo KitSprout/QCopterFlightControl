@@ -10,10 +10,6 @@
 void CTRL_FlightControl( void );
 /*=====================================================================================================*/
 /*=====================================================================================================*/
-extern PID_Struct PID_Yaw;
-extern PID_Struct PID_Roll;
-extern PID_Struct PID_Pitch;
-
 extern vs16 PWM_M1;
 extern vs16 PWM_M2;
 extern vs16 PWM_M3;

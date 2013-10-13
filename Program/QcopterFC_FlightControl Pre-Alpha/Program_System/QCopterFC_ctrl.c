@@ -8,10 +8,6 @@
 #include "algorithm_pid.h"
 /*=====================================================================================================*/
 /*=====================================================================================================*/
-PID_Struct PID_Yaw;
-PID_Struct PID_Roll;
-PID_Struct PID_Pitch;
-
 vs16 PWM_M1 = PWM_MOTOR_MIN;
 vs16 PWM_M2 = PWM_MOTOR_MIN;
 vs16 PWM_M3 = PWM_MOTOR_MIN;

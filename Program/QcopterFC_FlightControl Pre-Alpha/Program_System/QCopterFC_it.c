@@ -99,11 +99,11 @@ void SysTick_Handler( void )
       Gyr.Y = (s16)MoveAve_SMA(Gyr.Y, GYR_FIFO[1], MovegAveFIFO_Size);
       Gyr.Z = (s16)MoveAve_SMA(Gyr.Z, GYR_FIFO[2], MovegAveFIFO_Size);
 
-      Correction_Time++;	// 等待 FIFO 填滿空值 or 填滿靜態資料
+      Correction_Time++;  // 等待 FIFO 填滿空值 or 填滿靜態資料
       if(Correction_Time == 400) {
-        Gyr.OffsetX += (GYR_X_Horizontal + Gyr.X);	// 角速度為 0dps
-        Gyr.OffsetY += (GYR_Y_Horizontal + Gyr.Y);	// 角速度為 0dps
-        Gyr.OffsetZ += (GYR_Z_Horizontal + Gyr.Z);	// 角速度為 0dps
+        Gyr.OffsetX += (Gyr.X - GYR_X_Horizontal);  // 角速度為 0dps
+        Gyr.OffsetY += (Gyr.Y - GYR_Y_Horizontal);  // 角速度為 0dps
+        Gyr.OffsetZ += (Gyr.Z - GYR_Z_Horizontal);  // 角速度為 0dps
 
         Correction_Time = 0;
         SensorMode = Mode_AccCorrect;
@@ -117,11 +117,11 @@ void SysTick_Handler( void )
       Acc.Y = (s16)MoveAve_SMA(Acc.Y, ACC_FIFO[1], MovegAveFIFO_Size);
       Acc.Z = (s16)MoveAve_SMA(Acc.Z, ACC_FIFO[2], MovegAveFIFO_Size);
 
-      Correction_Time++;	// 等待 FIFO 填滿空值 or 填滿靜態資料
+      Correction_Time++;  // 等待 FIFO 填滿空值 or 填滿靜態資料
       if(Correction_Time == 400) {
-        Acc.OffsetX += (ACC_X_Horizontal + Acc.X);	// 重力加速度為 0g
-        Acc.OffsetY += (ACC_Y_Horizontal + Acc.Y);	// 重力加速度為 0g
-        Acc.OffsetZ += (ACC_Z_Horizontal + Acc.Z);	// 重力加速度為 1g
+        Acc.OffsetX += (Acc.X - ACC_X_Horizontal);  // 重力加速度為 0g
+        Acc.OffsetY += (Acc.Y - ACC_Y_Horizontal);  // 重力加速度為 0g
+        Acc.OffsetZ += (Acc.Z - ACC_Z_Horizontal);  // 重力加速度為 1g
 
         Correction_Time = 0;
         SensorMode = Mode_Quaternion;   // Mode_CorrectMag
@@ -191,15 +191,15 @@ void SysTick_Handler( void )
     case Mode_Quaternion:
       LED_R = !LED_R;
       /* To Physical */
-      Acc.TrueX = Acc.X*MPU9150A_4g;        // g/LSB
-      Acc.TrueY = Acc.Y*MPU9150A_4g;        // g/LSB
-      Acc.TrueZ = Acc.Z*MPU9150A_4g;        // g/LSB
-      Gyr.TrueX = Gyr.X*MPU9150G_2000dps;   // dps/LSB
-      Gyr.TrueY = Gyr.Y*MPU9150G_2000dps;   // dps/LSB
-      Gyr.TrueZ = Gyr.Z*MPU9150G_2000dps;   // dps/LSB
-      Mag.TrueX = Mag.X*MPU9150M_1200uT;    // uT/LSB
-      Mag.TrueY = Mag.Y*MPU9150M_1200uT;    // uT/LSB
-      Mag.TrueZ = Mag.Z*MPU9150M_1200uT;    // uT/LSB
+      Acc.TrueX = Acc.X*MPU9150A_4g;      // g/LSB
+      Acc.TrueY = Acc.Y*MPU9150A_4g;      // g/LSB
+      Acc.TrueZ = Acc.Z*MPU9150A_4g;      // g/LSB
+      Gyr.TrueX = Gyr.X*MPU9150G_2000dps; // dps/LSB
+      Gyr.TrueY = Gyr.Y*MPU9150G_2000dps; // dps/LSB
+      Gyr.TrueZ = Gyr.Z*MPU9150G_2000dps; // dps/LSB
+      Mag.TrueX = Mag.X*MPU9150M_1200uT;  // uT/LSB
+      Mag.TrueY = Mag.Y*MPU9150M_1200uT;  // uT/LSB
+      Mag.TrueZ = Mag.Z*MPU9150M_1200uT;  // uT/LSB
 
       AngE.Pitch = toDeg(atan2f(Acc.TrueY, Acc.TrueZ));
       AngE.Roll  = toDeg(-asinf(Acc.TrueX));
@@ -225,16 +225,17 @@ void SysTick_Handler( void )
       Mag.Z = (s16)MoveAve_WMA(Mag.Z, MAG_FIFO[2], 8);
 
       /* To Physical */
-      Acc.TrueX = Acc.X*MPU9150A_4g;        // g/LSB
-      Acc.TrueY = Acc.Y*MPU9150A_4g;        // g/LSB
-      Acc.TrueZ = Acc.Z*MPU9150A_4g;        // g/LSB
-      Gyr.TrueX = Gyr.X*MPU9150G_2000dps;   // dps/LSB
-      Gyr.TrueY = Gyr.Y*MPU9150G_2000dps;   // dps/LSB
-      Gyr.TrueZ = Gyr.Z*MPU9150G_2000dps;   // dps/LSB
-      Mag.TrueX = Mag.X*MPU9150M_1200uT;    // uT/LSB
-      Mag.TrueY = Mag.Y*MPU9150M_1200uT;    // uT/LSB
-      Mag.TrueZ = Mag.Z*MPU9150M_1200uT;    // uT/LSB
+      Acc.TrueX = Acc.X*MPU9150A_4g;      // g/LSB
+      Acc.TrueY = Acc.Y*MPU9150A_4g;      // g/LSB
+      Acc.TrueZ = Acc.Z*MPU9150A_4g;      // g/LSB
+      Gyr.TrueX = Gyr.X*MPU9150G_2000dps; // dps/LSB
+      Gyr.TrueY = Gyr.Y*MPU9150G_2000dps; // dps/LSB
+      Gyr.TrueZ = Gyr.Z*MPU9150G_2000dps; // dps/LSB
+      Mag.TrueX = Mag.X*MPU9150M_1200uT;  // uT/LSB
+      Mag.TrueY = Mag.Y*MPU9150M_1200uT;  // uT/LSB
+      Mag.TrueZ = Mag.Z*MPU9150M_1200uT;  // uT/LSB
 
+      /* Get Attitude Angle */
       AHRS_Update();
 
       if(KEYL_U == 0)	{	PID_Roll.Kp += 0.001f;	PID_Pitch.Kp += 0.001f;  }
@@ -251,18 +252,6 @@ void SysTick_Handler( void )
 //      if(KEYR_R == 0)	{	PID_Yaw.Kd += 0.0001f;	 }
 //      if(KEYR_D == 0)	{	PID_Yaw.Kd -= 0.0001f;	 }
 //      if(KEYR_L == 0)	{	PID_Roll.SumErr = 0.0f;	 }
-
-//      PID_Pitch.Kp = +0.1f;
-//      PID_Pitch.Ki = +0.2f;
-//      PID_Pitch.Kd = +0.3f;
-
-//      PID_Roll.Kp = +0.1f;
-//      PID_Roll.Ki = +0.2f;
-//      PID_Roll.Kd = +0.3f;
-
-      PID_Yaw.Kp = +0.0f;
-      PID_Yaw.Ki = +0.0f;
-      PID_Yaw.Kd = +0.25f;
 
       /* Get ZeroErr */
       PID_Pitch.ZeroErr = (float)((s16)Exp_Pitch/2.5f);
