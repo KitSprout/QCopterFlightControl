@@ -40,7 +40,7 @@ void RS232_Config( void )
   USART_Init(USART3, &USART_InitStruct);
   USART_Cmd(USART3, ENABLE);
 
-  USART_ClearFlag(USART1, USART_FLAG_TC);
+  USART_ClearFlag(USART3, USART_FLAG_TC);
 }
 /*=====================================================================================================*/
 /*=====================================================================================================*
