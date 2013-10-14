@@ -7,11 +7,11 @@
 vu16 ADC_DMA_Buf[ADC_Sample][ADC_Channel] = {0};
 /*=====================================================================================================*/
 /*=====================================================================================================*
-**¨ç¼Æ : ADC_Average
-**¥\¯à : ±N ADC Âà´««áªº¸ê®Æ¨ú¥­§¡
-**¿é¤J : ADC_AveTr
-**¿é¥X : None
-**¨Ï¥Î : ADC_Average(ADC_AveTr);
+**å‡½æ•¸ : ADC_Average
+**åŠŸèƒ½ : å°‡ ADC è½‰æ›å¾Œçš„è³‡æ–™å–å¹³å‡
+**è¼¸å…¥ : ADC_AveTr
+**è¼¸å‡º : None
+**ä½¿ç”¨ : ADC_Average(ADC_AveTr);
 **=====================================================================================================*/
 /*=====================================================================================================*/
 void ADC_Config( void )
@@ -38,12 +38,12 @@ void ADC_Config( void )
   DMA_InitStruct.DMA_Memory0BaseAddr = (u32)&ADC_DMA_Buf;                     // Memory address
   DMA_InitStruct.DMA_DIR = DMA_DIR_PeripheralToMemory;                        // Peripheral to Memory
   DMA_InitStruct.DMA_BufferSize = ADC_Sample*ADC_Channel;                     // Memory Buffer Size
-  DMA_InitStruct.DMA_PeripheralInc = DMA_PeripheralInc_Disable;               // Peripheral address »¼¼W Disable
-  DMA_InitStruct.DMA_MemoryInc = DMA_MemoryInc_Enable;                        // Memory address »¼¼W Enable
+  DMA_InitStruct.DMA_PeripheralInc = DMA_PeripheralInc_Disable;               // Peripheral address éå¢ Disable
+  DMA_InitStruct.DMA_MemoryInc = DMA_MemoryInc_Enable;                        // Memory address éå¢ Enable
   DMA_InitStruct.DMA_PeripheralDataSize = DMA_PeripheralDataSize_HalfWord;    // Peripheral Data Size 16bit
   DMA_InitStruct.DMA_MemoryDataSize = DMA_MemoryDataSize_HalfWord;            // Memory Data Size 16bit
-  DMA_InitStruct.DMA_Mode = DMA_Mode_Circular;                                // ´`Àô¼Ò¦¡ Enable
-  DMA_InitStruct.DMA_Priority = DMA_Priority_High;                            // ADC DMA³q¹D °ªÀu¥ı¯Å
+  DMA_InitStruct.DMA_Mode = DMA_Mode_Circular;                                // å¾ªç’°æ¨¡å¼ Enable
+  DMA_InitStruct.DMA_Priority = DMA_Priority_High;                            // ADC DMAé€šé“ é«˜å„ªå…ˆç´š
   DMA_InitStruct.DMA_FIFOMode = DMA_FIFOMode_Disable;                         // DMA FIFO Disable
   DMA_InitStruct.DMA_FIFOThreshold = DMA_FIFOThreshold_HalfFull;
   DMA_InitStruct.DMA_MemoryBurst = DMA_MemoryBurst_Single;
@@ -52,19 +52,19 @@ void ADC_Config( void )
   DMA_Cmd(DMA2_Stream0, ENABLE);
 
   /* ADC Common Init **********************************************************/
-  ADC_CommonInitStruct.ADC_Mode = ADC_Mode_Independent;                       // ¿W¥ß¼Ò¦¡
-  ADC_CommonInitStruct.ADC_Prescaler = ADC_Prescaler_Div2;                    // ¹w¤ÀÀW2
+  ADC_CommonInitStruct.ADC_Mode = ADC_Mode_Independent;                       // ç¨ç«‹æ¨¡å¼
+  ADC_CommonInitStruct.ADC_Prescaler = ADC_Prescaler_Div2;                    // é åˆ†é »2
   ADC_CommonInitStruct.ADC_DMAAccessMode = ADC_DMAAccessMode_Disabled;        // ADC DMA Mode Disable
-  ADC_CommonInitStruct.ADC_TwoSamplingDelay = ADC_TwoSamplingDelay_5Cycles;   // Âà´«©µ¿ğ®É¶¡
+  ADC_CommonInitStruct.ADC_TwoSamplingDelay = ADC_TwoSamplingDelay_5Cycles;   // è½‰æ›å»¶é²æ™‚é–“
   ADC_CommonInit(&ADC_CommonInitStruct);
 
   /* ADC Init *****************************************************************/
-  ADC_InitStruct.ADC_Resolution = ADC_Resolution_12b;                         // ¸ÑªR«× 12bit
-  ADC_InitStruct.ADC_ScanConvMode = ENABLE;                                   // ±½´y¼Ò¦¡
-  ADC_InitStruct.ADC_ContinuousConvMode = ENABLE;                             // ³sÄòÂà´«¼Ò¦¡
-  ADC_InitStruct.ADC_ExternalTrigConvEdge = ADC_ExternalTrigConvEdge_None;    // ¥~³¡Ä²µo Disable
-  ADC_InitStruct.ADC_DataAlign = ADC_DataAlign_Right;                         // ADC¼Æ¾Ú¥k¹ï»ô
-  ADC_InitStruct.ADC_NbrOfConversion = ADC_Channel;                           // Âà´«ADC³q¹D¼Æ¥Ø
+  ADC_InitStruct.ADC_Resolution = ADC_Resolution_12b;                         // è§£æåº¦ 12bit
+  ADC_InitStruct.ADC_ScanConvMode = ENABLE;                                   // æƒææ¨¡å¼
+  ADC_InitStruct.ADC_ContinuousConvMode = ENABLE;                             // é€£çºŒè½‰æ›æ¨¡å¼
+  ADC_InitStruct.ADC_ExternalTrigConvEdge = ADC_ExternalTrigConvEdge_None;    // å¤–éƒ¨è§¸ç™¼ Disable
+  ADC_InitStruct.ADC_DataAlign = ADC_DataAlign_Right;                         // ADCæ•¸æ“šå³å°é½Š
+  ADC_InitStruct.ADC_NbrOfConversion = ADC_Channel;                           // è½‰æ›ADCé€šé“æ•¸ç›®
   ADC_Init(ADC1, &ADC_InitStruct);
 
   /* ADC Regular Config *******************************************************/
@@ -79,11 +79,11 @@ void ADC_Config( void )
 }
 /*=====================================================================================================*/
 /*=====================================================================================================*
-**¨ç¼Æ : ADC_Average
-**¥\¯à : ±N ADC Âà´««áªº¸ê®Æ¨ú¥­§¡
-**¿é¤J : ADC_AveTr
-**¿é¥X : None
-**¨Ï¥Î : ADC_Average(ADC_AveTr);
+**å‡½æ•¸ : ADC_Average
+**åŠŸèƒ½ : å°‡ ADC è½‰æ›å¾Œçš„è³‡æ–™å–å¹³å‡
+**è¼¸å…¥ : ADC_AveTr
+**è¼¸å‡º : None
+**ä½¿ç”¨ : ADC_Average(ADC_AveTr);
 **=====================================================================================================*/
 /*=====================================================================================================*/
 void ADC_Average( u16* pADC_AveTr )
