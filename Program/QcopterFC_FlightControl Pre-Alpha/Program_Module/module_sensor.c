@@ -68,7 +68,7 @@ u8 Sensor_Init( void )
   Ang.TrueZ = 0.0f;
 
   Sta = MPU9150_Init();
-//  MS5611_Init(&Baro);
+  MS5611_Init(&Baro);
 
   return Sta;
 }

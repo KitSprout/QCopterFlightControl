@@ -25,7 +25,7 @@ void I2C_Config( void )
   NVIC_InitTypeDef NVIC_InitStruct;
   I2C_InitTypeDef I2C_InitStruct;
 
-  RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB | RCC_AHB1Periph_DMA1, ENABLE);
+  RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB | RCC_AHB1Periph_GPIOC | RCC_AHB1Periph_DMA1, ENABLE);
   RCC_APB1PeriphClockCmd(RCC_APB1Periph_I2C1, ENABLE);
 
   RCC_APB1PeriphResetCmd(RCC_APB1Periph_I2C1, DISABLE);
@@ -33,12 +33,18 @@ void I2C_Config( void )
   GPIO_PinAFConfig(GPIOB, GPIO_PinSource8, GPIO_AF_I2C1);
   GPIO_PinAFConfig(GPIOB, GPIO_PinSource9, GPIO_AF_I2C1);  
 
+  /* SCL PB8 */  /* SDA PB9 */
   GPIO_InitStruct.GPIO_Pin = GPIO_Pin_8 | GPIO_Pin_9;
   GPIO_InitStruct.GPIO_Mode = GPIO_Mode_AF;
   GPIO_InitStruct.GPIO_Speed = GPIO_Speed_50MHz;
   GPIO_InitStruct.GPIO_OType = GPIO_OType_OD;
   GPIO_InitStruct.GPIO_PuPd  = GPIO_PuPd_NOPULL;
   GPIO_Init(GPIOB, &GPIO_InitStruct);
+  /* INT PC3 */
+  GPIO_InitStruct.GPIO_Pin = GPIO_Pin_3;
+  GPIO_InitStruct.GPIO_Mode = GPIO_Mode_IN;
+  GPIO_InitStruct.GPIO_PuPd = GPIO_PuPd_NOPULL;
+  GPIO_Init(GPIOC, &GPIO_InitStruct);
 
   NVIC_InitStruct.NVIC_IRQChannel = DMA1_Stream0_IRQn;
   NVIC_InitStruct.NVIC_IRQChannelPreemptionPriority = 0;

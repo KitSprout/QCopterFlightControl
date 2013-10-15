@@ -44,6 +44,10 @@ u8 MPU9150_Init( void )
     Delay_1ms(10);
   }
 
+  Delay_1ms(10);
+
+//  MPU9150_Bypass(1);
+
 //  /* AK8975 */
 //  I2C_DMA_ReadReg(AK8975_I2C_ADDR,  AK8975_WIA, &ReadID, 1);
 //  if(ReadID != AK8975_Device_ID)
@@ -73,10 +77,10 @@ void MPU9150_Read( u8* ReadBuf )
 /*==============================================================================================*/
 /*==============================================================================================*
 **函數 : MPU9150_Bypass
-**功能 : 初始化 MPU9150
+**功能 : MPU9150 Bypass Enable/Disable
 **輸入 : None
 **輸出 : None
-**使用 : MPU9150_Bypass(IMU_Buf);
+**使用 : MPU9150_Bypass(1);
 **==============================================================================================*/
 /*==============================================================================================*/
 void MPU9150_Bypass( u8 Bypass )
@@ -88,6 +92,7 @@ void MPU9150_Bypass( u8 Bypass )
     ReadBuf &= (~0x02);
     I2C_DMA_WriteReg(MPU6050_I2C_ADDR, MPU6050_USER_CTRL, &ReadBuf, 1);
     Delay_1ms(5);
+    ReadBuf = 0x82;
     I2C_DMA_WriteReg(MPU6050_I2C_ADDR, MPU6050_INT_PIN_CFG, &ReadBuf, 1);
   }
   else {
