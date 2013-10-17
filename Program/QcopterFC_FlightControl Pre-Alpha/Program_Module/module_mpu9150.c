@@ -20,11 +20,11 @@ u8 MPU9150_Init( void )
   u8 ReadID = 0;
   u8 MPU6050_Init_Data[6][2] = {
       {0x01, MPU6050_PWR_MGMT_1},   // Reset device
+      {0x03, MPU6050_CONFIG},       // 
       {0x18, MPU6050_GYRO_CONFIG},  // +-2000dps
       {0x08, MPU6050_ACCEL_CONFIG}, // +-4G
-      {0x03, MPU6050_CONFIG},       // 
-      {0x00, MPU6050_USER_CTRL},    // 
-      {0x82, MPU6050_INT_PIN_CFG},  // 
+      {0x32, MPU6050_INT_PIN_CFG},  // 
+      {0x00, MPU6050_USER_CTRL}     // 
     };
 //  u8 AK8975_Init_Data[3][2] = {
 //      {0x01, MPU6050_PWR_MGMT_1},   // 
@@ -44,14 +44,10 @@ u8 MPU9150_Init( void )
     Delay_1ms(10);
   }
 
-  Delay_1ms(10);
-
-//  MPU9150_Bypass(1);
-
-//  /* AK8975 */
-//  I2C_DMA_ReadReg(AK8975_I2C_ADDR,  AK8975_WIA, &ReadID, 1);
-//  if(ReadID != AK8975_Device_ID)
-//    return ERROR;
+  /* AK8975 */
+  I2C_DMA_ReadReg(AK8975_I2C_ADDR,  AK8975_WIA, &ReadID, 1);
+  if(ReadID != AK8975_Device_ID)
+    return ERROR;
 
 //  for(i=0; i<3; i++) {
 //    I2C_DMA_WriteReg(AK8975_I2C_ADDR, AK8975_Init_Data[i][1], AK8975_Init_Data[i], 1);
@@ -72,7 +68,7 @@ u8 MPU9150_Init( void )
 void MPU9150_Read( u8* ReadBuf )
 {
   I2C_DMA_ReadReg(MPU6050_I2C_ADDR, MPU6050_ACCEL_XOUT_H, ReadBuf,    14);
-//  I2C_DMA_ReadReg(AK8975_I2C_ADDR,  AK8975_HXL,           ReadBuf+14,  6);
+  I2C_DMA_ReadReg(AK8975_I2C_ADDR,  AK8975_HXL,           ReadBuf+14,  6);
 }
 /*==============================================================================================*/
 /*==============================================================================================*

@@ -14,15 +14,17 @@
 /*==============================================================================================*/
 void AK8975_Init( void )
 {
-  u8 AK8975_Init_Data[3] = {
-      0x70, /* AK8975_REG_CONF_A */
-      0xA0, /* AK8975_REG_CONF_B */
-      0x00  /* AK8975_REG_MODE */
+  u8 i = 0;
+  u8 AK8975_Init_Data[3][2] = {
+      {0x01, MPU6050_PWR_MGMT_1},   // 
+      {0x03, MPU6050_CONFIG},       // 
+      {0x18, MPU6050_GYRO_CONFIG}   // 
     };
 
-  I2C_DMA_WriteReg(AK8975_I2C_ADDR, AK8975_WIA, AK8975_Init_Data,   1); Delay_1ms(10);
-  I2C_DMA_WriteReg(AK8975_I2C_ADDR, AK8975_WIA, AK8975_Init_Data+1, 1); Delay_1ms(10);
-  I2C_DMA_WriteReg(AK8975_I2C_ADDR, AK8975_WIA, AK8975_Init_Data+2, 1); Delay_1ms(10);
+  for(i=0; i<3; i++) {
+    I2C_DMA_WriteReg(AK8975_I2C_ADDR, AK8975_Init_Data[i][1], AK8975_Init_Data[i], 1);
+    Delay_1ms(10);
+  }
 }
 /*==============================================================================================*/
 /*==============================================================================================*/
