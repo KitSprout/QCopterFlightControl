@@ -414,6 +414,16 @@
               <FilePath>..\Libraries\CMSIS\system_stm32f4xx.c</FilePath>
             </File>
             <File>
+              <FileName>arm_sin_f32.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Libraries\CMSIS\FastMathFunctions\arm_sin_f32.c</FilePath>
+            </File>
+            <File>
+              <FileName>arm_cos_f32.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Libraries\CMSIS\FastMathFunctions\arm_cos_f32.c</FilePath>
+            </File>
+            <File>
               <FileName>misc.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Libraries\STM32F4xx_StdPeriph_Driver\src\misc.c</FilePath>
@@ -488,6 +498,11 @@
               <FileType>1</FileType>
               <FilePath>..\Program\experiment_stm32f4_it.c</FilePath>
             </File>
+            <File>
+              <FileName>QCopterFC_ahrs.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Program\QCopterFC_ahrs.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -517,6 +532,18 @@
         </Group>
         <Group>
           <GroupName>Algorithm</GroupName>
+          <Files>
+            <File>
+              <FileName>algorithm_moveAve.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Program\algorithm_moveAve.c</FilePath>
+            </File>
+            <File>
+              <FileName>algorithm_quaternion.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Program\algorithm_quaternion.c</FilePath>
+            </File>
+          </Files>
         </Group>
         <Group>
           <GroupName>Dou</GroupName>

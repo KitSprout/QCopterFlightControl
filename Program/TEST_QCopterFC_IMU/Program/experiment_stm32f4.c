@@ -3,36 +3,47 @@
 #include "stm32f4_system.h"
 #include "stm32f4_usart.h"
 #include "stm32f4_i2c.h"
+#include "experiment_stm32f4.h"
 #include "module_rs232.h"
 #include "module_sensor.h"
 #include "module_mpu9150.h"
 #include "module_ms5611.h"
 /*=====================================================================================================*/
 /*=====================================================================================================*/
-#define KEY   PBI(2)
-#define LED_R PCO(15)
-#define LED_G PCO(14)
-#define LED_B PCO(13)
-/*=====================================================================================================*/
-/*=====================================================================================================*/
 void GPIO_Config( void );
 /*=====================================================================================================*/
 /*=====================================================================================================*/
-int main( void )
+void System_Init( void )
 {
-  u8 IMU_Buf[24] = {0};
-  u8 USART_BUF[24] = {0};
-
-  u16 Tmep = 0;
-
   SystemInit();
   GPIO_Config();
   RS232_Config();
   I2C_Config();
 
+  /* Sensor Init */
   LED_G = (Sensor_Init() == SUCCESS) ? 0 : 1;
+  Delay_10ms(10);
 
-  Delay_100ms(5);
+  Delay_10ms(2);
+}
+/*=====================================================================================================*/
+/*=====================================================================================================*/
+int main( void )
+{
+  u16 TmpBuf[16] = {0};
+
+  u8 UART_BUF[24] = {0};
+
+  /* System Init */
+  System_Init();
+
+  /* Systick Config */
+  if(SysTick_Config(420000)) {    // 168MHz / 420000 = 400Hz = 2.5ms
+    while(1);
+  }
+
+  /* Wait Correction */
+  while(SensorMode != Mode_Algorithm);
 
   LED_R = 1;
   LED_G = 1;
@@ -41,44 +52,42 @@ int main( void )
   while(1) {
     LED_B = ~LED_B;
 
-    MPU9150_Read(IMU_Buf);
+    TmpBuf[0] = (s16)(Acc.TrueX*1000);  // 1 mg/LSB
+    TmpBuf[1] = (s16)(Acc.TrueY*1000);  // 1 mg/LSB
+    TmpBuf[2] = (s16)(Acc.TrueZ*1000);  // 1 mg/LSB
+    TmpBuf[3] = (s16)(Gyr.TrueX*100);   // 10 mdps/LSB
+    TmpBuf[4] = (s16)(Gyr.TrueY*100);   // 10 mdps/LSB
+    TmpBuf[5] = (s16)(Gyr.TrueZ*100);   // 10 mdps/LSB
+    TmpBuf[6] = (s16)(Mag.TrueX*10);    // 100 nTesla/LSB
+    TmpBuf[7] = (s16)(Mag.TrueY*10);    // 100 nTesla/LSB
+    TmpBuf[8] = (s16)(Mag.TrueZ*10);    // 100 nTesla/LSB
+    TmpBuf[9] = (s16)(Temp.TrueT*100);  // 0.01 degC/LSB
 
-    Acc.X = (s16)((IMU_Buf[0]  << 8) | IMU_Buf[1]);
-    Acc.Y = (s16)((IMU_Buf[2]  << 8) | IMU_Buf[3]);
-    Acc.Z = (s16)((IMU_Buf[4]  << 8) | IMU_Buf[5]);
-    Tmep  = (s16)((IMU_Buf[6]  << 8) | IMU_Buf[7]);
-    Gyr.X = (s16)((IMU_Buf[8]  << 8) | IMU_Buf[9]);
-    Gyr.Y = (s16)((IMU_Buf[10] << 8) | IMU_Buf[11]);
-    Gyr.Z = (s16)((IMU_Buf[12] << 8) | IMU_Buf[13]);
-    Mag.X = (s16)((IMU_Buf[15] << 8) | IMU_Buf[14]);
-    Mag.Y = (s16)((IMU_Buf[17] << 8) | IMU_Buf[16]);
-    Mag.Z = (s16)((IMU_Buf[19] << 8) | IMU_Buf[18]);
-
-    USART_BUF[0]  = (u8)(Acc.X);
-    USART_BUF[1]  = (u8)(Acc.X >> 8);
-    USART_BUF[2]  = (u8)(Acc.Y);
-    USART_BUF[3]  = (u8)(Acc.Y >> 8);
-    USART_BUF[4]  = (u8)(Acc.Z);
-    USART_BUF[5]  = (u8)(Acc.Z >> 8);
-    USART_BUF[6]  = (u8)(Tmep);
-    USART_BUF[7]  = (u8)(Tmep >> 8);
-//    USART_BUF[6]  = (u8)(Gyr.X);
-//    USART_BUF[7]  = (u8)(Gyr.X >> 8);
-    USART_BUF[8]  = (u8)(Gyr.Y);
-    USART_BUF[9]  = (u8)(Gyr.Y >> 8);
-    USART_BUF[10] = (u8)(Gyr.Z);
-    USART_BUF[11] = (u8)(Gyr.Z >> 8);
-    USART_BUF[12] = (u8)(Mag.X);
-    USART_BUF[13] = (u8)(Mag.X >> 8);
-    USART_BUF[14] = (u8)(Mag.Y);
-    USART_BUF[15] = (u8)(Mag.Y >> 8);
-    USART_BUF[16] = (u8)(Mag.Z);
-    USART_BUF[17] = (u8)(Mag.Z >> 8);
+    UART_BUF[0]  = (u8)(TmpBuf[0]);
+    UART_BUF[1]  = (u8)(TmpBuf[0] >> 8);
+    UART_BUF[2]  = (u8)(TmpBuf[1]);
+    UART_BUF[3]  = (u8)(TmpBuf[1] >> 8);
+    UART_BUF[4]  = (u8)(TmpBuf[2]);
+    UART_BUF[5]  = (u8)(TmpBuf[2] >> 8);
+    UART_BUF[6]  = (u8)(TmpBuf[3]);
+    UART_BUF[7]  = (u8)(TmpBuf[3] >> 8);
+    UART_BUF[8]  = (u8)(TmpBuf[4]);
+    UART_BUF[9]  = (u8)(TmpBuf[4] >> 8);
+    UART_BUF[10] = (u8)(TmpBuf[5]);
+    UART_BUF[11] = (u8)(TmpBuf[5] >> 8);
+    UART_BUF[12] = (u8)(TmpBuf[6]);
+    UART_BUF[13] = (u8)(TmpBuf[6] >> 8);
+    UART_BUF[14] = (u8)(TmpBuf[7]);
+    UART_BUF[15] = (u8)(TmpBuf[7] >> 8);
+    UART_BUF[16] = (u8)(TmpBuf[8]);
+    UART_BUF[17] = (u8)(TmpBuf[8] >> 8);
+    UART_BUF[18] = (u8)(TmpBuf[9]);
+    UART_BUF[19] = (u8)(TmpBuf[9] >> 8);
 
     if(KEY == 1)
-      RS232_VisualScope(USART3, USART_BUF, 8);
+      RS232_VisualScope(USART3, UART_BUF, 8);
     else
-      RS232_VisualScope(USART3, USART_BUF+10, 8);
+      RS232_VisualScope(USART3, UART_BUF+12, 8);
   }
 }
 /*=====================================================================================================*/

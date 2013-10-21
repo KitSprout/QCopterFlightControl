@@ -3,7 +3,7 @@
 * File Name   : Readme.md
 * Author      : Hom19910422
 * Version     : v2.0
-* Update      : 2013/10/14
+* Update      : 2013/10/22
 * Description : QCopterFlightControl Information
 * Wiki        : https://github.com/Hom19910422/QCopterFlightControl/wiki
 
@@ -14,7 +14,7 @@
 * 無線傳輸　nRF24L01P + PA + LNA
 * 儲存紀錄　SD卡，使用SDIO操作
 * 1個SPI接口　與攝像板連接、外擴其他裝置
-* 1個USB接口　與攝像板連接、外擴其他裝置
+* 1個USB接口　外擴其他裝置
 * 2個ADC通道　測量電量
 * 12個PWM通道　連接電調、LED、PPM
 * 1個UART接口　可擴充 GPS 模組、藍芽模組、RS232
