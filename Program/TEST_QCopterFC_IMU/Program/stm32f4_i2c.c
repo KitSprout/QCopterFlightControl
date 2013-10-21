@@ -373,7 +373,7 @@ u32 I2C_TimeOut( void )
 **使用 : I2C_MS5611_Read(ReadBuf, SlaveAddr, ReadAddr, (u8*)(&NumByte));
 **=====================================================================================================*/
 /*=====================================================================================================*/
-u32 MS5611_Read( u8* ReadBuf, u8 SlaveAddr, u8* NumByte )
+u32 I2C_MS5611_Read( u8* ReadBuf, u8 SlaveAddr, u8* NumByte )
 {
   I2C_ReadPtr = NumByte;
 
@@ -416,10 +416,18 @@ u32 MS5611_Read( u8* ReadBuf, u8 SlaveAddr, u8* NumByte )
 
   return SUCCESS;
 }
-
-u32 MS5611_ReadData( u8* ReadBuf, u8 SlaveAddr, u8 NumByte )
+/*=====================================================================================================*/
+/*=====================================================================================================*
+**函數 : I2C_MS5611_ReadData
+**功能 : MS5611 Read Data
+**輸入 : ReadBuf, SlaveAddr, NumByte
+**輸出 : Status
+**使用 : I2C_MS5611_WriteByte(SlaveAddr, WriteByte);
+**=====================================================================================================*/
+/*=====================================================================================================*/
+u32 I2C_MS5611_ReadData( u8* ReadBuf, u8 SlaveAddr, u8 NumByte )
 {
-  MS5611_Read(ReadBuf, SlaveAddr, (u8*)(&NumByte));
+  I2C_MS5611_Read(ReadBuf, SlaveAddr, (u8*)(&NumByte));
 
   I2C_TimeCnt = I2C_TIME;
   while(NumByte > 0)
@@ -429,14 +437,14 @@ u32 MS5611_ReadData( u8* ReadBuf, u8 SlaveAddr, u8 NumByte )
 }
 /*=====================================================================================================*/
 /*=====================================================================================================*
-**函數 : I2C_MS5611_Write
-**功能 : MS5611 I2C Write
-**輸入 : SlaveAddr, WriteCom
+**函數 : I2C_MS5611_WriteByte
+**功能 : I2C Write Byte
+**輸入 : SlaveAddr, WriteByte
 **輸出 : Status
-**使用 : I2C_Write(SlaveAddr, WriteCom);
+**使用 : I2C_MS5611_WriteByte(SlaveAddr, WriteByte);
 **=====================================================================================================*/
 /*=====================================================================================================*/
-u32 MS5611_WriteCom( u8 SlaveAddr, u8 WriteCom )
+u32 I2C_MS5611_WriteByte( u8 SlaveAddr, u8 WriteByte )
 {
   I2C_TimeCnt = I2C_TIME;
   while(I2C_GetFlagStatus(I2C1, I2C_FLAG_BUSY))
@@ -455,7 +463,7 @@ u32 MS5611_WriteCom( u8 SlaveAddr, u8 WriteCom )
   while(!I2C_CheckEvent(I2C1, I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED))
     if((I2C_TimeCnt--) == 0) return I2C_TimeOut();
 
-  I2C_SendData(I2C1, WriteCom);
+  I2C_SendData(I2C1, WriteByte);
 
   I2C_TimeCnt = I2C_TIME;
   while(!I2C_CheckEvent(I2C1, I2C_EVENT_MASTER_BYTE_TRANSMITTED))

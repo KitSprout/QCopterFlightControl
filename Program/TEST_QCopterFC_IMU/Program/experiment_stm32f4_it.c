@@ -6,6 +6,7 @@
 #include "QCopterFC_ahrs.h"
 #include "module_sensor.h"
 #include "module_mpu9150.h"
+#include "module_ms5611.h"
 #include "algorithm_moveAve.h"
 #include "algorithm_mathUnit.h"
 #include "algorithm_quaternion.h"
@@ -18,6 +19,7 @@ void SysTick_Handler( void )
 {
   u8 IMU_Buf[20] = {0};
 
+  static u8  BaroCnt = 0;
   static s16 ACC_FIFO[3][256] = {0};
   static s16 GYR_FIFO[3][256] = {0};
   static s16 MAG_FIFO[3][256] = {0};
@@ -28,7 +30,7 @@ void SysTick_Handler( void )
 
   static u16 Correction_Time = 0;
 
-  /* Read Sensor 400Hz */
+  /* 400Hz, Read Accelerometer, Gyroscope, Magnetometer */
   MPU9150_Read(IMU_Buf);
 
   Acc.X  = (s16)((IMU_Buf[0]  << 8) | IMU_Buf[1]);
@@ -41,6 +43,13 @@ void SysTick_Handler( void )
   Mag.X  = (s16)((IMU_Buf[15] << 8) | IMU_Buf[14]);
   Mag.Y  = (s16)((IMU_Buf[17] << 8) | IMU_Buf[16]);
   Mag.Z  = (s16)((IMU_Buf[19] << 8) | IMU_Buf[18]);
+
+  /* 100Hz, Read Barometer */
+  BaroCnt++;
+  if(BaroCnt == 4) {
+    MS5611_Read(&Baro, MS5611_D1_OSR_4096);
+    BaroCnt = 0;
+  }
 
   /* Offset */
   Acc.X  -= Acc.OffsetX;

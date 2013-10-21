@@ -12,17 +12,21 @@
 #define I2C1_SPEED      ((u32)400000)
 /*=====================================================================================================*/
 /*=====================================================================================================*/
-void I2C_Config(void);
-u32 I2C_DMA_Read( u8*, u8, u8, u8* );
-u32 I2C_DMA_ReadReg( u8, u8, u8*, u8 );
-u32 I2C_DMA_Write( u8*, u8, u8, u8* );
-u32 I2C_DMA_WriteReg( u8, u8, u8*, u8 );
+void I2C_Config( void );
+
+u32 I2C_DMA_Read( u8* ReadBuf, u8 SlaveAddr, u8 ReadAddr, u8* NumByte );
+u32 I2C_DMA_ReadReg( u8 SlaveAddr, u8 ReadAddr, u8* ReadBuf, u8 NumByte );
+u32 I2C_DMA_Write( u8* WriteBuf, u8 SlaveAddr, u8 WriteAddr, u8* NumByte );
+u32 I2C_DMA_WriteReg( u8 SlaveAddr, u8 WriteAddr, u8* WriteBuf, u8 NumByte );
+
 void I2C1_Send_DMA_IRQ( void );
 void I2C1_Recv_DMA_IRQ( void );
+
 u32 I2C_TimeOut( void );
 
-u32 MS5611_ReadData( u8*, u8, u8 );
-u32 MS5611_WriteCom( u8, u8 );
+u32 I2C_MS5611_Read( u8* ReadBuf, u8 SlaveAddr, u8* NumByte );
+u32 I2C_MS5611_ReadData( u8* ReadBuf, u8 SlaveAddr, u8 NumByte );
+u32 I2C_MS5611_WriteByte( u8 SlaveAddr, u8 WriteByte );
 /*=====================================================================================================*/
 /*=====================================================================================================*/
 #endif
