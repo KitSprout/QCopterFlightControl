@@ -2,9 +2,12 @@
 
 #ifndef __MODULE_RS232_H
 #define __MODULE_RS232_H
+
+#include "stm32f4xx.h"
 /*=====================================================================================================*/
 /*=====================================================================================================*/
 void RS232_Config( void );
+void RS232_DMA_Config( void );
 void RS232_SendStr( USART_TypeDef* USARTx, uc8 *pWord );
 void RS232_SendNum( USART_TypeDef* USARTx, u8 Type, u8 NumLen, s32 SendData );
 void RS232_SendData( USART_TypeDef* USARTx, uc8 *SendData, u16 DataLen );

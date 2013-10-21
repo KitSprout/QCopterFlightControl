@@ -5,8 +5,7 @@
 #include "stm32f4_i2c.h"
 #include "module_rs232.h"
 #include "module_sensor.h"
-#include "module_mpu6050.h"
-#include "module_hmc5883.h"
+#include "module_mpu9150.h"
 #include "module_ms5611.h"
 /*=====================================================================================================*/
 /*=====================================================================================================*/
@@ -19,54 +18,41 @@
 void GPIO_Config( void );
 /*=====================================================================================================*/
 /*=====================================================================================================*/
-/*
 int main( void )
 {
-  u16 i = 0;
-  u8 USART_BUF[8] = {0};
-
-	SystemInit();
-	GPIO_Config();
-	RS232_Config();
-
-  while(1) {
-    LED_G = ~LED_G;
-
-    i++;
-    if(i==65535)	i = 0;
-
-    USART_BUF[0]  = (u8)(i);
-    USART_BUF[1]  = (u8)(i >> 8);
-		USART_BUF[2]  = (u8)(0);
-		USART_BUF[3]  = (u8)(0);
-		USART_BUF[4]  = (u8)(0);
-		USART_BUF[5]  = (u8)(0);
-		USART_BUF[6]  = (u8)(0);
-		USART_BUF[7]  = (u8)(0);
-		RS232_VisualScope(USART3, USART_BUF, 8);
-	}
-}
-*/
-
-int main( void )
-{
+  u8 IMU_Buf[24] = {0};
   u8 USART_BUF[24] = {0};
+
+  u16 Tmep = 0;
 
   SystemInit();
   GPIO_Config();
   RS232_Config();
   I2C_Config();
 
-  MPU6050_Init();
-  HMC5883_Init();
-//  MS5611_Init(&Baro);
+  LED_G = (Sensor_Init() == SUCCESS) ? 0 : 1;
 
-  if(SysTick_Config(420000)) {		// 168MHz / 420000 = 400Hz = 2.5ms
-    while(1);
-  }
+  Delay_100ms(5);
+
+  LED_R = 1;
+  LED_G = 1;
+  LED_B = 1;
 
   while(1) {
-    LED_G = ~LED_G;
+    LED_B = ~LED_B;
+
+    MPU9150_Read(IMU_Buf);
+
+    Acc.X = (s16)((IMU_Buf[0]  << 8) | IMU_Buf[1]);
+    Acc.Y = (s16)((IMU_Buf[2]  << 8) | IMU_Buf[3]);
+    Acc.Z = (s16)((IMU_Buf[4]  << 8) | IMU_Buf[5]);
+    Tmep  = (s16)((IMU_Buf[6]  << 8) | IMU_Buf[7]);
+    Gyr.X = (s16)((IMU_Buf[8]  << 8) | IMU_Buf[9]);
+    Gyr.Y = (s16)((IMU_Buf[10] << 8) | IMU_Buf[11]);
+    Gyr.Z = (s16)((IMU_Buf[12] << 8) | IMU_Buf[13]);
+    Mag.X = (s16)((IMU_Buf[15] << 8) | IMU_Buf[14]);
+    Mag.Y = (s16)((IMU_Buf[17] << 8) | IMU_Buf[16]);
+    Mag.Z = (s16)((IMU_Buf[19] << 8) | IMU_Buf[18]);
 
     USART_BUF[0]  = (u8)(Acc.X);
     USART_BUF[1]  = (u8)(Acc.X >> 8);
@@ -74,8 +60,10 @@ int main( void )
     USART_BUF[3]  = (u8)(Acc.Y >> 8);
     USART_BUF[4]  = (u8)(Acc.Z);
     USART_BUF[5]  = (u8)(Acc.Z >> 8);
-    USART_BUF[6]  = (u8)(Gyr.X);
-    USART_BUF[7]  = (u8)(Gyr.X >> 8);
+    USART_BUF[6]  = (u8)(Tmep);
+    USART_BUF[7]  = (u8)(Tmep >> 8);
+//    USART_BUF[6]  = (u8)(Gyr.X);
+//    USART_BUF[7]  = (u8)(Gyr.X >> 8);
     USART_BUF[8]  = (u8)(Gyr.Y);
     USART_BUF[9]  = (u8)(Gyr.Y >> 8);
     USART_BUF[10] = (u8)(Gyr.Z);
@@ -87,7 +75,7 @@ int main( void )
     USART_BUF[16] = (u8)(Mag.Z);
     USART_BUF[17] = (u8)(Mag.Z >> 8);
 
-    if(KEY == 0)
+    if(KEY == 1)
       RS232_VisualScope(USART3, USART_BUF, 8);
     else
       RS232_VisualScope(USART3, USART_BUF+10, 8);

@@ -6,27 +6,27 @@
 #include "stm32f4xx.h"
 /*=====================================================================================================*/
 /*=====================================================================================================*/
-#define LSM303A_X_Theoretic 0
-#define LSM303A_Y_Theoretic 0
-#define LSM303A_Z_Theoretic 8000	// 1000mg/2mg = 500, 500<<4 = 8000
-#define L3G4200_X_Theoretic 0
-#define L3G4200_Y_Theoretic 0
-#define L3G4200_Z_Theoretic 0
-#define LSM303M_X_Theoretic 0			// 36352.52nT = 0.3635252Gauss
-#define LSM303M_Y_Theoretic 0
-#define LSM303M_Z_Theoretic 0
+#define ACC_X_Horizontal 0
+#define ACC_Y_Horizontal 0
+#define ACC_Z_Horizontal 8192
+#define GYR_X_Horizontal 0
+#define GYR_Y_Horizontal 0
+#define GYR_Z_Horizontal 0
+#define MAG_X_Horizontal 0
+#define MAG_Y_Horizontal 0
+#define MAG_Z_Horizontal 0
 /*=====================================================================================================*/
 /*=====================================================================================================*/
 typedef struct {
-	s16 X;
-	s16 Y;
-	s16 Z;
+  s16 X;
+  s16 Y;
+  s16 Z;
   s16 OffsetX;
   s16 OffsetY;
   s16 OffsetZ;
- 	float TrueX;
-	float TrueY;
-	float TrueZ;
+  float TrueX;
+  float TrueY;
+  float TrueZ;
 } Sensor;
 /*=====================================================================================================*/
 /*=====================================================================================================*/
@@ -37,8 +37,8 @@ extern Sensor Ang;
 extern float Ellipse[5];
 /*=====================================================================================================*/
 /*=====================================================================================================*/
-void Sensor_Init( void );
-void Sensor_EllipseFitting( float*, s16*, s16*, u8 );
+u8 Sensor_Init( void );
+void EllipseFitting( float* Ans, s16* MagDataX, s16* MagDataY, u8 Num );
 /*=====================================================================================================*/
 /*=====================================================================================================*/
 #endif
