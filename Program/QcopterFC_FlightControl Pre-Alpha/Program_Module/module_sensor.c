@@ -11,6 +11,7 @@ Sensor Acc = {0};
 Sensor Gyr = {0};
 Sensor Mag = {0};
 Sensor Ang = {0};
+SensorTemp Temp = {0};
 float Ellipse[5] = {0};
 /*=====================================================================================================*/
 /*=====================================================================================================*
@@ -28,9 +29,9 @@ u8 Sensor_Init( void )
   Acc.X = 0;
   Acc.Y = 0;
   Acc.Z = 0;
-  Acc.OffsetX = -480;
-  Acc.OffsetY = +165;
-  Acc.OffsetZ = +550;
+  Acc.OffsetX = 0;
+  Acc.OffsetY = 0;
+  Acc.OffsetZ = 0;
   Acc.TrueX = 0.0f;
   Acc.TrueY = 0.0f;
   Acc.TrueZ = 0.0f;
@@ -66,6 +67,10 @@ u8 Sensor_Init( void )
   Ang.TrueX = 0.0f;
   Ang.TrueY = 0.0f;
   Ang.TrueZ = 0.0f;
+
+  Temp.T = 0;
+  Temp.OffsetT = TEMP_OFFSET;
+  Temp.TrueT = 0.0f;
 
   Sta = MPU9150_Init();
   MS5611_Init(&Baro);

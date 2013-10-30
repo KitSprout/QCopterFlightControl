@@ -10,6 +10,7 @@
 #include "module_motor.h"
 #include "module_sensor.h"
 #include "module_mpu9150.h"
+#include "module_ms5611.h"
 #include "algorithm_PID.h"
 #include "algorithm_moveAve.h"
 #include "algorithm_mathUnit.h"
@@ -41,6 +42,8 @@ void SysTick_Handler( void )
 
   s16 Thr = 0, Pitch = 0, Roll = 0, Yaw = 0;
 
+  static u8  BaroCnt = 0;
+
   static s16 ACC_FIFO[3][256] = {0};
   static s16 GYR_FIFO[3][256] = {0};
   static s16 MAG_FIFO[3][256] = {0};
@@ -63,19 +66,26 @@ void SysTick_Handler( void )
     }
   }
 
-  /* Read Sensor 400Hz */
+  /* 400Hz, Read Sensor ( Accelerometer, Gyroscope, Magnetometer ) */
   MPU9150_Read(IMU_Buf);
 
-  Acc.X = (s16)((IMU_Buf[0]  << 8) | IMU_Buf[1]);
-  Acc.Y = (s16)((IMU_Buf[2]  << 8) | IMU_Buf[3]);
-  Acc.Z = (s16)((IMU_Buf[4]  << 8) | IMU_Buf[5]);
-//  Tmp   = (s16)((IMU_Buf[6]  << 8) | IMU_Buf[7]);
-  Gyr.X = (s16)((IMU_Buf[8]  << 8) | IMU_Buf[9]);
-  Gyr.Y = (s16)((IMU_Buf[10] << 8) | IMU_Buf[11]);
-  Gyr.Z = (s16)((IMU_Buf[12] << 8) | IMU_Buf[13]);
-  Mag.X = (s16)((IMU_Buf[14] << 8) | IMU_Buf[15]);
-  Mag.Y = (s16)((IMU_Buf[16] << 8) | IMU_Buf[17]);
-  Mag.Z = (s16)((IMU_Buf[18] << 8) | IMU_Buf[19]);
+  /* 100Hz, Read Barometer */
+  BaroCnt++;
+  if(BaroCnt == 4) {
+    MS5611_Read(&Baro, MS5611_D1_OSR_4096);
+    BaroCnt = 0;
+  }
+
+  Acc.X  = (s16)((IMU_Buf[0]  << 8) | IMU_Buf[1]);
+  Acc.Y  = (s16)((IMU_Buf[2]  << 8) | IMU_Buf[3]);
+  Acc.Z  = (s16)((IMU_Buf[4]  << 8) | IMU_Buf[5]);
+  Temp.T = (s16)((IMU_Buf[6]  << 8) | IMU_Buf[7]);
+  Gyr.X  = (s16)((IMU_Buf[8]  << 8) | IMU_Buf[9]);
+  Gyr.Y  = (s16)((IMU_Buf[10] << 8) | IMU_Buf[11]);
+  Gyr.Z  = (s16)((IMU_Buf[12] << 8) | IMU_Buf[13]);
+  Mag.X  = (s16)((IMU_Buf[14] << 8) | IMU_Buf[15]);
+  Mag.Y  = (s16)((IMU_Buf[16] << 8) | IMU_Buf[17]);
+  Mag.Z  = (s16)((IMU_Buf[18] << 8) | IMU_Buf[19]);
 
   /* Offset */
   Acc.X -= Acc.OffsetX;
@@ -101,9 +111,9 @@ void SysTick_Handler( void )
 
       Correction_Time++;  // 等待 FIFO 填滿空值 or 填滿靜態資料
       if(Correction_Time == 400) {
-        Gyr.OffsetX += (Gyr.X - GYR_X_Horizontal);  // 角速度為 0dps
-        Gyr.OffsetY += (Gyr.Y - GYR_Y_Horizontal);  // 角速度為 0dps
-        Gyr.OffsetZ += (Gyr.Z - GYR_Z_Horizontal);  // 角速度為 0dps
+        Gyr.OffsetX += (Gyr.X - GYR_X_OFFSET);  // 角速度為 0dps
+        Gyr.OffsetY += (Gyr.Y - GYR_Y_OFFSET);  // 角速度為 0dps
+        Gyr.OffsetZ += (Gyr.Z - GYR_Z_OFFSET);  // 角速度為 0dps
 
         Correction_Time = 0;
         SensorMode = Mode_AccCorrect;
@@ -119,9 +129,9 @@ void SysTick_Handler( void )
 
       Correction_Time++;  // 等待 FIFO 填滿空值 or 填滿靜態資料
       if(Correction_Time == 400) {
-        Acc.OffsetX += (Acc.X - ACC_X_Horizontal);  // 重力加速度為 0g
-        Acc.OffsetY += (Acc.Y - ACC_Y_Horizontal);  // 重力加速度為 0g
-        Acc.OffsetZ += (Acc.Z - ACC_Z_Horizontal);  // 重力加速度為 1g
+        Acc.OffsetX += (Acc.X - ACC_X_OFFSET);  // 重力加速度為 0g
+        Acc.OffsetY += (Acc.Y - ACC_Y_OFFSET);  // 重力加速度為 0g
+        Acc.OffsetZ += (Acc.Z - ACC_Z_OFFSET);  // 重力加速度為 1g
 
         Correction_Time = 0;
         SensorMode = Mode_Quaternion;   // Mode_CorrectMag
@@ -225,26 +235,27 @@ void SysTick_Handler( void )
       Mag.Z = (s16)MoveAve_WMA(Mag.Z, MAG_FIFO[2], 8);
 
       /* To Physical */
-      Acc.TrueX = Acc.X*MPU9150A_4g;      // g/LSB
-      Acc.TrueY = Acc.Y*MPU9150A_4g;      // g/LSB
-      Acc.TrueZ = Acc.Z*MPU9150A_4g;      // g/LSB
-      Gyr.TrueX = Gyr.X*MPU9150G_2000dps; // dps/LSB
-      Gyr.TrueY = Gyr.Y*MPU9150G_2000dps; // dps/LSB
-      Gyr.TrueZ = Gyr.Z*MPU9150G_2000dps; // dps/LSB
-      Mag.TrueX = Mag.X*MPU9150M_1200uT;  // uT/LSB
-      Mag.TrueY = Mag.Y*MPU9150M_1200uT;  // uT/LSB
-      Mag.TrueZ = Mag.Z*MPU9150M_1200uT;  // uT/LSB
+      Acc.TrueX = Acc.X*MPU9150A_4g;        // g/LSB
+      Acc.TrueY = Acc.Y*MPU9150A_4g;        // g/LSB
+      Acc.TrueZ = Acc.Z*MPU9150A_4g;        // g/LSB
+      Gyr.TrueX = Gyr.X*MPU9150G_2000dps;   // dps/LSB
+      Gyr.TrueY = Gyr.Y*MPU9150G_2000dps;   // dps/LSB
+      Gyr.TrueZ = Gyr.Z*MPU9150G_2000dps;   // dps/LSB
+      Mag.TrueX = Mag.X*MPU9150M_1200uT;    // uT/LSB
+      Mag.TrueY = Mag.Y*MPU9150M_1200uT;    // uT/LSB
+      Mag.TrueZ = Mag.Z*MPU9150M_1200uT;    // uT/LSB
+      Temp.TrueT = Temp.T*MPU9150T_85degC;  // degC/LSB
 
       /* Get Attitude Angle */
       AHRS_Update();
 
-      if(KEYL_U == 0)	{	PID_Roll.Kp += 0.001f;	PID_Pitch.Kp += 0.001f;  }
-      if(KEYL_L == 0)	{	PID_Roll.Kp -= 0.001f;	PID_Pitch.Kp -= 0.001f;  }
-      if(KEYL_R == 0)	{	PID_Roll.Ki += 0.0001f;	PID_Pitch.Ki += 0.0001f; }
-      if(KEYL_D == 0)	{	PID_Roll.Ki -= 0.0001f;	PID_Pitch.Ki -= 0.0001f; }
-      if(KEYR_R == 0)	{	PID_Roll.Kd += 0.0001f;	PID_Pitch.Kd += 0.0001f; }
-      if(KEYR_D == 0)	{	PID_Roll.Kd -= 0.0001f;	PID_Pitch.Kd -= 0.0001f; }
-      if(KEYR_L == 0)	{	PID_Roll.SumErr = 0.0f;	PID_Pitch.SumErr = 0.0f; }
+//      if(KEYL_U == 0)	{	PID_Roll.Kp += 0.001f;	PID_Pitch.Kp += 0.001f;  }
+//      if(KEYL_L == 0)	{	PID_Roll.Kp -= 0.001f;	PID_Pitch.Kp -= 0.001f;  }
+//      if(KEYL_R == 0)	{	PID_Roll.Ki += 0.0001f;	PID_Pitch.Ki += 0.0001f; }
+//      if(KEYL_D == 0)	{	PID_Roll.Ki -= 0.0001f;	PID_Pitch.Ki -= 0.0001f; }
+//      if(KEYR_R == 0)	{	PID_Roll.Kd += 0.0001f;	PID_Pitch.Kd += 0.0001f; }
+//      if(KEYR_D == 0)	{	PID_Roll.Kd -= 0.0001f;	PID_Pitch.Kd -= 0.0001f; }
+//      if(KEYR_L == 0)	{	PID_Roll.SumErr = 0.0f;	PID_Pitch.SumErr = 0.0f; }
 //      if(KEYL_U == 0)	{	PID_Yaw.Kp += 0.001f;    }
 //      if(KEYL_L == 0)	{	PID_Yaw.Kp -= 0.001f;    }
 //      if(KEYL_R == 0)	{	PID_Yaw.Ki += 0.0001f;	 }
