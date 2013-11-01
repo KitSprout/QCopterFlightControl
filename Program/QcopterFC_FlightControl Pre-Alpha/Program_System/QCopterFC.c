@@ -1,7 +1,6 @@
 /*=====================================================================================================*/
 /*=====================================================================================================*/
 #include "stm32f4_system.h"
-#include "stm32f4_i2c.h"
 #include "QCopterFC.h"
 #include "QCopterFC_ctrl.h"
 #include "QCopterFC_transport.h"
@@ -15,11 +14,12 @@
 void System_Init( void )
 {
   SystemInit();
+
   LED_Config();
   KEY_Config();
   RS232_Config();
-  I2C_Config();
   Motor_Config();
+  Sensor_Config();
   nRF24L01_Config();
 
   PID_Init(&PID_Yaw);
