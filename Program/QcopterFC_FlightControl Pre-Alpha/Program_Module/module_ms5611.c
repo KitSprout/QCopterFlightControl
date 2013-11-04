@@ -17,8 +17,11 @@ MS5611_ST Baro;
 /*=====================================================================================================*/
 void MS5611_Init( MS5611_ST* COEFF )
 {
+  u8 WriteCMD = MS5611_RESET;
+
   /* Reset */
-  I2C_MS5611_WriteByte(MS5611_I2C_ADDR, MS5611_RESET);
+  I2C_WriteBytes(MS5611_I2C_ADDR, &WriteCMD, 1);
+//  I2C_MS5611_WriteByte(MS5611_I2C_ADDR, MS5611_RESET);
   Delay_1ms(10);
 
   /* Read PROM */
@@ -49,11 +52,15 @@ void MS5611_Init( MS5611_ST* COEFF )
 static void MS5611_ReadPROM( MS5611_ST* COEFF )
 {
   u8 i = 0;
+  u8 WriteCMD = 0;
   u8 ReadC[6][2] = {0};
 
   for(i=0; i<6; i++) {
-    I2C_MS5611_WriteByte(MS5611_I2C_ADDR, MS5611_PROM_COEFF_1+i);
-    I2C_MS5611_ReadData(ReadC[i], MS5611_I2C_ADDR, 2);
+    WriteCMD = MS5611_PROM_COEFF_1+i;
+    I2C_WriteBytes(MS5611_I2C_ADDR, &WriteCMD, 1);
+//    I2C_MS5611_WriteByte(MS5611_I2C_ADDR, MS5611_PROM_COEFF_1+i);
+    I2C_ReadBytes(MS5611_I2C_ADDR, ReadC[i], 2);
+//    I2C_MS5611_ReadData(ReadC[i], MS5611_I2C_ADDR, 2);
     COEFF->C[i+1] = (u16)((ReadC[i][0] << 8) | ReadC[i][1]);
   }
 }
@@ -68,7 +75,10 @@ static void MS5611_ReadPROM( MS5611_ST* COEFF )
 /*=====================================================================================================*/
 static void MS5611_ConvADC( u8 ADC_ConvMode )
 {
-  I2C_MS5611_WriteByte(MS5611_I2C_ADDR, ADC_ConvMode);
+  u8 WriteCMD = ADC_ConvMode;
+
+  I2C_WriteBytes(MS5611_I2C_ADDR, &WriteCMD, 1);
+//  I2C_MS5611_WriteByte(MS5611_I2C_ADDR, ADC_ConvMode);
 }
 /*=====================================================================================================*/
 /*=====================================================================================================*
@@ -82,9 +92,12 @@ static void MS5611_ConvADC( u8 ADC_ConvMode )
 static void MS5611_ReadADC( MS5611_ST* COEFF, u8 ADC_Sel )
 {
   u8 ReadADC[3] = {0};
+  u8 WriteCMD = MS5611_ADC;
 
-  I2C_MS5611_WriteByte(MS5611_I2C_ADDR, MS5611_ADC);
-  I2C_MS5611_ReadData(ReadADC, MS5611_I2C_ADDR, 3);
+  I2C_WriteBytes(MS5611_I2C_ADDR, &WriteCMD, 1);
+//  I2C_MS5611_WriteByte(MS5611_I2C_ADDR, MS5611_ADC);
+  I2C_ReadBytes(MS5611_I2C_ADDR, ReadADC, 3);
+//  I2C_MS5611_ReadData(ReadADC, MS5611_I2C_ADDR, 3);
   
   COEFF->D[ADC_Sel] = (u16)(ReadADC[0]<<16 | ReadADC[1]<<8 | ReadADC[2]);
 }

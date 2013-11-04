@@ -159,16 +159,135 @@ void I2C_Config( void )
 }
 /*=====================================================================================================*/
 /*=====================================================================================================*
-**函數 : I2C_DMA_Read
-**功能 : I2C DMA Read
-**輸入 : *ReadBuf, SlaveAddr, ReadAddr, *NumByte
+**函數 : I2C_ReadBytes
+**功能 : I2C Read Bytes
+**輸入 : SlaveAddr, ReadBuf, NumByte
 **輸出 : Status
-**使用 : I2C_DMA_Read(ReadBuf, SlaveAddr, ReadAddr, (u8*)(&NumByte));
+**使用 : I2C_ReadBytes(SlaveAddr, ReadBuf, NumByte);
 **=====================================================================================================*/
 /*=====================================================================================================*/
-u32 I2C_DMA_Read( u8* ReadBuf, u8 SlaveAddr, u8 ReadAddr, u8* NumByte )
+u32 I2C_ReadBytes( u8 SlaveAddr, u8* ReadBuf, u8 NumByte )
 {
-  I2C_ReadPtr = NumByte;
+  I2C_ReadPtr = &NumByte;
+
+  I2C_GenerateSTART(I2Cx, ENABLE);
+
+  I2C_TimeCnt = I2C_TIMEOUT;
+  while(!I2C_CheckEvent(I2Cx, I2C_EVENT_MASTER_MODE_SELECT))
+    if((I2C_TimeCnt--) == 0)	return I2C_TimeOut();
+
+  I2C_Send7bitAddress(I2Cx, SlaveAddr, I2C_Direction_Receiver);
+
+  I2C_TimeCnt = I2C_TIMEOUT;
+  while(!I2C_CheckEvent(I2Cx, I2C_EVENT_MASTER_RECEIVER_MODE_SELECTED))
+    if((I2C_TimeCnt--) == 0)	return I2C_TimeOut();
+
+  DMA_InitStruct.DMA_Channel = DMAx_RX_CHANNEL;
+  DMA_InitStruct.DMA_PeripheralBaseAddr = (u32)I2Cx_DR_ADDR;
+  DMA_InitStruct.DMA_Memory0BaseAddr = (u32)ReadBuf;
+  DMA_InitStruct.DMA_DIR = DMA_DIR_PeripheralToMemory;
+  DMA_InitStruct.DMA_BufferSize = (u32)(NumByte);
+  DMA_InitStruct.DMA_PeripheralInc = DMA_PeripheralInc_Disable;
+  DMA_InitStruct.DMA_MemoryInc = DMA_MemoryInc_Enable;
+  DMA_InitStruct.DMA_PeripheralDataSize = DMA_PeripheralDataSize_Byte;
+  DMA_InitStruct.DMA_MemoryDataSize = DMA_MemoryDataSize_Byte;
+  DMA_InitStruct.DMA_Mode = DMA_Mode_Normal;
+  DMA_InitStruct.DMA_Priority = DMA_Priority_VeryHigh;
+  DMA_InitStruct.DMA_FIFOMode = DMA_FIFOMode_Enable;
+  DMA_InitStruct.DMA_FIFOThreshold = DMA_FIFOThreshold_Full;
+  DMA_InitStruct.DMA_MemoryBurst = DMA_MemoryBurst_Single;
+  DMA_InitStruct.DMA_PeripheralBurst = DMA_PeripheralBurst_Single;
+  DMA_Init(DMAx_RX_STREAM, &DMA_InitStruct);
+
+  I2C_DMALastTransferCmd(I2Cx, ENABLE);
+
+  DMA_Cmd(DMAx_RX_STREAM, ENABLE);
+
+  I2C_TimeCnt = I2C_TIMEOUT;
+  while(NumByte > 0)
+    if((I2C_TimeCnt--) == 0)	return I2C_TimeOut();
+
+  return SUCCESS;
+}
+/*=====================================================================================================*/
+/*=====================================================================================================*
+**函數 : I2C_WriteBytes
+**功能 : I2C Write Bytes
+**輸入 : SlaveAddr, WriteBuf, NumByte
+**輸出 : Status
+**使用 : I2C_WriteByte(SlaveAddr, WriteBuf, NumByte);
+**=====================================================================================================*/
+/*=====================================================================================================*/
+u32 I2C_WriteBytes( u8 SlaveAddr, u8* WriteBuf, u8 NumByte )
+{
+  NumByte--;
+  I2C_WritePtr = &NumByte;
+
+  I2C_TimeCnt = I2C_TIMEOUT;
+  while(I2C_GetFlagStatus(I2Cx, I2C_FLAG_BUSY))
+    if((I2C_TimeCnt--) == 0) return I2C_TimeOut();
+
+  I2C_GenerateSTART(I2Cx, ENABLE);
+
+  I2C_TimeCnt = I2C_TIMEOUT;
+  while(!I2C_CheckEvent(I2Cx, I2C_EVENT_MASTER_MODE_SELECT))
+    if((I2C_TimeCnt--) == 0) return I2C_TimeOut();
+
+  I2C_TimeCnt = I2C_TIMEOUT;
+  I2C_Send7bitAddress(I2Cx, SlaveAddr, I2C_Direction_Transmitter);
+
+  I2C_TimeCnt = I2C_TIMEOUT;
+  while(!I2C_CheckEvent(I2Cx, I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED))
+    if((I2C_TimeCnt--) == 0) return I2C_TimeOut();
+
+  I2C_SendData(I2Cx, WriteBuf[0]);
+
+  I2C_TimeCnt = I2C_TIMEOUT;
+  while(!I2C_CheckEvent(I2Cx, I2C_EVENT_MASTER_BYTE_TRANSMITTING))
+    if((I2C_TimeCnt--) == 0) return I2C_TimeOut();
+
+  if(NumByte > 0) {
+    DMA_InitStruct.DMA_Channel = DMAx_TX_CHANNEL;
+    DMA_InitStruct.DMA_PeripheralBaseAddr = (u32)I2Cx_DR_ADDR;
+    DMA_InitStruct.DMA_Memory0BaseAddr = (u32)(WriteBuf+1);
+    DMA_InitStruct.DMA_DIR = DMA_DIR_MemoryToPeripheral;
+    DMA_InitStruct.DMA_BufferSize = (u32)(NumByte);
+    DMA_InitStruct.DMA_PeripheralInc = DMA_PeripheralInc_Disable;
+    DMA_InitStruct.DMA_MemoryInc = DMA_MemoryInc_Enable;
+    DMA_InitStruct.DMA_PeripheralDataSize = DMA_PeripheralDataSize_Byte;
+    DMA_InitStruct.DMA_MemoryDataSize = DMA_MemoryDataSize_Byte;
+    DMA_InitStruct.DMA_Mode = DMA_Mode_Normal;
+    DMA_InitStruct.DMA_Priority = DMA_Priority_VeryHigh;
+    DMA_InitStruct.DMA_FIFOMode = DMA_FIFOMode_Enable;
+    DMA_InitStruct.DMA_FIFOThreshold = DMA_FIFOThreshold_Full;
+    DMA_InitStruct.DMA_MemoryBurst = DMA_MemoryBurst_Single;
+    DMA_InitStruct.DMA_PeripheralBurst = DMA_PeripheralBurst_Single;
+    DMA_Init(DMAx_TX_STREAM, &DMA_InitStruct);
+
+    DMA_Cmd(DMAx_TX_STREAM, ENABLE);
+  }
+  else {
+    I2C_GenerateSTOP(I2Cx, ENABLE);
+  }
+
+  I2C_TimeCnt = I2C_TIMEOUT;
+  while(NumByte > 0)
+    if((I2C_TimeCnt--) == 0)	return I2C_TimeOut();
+
+  return SUCCESS;
+}
+/*=====================================================================================================*/
+/*=====================================================================================================*
+**函數 : I2C_DMA_ReadReg
+**功能 : I2C DMA Read Reg
+**輸入 : *ReadBuf, SlaveAddr, ReadAddr, NumByte
+**輸出 : Status
+**使用 : I2C_DMA_Read(SlaveAddr, ReadAddr, ReadBuf, NumByte);
+**=====================================================================================================*/
+/*=====================================================================================================*/
+u32 I2C_DMA_ReadReg( u8 SlaveAddr, u8 ReadAddr, u8* ReadBuf, u8 NumByte )
+{
+  I2C_ReadPtr = &NumByte;
 
   I2C_TimeCnt = I2C_TIMEOUT;
   while(I2C_GetFlagStatus(I2Cx, I2C_FLAG_BUSY))
@@ -200,7 +319,7 @@ u32 I2C_DMA_Read( u8* ReadBuf, u8 SlaveAddr, u8 ReadAddr, u8* NumByte )
 
   I2C_Send7bitAddress(I2Cx, SlaveAddr, I2C_Direction_Receiver);
 
-  if((u16)(*NumByte) < 2) {
+  if(NumByte < 2) {
   I2C_TimeCnt = I2C_TIMEOUT;
   while(I2C_GetFlagStatus(I2Cx, I2C_FLAG_ADDR) == RESET)
     if((I2C_TimeCnt--) == 0)	return I2C_TimeOut();
@@ -216,7 +335,7 @@ u32 I2C_DMA_Read( u8* ReadBuf, u8 SlaveAddr, u8 ReadAddr, u8* NumByte )
 
   *ReadBuf = I2C_ReceiveData(I2Cx);
 
-  (u16)(*NumByte)--;
+  NumByte--;
 
   I2C_TimeCnt = I2C_TIMEOUT;
   while(I2Cx->CR1 & I2C_CR1_STOP)
@@ -233,7 +352,7 @@ u32 I2C_DMA_Read( u8* ReadBuf, u8 SlaveAddr, u8 ReadAddr, u8* NumByte )
     DMA_InitStruct.DMA_PeripheralBaseAddr = (u32)I2Cx_DR_ADDR;
     DMA_InitStruct.DMA_Memory0BaseAddr = (u32)ReadBuf;
     DMA_InitStruct.DMA_DIR = DMA_DIR_PeripheralToMemory;
-    DMA_InitStruct.DMA_BufferSize = (u32)(*NumByte);
+    DMA_InitStruct.DMA_BufferSize = (u32)(NumByte);
     DMA_InitStruct.DMA_PeripheralInc = DMA_PeripheralInc_Disable;
     DMA_InitStruct.DMA_MemoryInc = DMA_MemoryInc_Enable;
     DMA_InitStruct.DMA_PeripheralDataSize = DMA_PeripheralDataSize_Byte;
@@ -252,42 +371,23 @@ u32 I2C_DMA_Read( u8* ReadBuf, u8 SlaveAddr, u8 ReadAddr, u8* NumByte )
   }
 
   I2C_TimeCnt = I2C_TIMEOUT;
-  while(*NumByte > 0)
+  while(NumByte > 0)
   if((I2C_TimeCnt--) == 0)	return I2C_TimeOut();
 
   return SUCCESS;
 }
 /*=====================================================================================================*/
 /*=====================================================================================================*
-**函數 : I2C_DMA_ReadReg
-**功能 : I2C DMA Read Reg
-**輸入 : *ReadBuf, SlaveAddr, ReadAddr, NumByte
+**函數 : I2C_DMA_WriteReg
+**功能 : I2C DMA Write Reg
+**輸入 : WriteAddr, WriteAddr, *WriteBuf, NumByte
 **輸出 : Status
-**使用 : I2C_DMA_Read(ReadBuf, SlaveAddr, ReadAddr, NumByte);
+**使用 : I2C_DMA_Write(SlaveAddr, WriteAddr, WriteBuf, NumByte);
 **=====================================================================================================*/
 /*=====================================================================================================*/
-u32 I2C_DMA_ReadReg( u8 SlaveAddr, u8 ReadAddr, u8* ReadBuf, u8 NumByte )
+u32 I2C_DMA_WriteReg( u8 SlaveAddr, u8 WriteAddr, u8* WriteBuf, u8 NumByte )
 {
-  I2C_DMA_Read(ReadBuf, SlaveAddr, ReadAddr, (u8*)(&NumByte));
-
-  I2C_TimeCnt = I2C_TIMEOUT;
-  while(NumByte > 0)
-    if((I2C_TimeCnt--) == 0)	return I2C_TimeOut();
-
-  return SUCCESS;
-}
-/*=====================================================================================================*/
-/*=====================================================================================================*
-**函數 : I2C_DMA_Write
-**功能 : I2C DMA Write
-**輸入 : *WriteBuf, SlaveAddr, WriteAddr, *NumByte
-**輸出 : Status
-**使用 : I2C_DMA_Write(WriteBuf, SlaveAddr, WriteAddr, (u8*)(&NumByte));
-**=====================================================================================================*/
-/*=====================================================================================================*/
-u32 I2C_DMA_Write( u8* WriteBuf, u8 SlaveAddr, u8 WriteAddr, u8* NumByte )
-{
-  I2C_WritePtr = NumByte;
+  I2C_WritePtr = &NumByte;
 
   I2C_TimeCnt = I2C_TIMEOUT;
   while(I2C_GetFlagStatus(I2Cx, I2C_FLAG_BUSY))
@@ -316,7 +416,7 @@ u32 I2C_DMA_Write( u8* WriteBuf, u8 SlaveAddr, u8 WriteAddr, u8* NumByte )
   DMA_InitStruct.DMA_PeripheralBaseAddr = (u32)I2Cx_DR_ADDR;
   DMA_InitStruct.DMA_Memory0BaseAddr = (u32)WriteBuf;
   DMA_InitStruct.DMA_DIR = DMA_DIR_MemoryToPeripheral;
-  DMA_InitStruct.DMA_BufferSize = (u32)(*NumByte);
+  DMA_InitStruct.DMA_BufferSize = (u32)(NumByte);
   DMA_InitStruct.DMA_PeripheralInc = DMA_PeripheralInc_Disable;
   DMA_InitStruct.DMA_MemoryInc = DMA_MemoryInc_Enable;
   DMA_InitStruct.DMA_PeripheralDataSize = DMA_PeripheralDataSize_Byte;
@@ -331,26 +431,26 @@ u32 I2C_DMA_Write( u8* WriteBuf, u8 SlaveAddr, u8 WriteAddr, u8* NumByte )
 
   DMA_Cmd(DMAx_TX_STREAM, ENABLE);
 
-  return SUCCESS;
-}
-/*=====================================================================================================*/
-/*=====================================================================================================*
-**函數 : I2C_DMA_WriteReg
-**功能 : I2C DMA Write Reg
-**輸入 : WriteAddr, WriteAddr, *WriteBuf, NumByte
-**輸出 : Status
-**使用 : I2C_DMA_Write(WriteBuf, SlaveAddr, WriteAddr, NumByte);
-**=====================================================================================================*/
-/*=====================================================================================================*/
-u32 I2C_DMA_WriteReg( u8 SlaveAddr, u8 WriteAddr, u8* WriteBuf, u8 NumByte )
-{
-  I2C_DMA_Write(WriteBuf, SlaveAddr, WriteAddr, (u8*)(&NumByte));
-
   I2C_TimeCnt = I2C_TIMEOUT;
   while(NumByte > 0)
     if((I2C_TimeCnt--) == 0)	return I2C_TimeOut();
 
   return SUCCESS;
+}
+/*=====================================================================================================*/
+/*=====================================================================================================*
+**函數 : I2C_TimeOut
+**功能 : I2C TimeOut
+**輸入 : None
+**輸出 : None
+**使用 : I2C_TimeOut();
+**=====================================================================================================*/
+/*=====================================================================================================*/
+u32 I2C_TimeOut( void )
+{
+  while(1) {
+    Delay_1ms(200);
+  }
 }
 /*=====================================================================================================*/
 /*=====================================================================================================*
@@ -392,130 +492,6 @@ void I2C_RX_DMA_IRQ( void )
     DMA_ClearFlag(DMAx_RX_STREAM, DMAx_RX_FLAG_TCIF);
     *I2C_ReadPtr = 0;
   }
-}
-/*=====================================================================================================*/
-/*=====================================================================================================*
-**函數 : I2C_TimeOut
-**功能 : I2C TimeOut
-**輸入 : None
-**輸出 : None
-**使用 : I2C_TimeOut();
-**=====================================================================================================*/
-/*=====================================================================================================*/
-u32 I2C_TimeOut( void )
-{
-  while(1) {
-    Delay_1ms(200);
-  }
-}
-/*=====================================================================================================*/
-/*=====================================================================================================*
-**函數 : I2C_MS5611_Read
-**功能 : MS5611 I2C Read
-**輸入 : *ReadBuf, SlaveAddr, ReadAddr, *NumByte
-**輸出 : Status
-**使用 : I2C_MS5611_Read(ReadBuf, SlaveAddr, ReadAddr, (u8*)(&NumByte));
-**=====================================================================================================*/
-/*=====================================================================================================*/
-u32 I2C_MS5611_Read( u8* ReadBuf, u8 SlaveAddr, u8* NumByte )
-{
-  I2C_ReadPtr = NumByte;
-
-  I2C_GenerateSTART(I2Cx, ENABLE);
-
-  I2C_TimeCnt = I2C_TIMEOUT;
-  while(!I2C_CheckEvent(I2Cx, I2C_EVENT_MASTER_MODE_SELECT))
-    if((I2C_TimeCnt--) == 0)	return I2C_TimeOut();
-
-  I2C_Send7bitAddress(I2Cx, SlaveAddr, I2C_Direction_Receiver);
-
-  I2C_TimeCnt = I2C_TIMEOUT;
-  while(!I2C_CheckEvent(I2Cx, I2C_EVENT_MASTER_RECEIVER_MODE_SELECTED))
-    if((I2C_TimeCnt--) == 0)	return I2C_TimeOut();
-
-  DMA_InitStruct.DMA_Channel = DMAx_RX_CHANNEL;
-  DMA_InitStruct.DMA_PeripheralBaseAddr = (u32)I2Cx_DR_ADDR;
-  DMA_InitStruct.DMA_Memory0BaseAddr = (u32)ReadBuf;
-  DMA_InitStruct.DMA_DIR = DMA_DIR_PeripheralToMemory;
-  DMA_InitStruct.DMA_BufferSize = (u32)(*NumByte);
-  DMA_InitStruct.DMA_PeripheralInc = DMA_PeripheralInc_Disable;
-  DMA_InitStruct.DMA_MemoryInc = DMA_MemoryInc_Enable;
-  DMA_InitStruct.DMA_PeripheralDataSize = DMA_PeripheralDataSize_Byte;
-  DMA_InitStruct.DMA_MemoryDataSize = DMA_MemoryDataSize_Byte;
-  DMA_InitStruct.DMA_Mode = DMA_Mode_Normal;
-  DMA_InitStruct.DMA_Priority = DMA_Priority_VeryHigh;
-  DMA_InitStruct.DMA_FIFOMode = DMA_FIFOMode_Enable;
-  DMA_InitStruct.DMA_FIFOThreshold = DMA_FIFOThreshold_Full;
-  DMA_InitStruct.DMA_MemoryBurst = DMA_MemoryBurst_Single;
-  DMA_InitStruct.DMA_PeripheralBurst = DMA_PeripheralBurst_Single;
-  DMA_Init(DMAx_RX_STREAM, &DMA_InitStruct);
-
-  I2C_DMALastTransferCmd(I2Cx, ENABLE);
-
-  DMA_Cmd(DMAx_RX_STREAM, ENABLE);
-
-  I2C_TimeCnt = I2C_TIMEOUT;
-  while(*NumByte > 0)
-    if((I2C_TimeCnt--) == 0)	return I2C_TimeOut();
-
-  return SUCCESS;
-}
-/*=====================================================================================================*/
-/*=====================================================================================================*
-**函數 : I2C_MS5611_ReadData
-**功能 : MS5611 Read Data
-**輸入 : ReadBuf, SlaveAddr, NumByte
-**輸出 : Status
-**使用 : I2C_MS5611_WriteByte(SlaveAddr, WriteByte);
-**=====================================================================================================*/
-/*=====================================================================================================*/
-u32 I2C_MS5611_ReadData( u8* ReadBuf, u8 SlaveAddr, u8 NumByte )
-{
-  I2C_MS5611_Read(ReadBuf, SlaveAddr, (u8*)(&NumByte));
-
-  I2C_TimeCnt = I2C_TIMEOUT;
-  while(NumByte > 0)
-    if((I2C_TimeCnt--) == 0)	return I2C_TimeOut();
-
-  return SUCCESS;
-}
-/*=====================================================================================================*/
-/*=====================================================================================================*
-**函數 : I2C_MS5611_WriteByte
-**功能 : I2C Write Byte
-**輸入 : SlaveAddr, WriteByte
-**輸出 : Status
-**使用 : I2C_MS5611_WriteByte(SlaveAddr, WriteByte);
-**=====================================================================================================*/
-/*=====================================================================================================*/
-u32 I2C_MS5611_WriteByte( u8 SlaveAddr, u8 WriteByte )
-{
-  I2C_TimeCnt = I2C_TIMEOUT;
-  while(I2C_GetFlagStatus(I2Cx, I2C_FLAG_BUSY))
-    if((I2C_TimeCnt--) == 0) return I2C_TimeOut();
-
-  I2C_GenerateSTART(I2Cx, ENABLE);
-
-  I2C_TimeCnt = I2C_TIMEOUT;
-  while(!I2C_CheckEvent(I2Cx, I2C_EVENT_MASTER_MODE_SELECT))
-    if((I2C_TimeCnt--) == 0) return I2C_TimeOut();
-
-  I2C_TimeCnt = I2C_TIMEOUT;
-  I2C_Send7bitAddress(I2Cx, SlaveAddr, I2C_Direction_Transmitter);
-
-  I2C_TimeCnt = I2C_TIMEOUT;
-  while(!I2C_CheckEvent(I2Cx, I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED))
-    if((I2C_TimeCnt--) == 0) return I2C_TimeOut();
-
-  I2C_SendData(I2Cx, WriteByte);
-
-  I2C_TimeCnt = I2C_TIMEOUT;
-  while(!I2C_CheckEvent(I2Cx, I2C_EVENT_MASTER_BYTE_TRANSMITTED))
-    if((I2C_TimeCnt--) == 0) return I2C_TimeOut();
-
-  I2C_GenerateSTOP(I2Cx, ENABLE);
-
-  return SUCCESS;
 }
 /*=====================================================================================================*/
 /*=====================================================================================================*/

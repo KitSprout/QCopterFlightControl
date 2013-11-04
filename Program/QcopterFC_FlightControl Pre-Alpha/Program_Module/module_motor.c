@@ -117,6 +117,11 @@ void Motor_Config( void )
   TIM_Cmd(TIM3, ENABLE);																			// 致能 TIM3
   TIM_Cmd(TIM4, ENABLE);																			// 致能 TIM4
   TIM_Cmd(TIM8, ENABLE);																			// 致能 TIM8
+
+  PWM_Motor1 = PWM_MOTOR_MIN;
+  PWM_Motor2 = PWM_MOTOR_MIN;
+  PWM_Motor3 = PWM_MOTOR_MIN;
+  PWM_Motor4 = PWM_MOTOR_MIN;
 }
 /*=====================================================================================================*/
 /*=====================================================================================================*
