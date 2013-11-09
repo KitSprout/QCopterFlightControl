@@ -28,7 +28,31 @@ typedef struct {
   float TrueX;
   float TrueY;
   float TrueZ;
-} Sensor;
+} SensorAcc;
+
+typedef struct {
+  s16 X;
+  s16 Y;
+  s16 Z;
+  s16 OffsetX;
+  s16 OffsetY;
+  s16 OffsetZ;
+  float TrueX;
+  float TrueY;
+  float TrueZ;
+} SensorGyr;
+
+typedef struct {
+  s16 X;
+  s16 Y;
+  s16 Z;
+  u16 AdjustX;
+  u16 AdjustY;
+  u16 AdjustZ;
+  float TrueX;
+  float TrueY;
+  float TrueZ;
+} SensorMag;
 
 typedef struct {
   s16 T;
@@ -37,10 +61,10 @@ typedef struct {
 } SensorTemp;
 /*=====================================================================================================*/
 /*=====================================================================================================*/
-extern Sensor Acc;
-extern Sensor Gyr;
-extern Sensor Mag;
-extern Sensor Ang;
+extern SensorAcc Acc;
+extern SensorGyr Gyr;
+extern SensorMag Mag;
+//extern SensorMag Ang;
 extern SensorTemp Temp;
 extern float Ellipse[5];
 /*=====================================================================================================*/

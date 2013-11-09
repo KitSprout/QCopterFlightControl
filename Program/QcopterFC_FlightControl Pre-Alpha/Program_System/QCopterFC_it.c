@@ -83,9 +83,9 @@ void SysTick_Handler( void )
   Gyr.X  = (s16)((IMU_Buf[8]  << 8) | IMU_Buf[9]);
   Gyr.Y  = (s16)((IMU_Buf[10] << 8) | IMU_Buf[11]);
   Gyr.Z  = (s16)((IMU_Buf[12] << 8) | IMU_Buf[13]);
-  Mag.X  = (s16)((IMU_Buf[14] << 8) | IMU_Buf[15]);
-  Mag.Y  = (s16)((IMU_Buf[16] << 8) | IMU_Buf[17]);
-  Mag.Z  = (s16)((IMU_Buf[18] << 8) | IMU_Buf[19]);
+  Mag.X  = (s16)((IMU_Buf[15] << 8) | IMU_Buf[14]);
+  Mag.Y  = (s16)((IMU_Buf[17] << 8) | IMU_Buf[16]);
+  Mag.Z  = (s16)((IMU_Buf[19] << 8) | IMU_Buf[18]);
 
   /* Offset */
   Acc.X -= Acc.OffsetX;
@@ -94,9 +94,9 @@ void SysTick_Handler( void )
   Gyr.X -= Gyr.OffsetX;
   Gyr.Y -= Gyr.OffsetY;
   Gyr.Z -= Gyr.OffsetZ;
-  Mag.X -= Mag.OffsetX;
-  Mag.Y -= Mag.OffsetY;
-  Mag.Z -= Mag.OffsetZ;
+  Mag.X *= Mag.AdjustX;
+  Mag.Y *= Mag.AdjustY;
+  Mag.Z *= Mag.AdjustZ;
 
   #define MovegAveFIFO_Size 250
   switch(SensorMode) {
@@ -188,8 +188,8 @@ void SysTick_Handler( void )
         default:
           LED_B = 1;
           EllipseFitting(Ellipse, MagDataX, MagDataY, 8);
-          Mag.OffsetX = Ellipse[1];
-          Mag.OffsetY = Ellipse[2];
+//          Mag.OffsetX = Ellipse[1];
+//          Mag.OffsetY = Ellipse[2];
 
           Correction_Time = 0;
           SensorMode = Mode_Quaternion;
@@ -210,6 +210,7 @@ void SysTick_Handler( void )
       Mag.TrueX = Mag.X*MPU9150M_1200uT;  // uT/LSB
       Mag.TrueY = Mag.Y*MPU9150M_1200uT;  // uT/LSB
       Mag.TrueZ = Mag.Z*MPU9150M_1200uT;  // uT/LSB
+      Temp.TrueT = Temp.T*MPU9150T_85degC;  // degC/LSB
 
       AngE.Pitch = toDeg(atan2f(Acc.TrueY, Acc.TrueZ));
       AngE.Roll  = toDeg(-asinf(Acc.TrueX));
@@ -230,9 +231,9 @@ void SysTick_Handler( void )
       Gyr.X = (s16)MoveAve_WMA(Gyr.X, GYR_FIFO[0], 8);
       Gyr.Y = (s16)MoveAve_WMA(Gyr.Y, GYR_FIFO[1], 8);
       Gyr.Z = (s16)MoveAve_WMA(Gyr.Z, GYR_FIFO[2], 8);
-      Mag.X = (s16)MoveAve_WMA(Mag.X, MAG_FIFO[0], 8);
-      Mag.Y = (s16)MoveAve_WMA(Mag.Y, MAG_FIFO[1], 8);
-      Mag.Z = (s16)MoveAve_WMA(Mag.Z, MAG_FIFO[2], 8);
+      Mag.X = (s16)MoveAve_WMA(Mag.X, MAG_FIFO[0], 64);
+      Mag.Y = (s16)MoveAve_WMA(Mag.Y, MAG_FIFO[1], 64);
+      Mag.Z = (s16)MoveAve_WMA(Mag.Z, MAG_FIFO[2], 64);
 
       /* To Physical */
       Acc.TrueX = Acc.X*MPU9150A_4g;        // g/LSB
@@ -244,6 +245,9 @@ void SysTick_Handler( void )
       Mag.TrueX = Mag.X*MPU9150M_1200uT;    // uT/LSB
       Mag.TrueY = Mag.Y*MPU9150M_1200uT;    // uT/LSB
       Mag.TrueZ = Mag.Z*MPU9150M_1200uT;    // uT/LSB
+//      Mag.TrueX = Mag.TrueX*Mag.AdjustX;
+//      Mag.TrueY = Mag.TrueY*Mag.AdjustY;
+//      Mag.TrueZ = Mag.TrueZ*Mag.AdjustZ;
       Temp.TrueT = Temp.T*MPU9150T_85degC;  // degC/LSB
 
       /* Get Attitude Angle */

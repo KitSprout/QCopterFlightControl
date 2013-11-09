@@ -8,10 +8,9 @@
 #include "algorithm_mathUnit.h"
 /*=====================================================================================================*/
 /*=====================================================================================================*/
-Sensor Acc = {0};
-Sensor Gyr = {0};
-Sensor Mag = {0};
-Sensor Ang = {0};
+SensorAcc Acc = {0};
+SensorGyr Gyr = {0};
+SensorMag Mag = {0};
 SensorTemp Temp = {0};
 float Ellipse[5] = {0};
 /*=====================================================================================================*/
@@ -73,24 +72,12 @@ u8 Sensor_Init( void )
   Mag.X = 0;
   Mag.Y = 0;
   Mag.Z = 0;
-  Mag.OffsetX = 0;
-  Mag.OffsetY = 0;
-  Mag.OffsetX = 0;
-  Mag.OffsetY = 0;
-  Mag.OffsetZ = 0;
+  Mag.AdjustX = 0;
+  Mag.AdjustY = 0;
+  Mag.AdjustZ = 0;
   Mag.TrueX = 0.0f;
   Mag.TrueY = 0.0f;
   Mag.TrueZ = 0.0f;
-
-  Ang.X = 0;
-  Ang.Y = 0;
-  Ang.Z = 0;
-  Ang.OffsetX = 0;
-  Ang.OffsetY = 0;
-  Ang.OffsetZ = 0;
-  Ang.TrueX = 0.0f;
-  Ang.TrueY = 0.0f;
-  Ang.TrueZ = 0.0f;
 
   Temp.T = 0;
   Temp.OffsetT = TEMP_OFFSET;

@@ -77,9 +77,9 @@ void Transport_Send( u8* SendBuf )
   TMP_BUF[3]  = (s16)(Gyr.TrueX*100);   // 10 mdps/LSB
   TMP_BUF[4]  = (s16)(Gyr.TrueY*100);   // 10 mdps/LSB
   TMP_BUF[5]  = (s16)(Gyr.TrueZ*100);   // 10 mdps/LSB
-  TMP_BUF[6]  = (s16)(Mag.TrueX*10);    // 100 nTesla/LSB
-  TMP_BUF[7]  = (s16)(Mag.TrueY*10);    // 100 nTesla/LSB
-  TMP_BUF[8]  = (s16)(Mag.TrueZ*10);    // 100 nTesla/LSB
+  TMP_BUF[6]  = (s16)(Mag.TrueX);       // 10 nTesla/LSB
+  TMP_BUF[7]  = (s16)(Mag.TrueY);       // 10 nTesla/LSB
+  TMP_BUF[8]  = (s16)(Mag.TrueZ);       // 10 nTesla/LSB
   TMP_BUF[9]  = (s16)(AngE.Pitch*100);  // 10 mdeg/LSB
   TMP_BUF[10] = (s16)(AngE.Roll*100);   // 10 mdeg/LSB
   TMP_BUF[11] = (s16)(AngE.Yaw*10);     // 100 mdeg/LSB

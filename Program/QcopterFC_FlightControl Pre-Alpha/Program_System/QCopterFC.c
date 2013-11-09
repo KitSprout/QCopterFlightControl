@@ -84,7 +84,7 @@ int main( void )
     LED_B = ~LED_B;
     Delay_10ms(1);
     Transport_Send(TxBuf[0]);
-    RS232_VisualScope(USART3, TxBuf[0]+20, 8);
+    RS232_VisualScope(USART3, TxBuf[0]+14, 8);
   }
   LED_B = 1;
 
@@ -127,7 +127,7 @@ int main( void )
     /************************** FSM UART ***************************************/
     case FSM_UART:
       // FSM_USART
-      RS232_VisualScope(USART3, TxBuf[0]+2, 8);
+      RS232_VisualScope(USART3, TxBuf[0]+20, 8);
       // FSM_USART End
       FSM_State = FSM_DATA;
       break;
