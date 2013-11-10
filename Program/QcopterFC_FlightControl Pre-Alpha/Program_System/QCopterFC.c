@@ -3,6 +3,7 @@
 #include "stm32f4_system.h"
 #include "QCopterFC.h"
 #include "QCopterFC_ctrl.h"
+#include "QCopterFC_ahrs.h"
 #include "QCopterFC_transport.h"
 #include "module_board.h"
 #include "module_rs232.h"
@@ -26,17 +27,17 @@ void System_Init( void )
   PID_Init(&PID_Roll);
   PID_Init(&PID_Pitch);
 
-  PID_Pitch.Kp = +3.5f;
-  PID_Pitch.Ki = +0.004f;
-  PID_Pitch.Kd = +4.0f;
+  PID_Pitch.Kp = +1.5f;
+  PID_Pitch.Ki = +0.002f;
+  PID_Pitch.Kd = +1.0f;
 
-  PID_Roll.Kp  = +3.5f;
-  PID_Roll.Ki  = +0.004f;
-  PID_Roll.Kd  = +4.0f;
+  PID_Roll.Kp  = +1.5f;
+  PID_Roll.Ki  = +0.002f;
+  PID_Roll.Kd  = +1.0f;
 
   PID_Yaw.Kp   = +0.0f;
   PID_Yaw.Ki   = +0.0f;
-  PID_Yaw.Kd   = +0.25f;
+  PID_Yaw.Kd   = +0.0f;
 
   Delay_10ms(2);
 }
@@ -69,7 +70,7 @@ int main( void )
   Delay_10ms(10);
 
   /* Systick Config */
-  if(SysTick_Config(420000)) {    // 168MHz / 420000 = 400Hz = 2.5ms
+  if(SysTick_Config(SystemCoreClock/SampleRateFreg)) {  // SampleRateFreg = 500 Hz
     while(1);
   }
 
@@ -84,7 +85,7 @@ int main( void )
     LED_B = ~LED_B;
     Delay_10ms(1);
     Transport_Send(TxBuf[0]);
-    RS232_VisualScope(USART3, TxBuf[0]+14, 8);
+    RS232_VisualScope(USART3, TxBuf[0]+20, 8);
   }
   LED_B = 1;
 

@@ -42,6 +42,8 @@ void SysTick_Handler( void )
 
   s16 Thr = 0, Pitch = 0, Roll = 0, Yaw = 0;
 
+  float Ellipse[5] = {0};
+
   static u8  BaroCnt = 0;
 
   static s16 ACC_FIFO[3][256] = {0};
@@ -55,7 +57,7 @@ void SysTick_Handler( void )
 
   /* Time Count */
   SysTick_Cnt++;
-  if(SysTick_Cnt == 400) {
+  if(SysTick_Cnt == SampleRateFreg) {
     SysTick_Cnt = 0;
     Time_Sec++;
     if(Time_Sec == 60) {	// 0~59
@@ -116,13 +118,14 @@ void SysTick_Handler( void )
         Gyr.OffsetZ += (Gyr.Z - GYR_Z_OFFSET);  // 角速度為 0dps
 
         Correction_Time = 0;
-        SensorMode = Mode_AccCorrect;
+        SensorMode = Mode_MagCorrect; // Mode_AccCorrect;
       }
       break;
  
   /************************** Mode_CorrectAcc **************************************/
     case Mode_AccCorrect:
       LED_R = ~LED_R;
+      /* Simple Moving Average */
       Acc.X = (s16)MoveAve_SMA(Acc.X, ACC_FIFO[0], MovegAveFIFO_Size);
       Acc.Y = (s16)MoveAve_SMA(Acc.Y, ACC_FIFO[1], MovegAveFIFO_Size);
       Acc.Z = (s16)MoveAve_SMA(Acc.Z, ACC_FIFO[2], MovegAveFIFO_Size);
@@ -134,7 +137,7 @@ void SysTick_Handler( void )
         Acc.OffsetZ += (Acc.Z - ACC_Z_OFFSET);  // 重力加速度為 1g
 
         Correction_Time = 0;
-        SensorMode = Mode_Quaternion;   // Mode_CorrectMag
+        SensorMode = Mode_Quaternion; // Mode_MagCorrect;
       }
       break;
 
@@ -188,8 +191,11 @@ void SysTick_Handler( void )
         default:
           LED_B = 1;
           EllipseFitting(Ellipse, MagDataX, MagDataY, 8);
-//          Mag.OffsetX = Ellipse[1];
-//          Mag.OffsetY = Ellipse[2];
+          Mag.EllipseSita = Ellipse[0];
+          Mag.EllipseX0   = Ellipse[1];
+          Mag.EllipseY0   = Ellipse[2];
+          Mag.EllipseA    = Ellipse[3];
+          Mag.EllipseB    = Ellipse[4];
 
           Correction_Time = 0;
           SensorMode = Mode_Quaternion;
@@ -201,20 +207,23 @@ void SysTick_Handler( void )
     case Mode_Quaternion:
       LED_R = !LED_R;
       /* To Physical */
-      Acc.TrueX = Acc.X*MPU9150A_4g;      // g/LSB
-      Acc.TrueY = Acc.Y*MPU9150A_4g;      // g/LSB
-      Acc.TrueZ = Acc.Z*MPU9150A_4g;      // g/LSB
-      Gyr.TrueX = Gyr.X*MPU9150G_2000dps; // dps/LSB
-      Gyr.TrueY = Gyr.Y*MPU9150G_2000dps; // dps/LSB
-      Gyr.TrueZ = Gyr.Z*MPU9150G_2000dps; // dps/LSB
-      Mag.TrueX = Mag.X*MPU9150M_1200uT;  // uT/LSB
-      Mag.TrueY = Mag.Y*MPU9150M_1200uT;  // uT/LSB
-      Mag.TrueZ = Mag.Z*MPU9150M_1200uT;  // uT/LSB
+      Acc.TrueX = Acc.X*MPU9150A_4g;        // g/LSB
+      Acc.TrueY = Acc.Y*MPU9150A_4g;        // g/LSB
+      Acc.TrueZ = Acc.Z*MPU9150A_4g;        // g/LSB
+      Gyr.TrueX = Gyr.X*MPU9150G_2000dps;   // dps/LSB
+      Gyr.TrueY = Gyr.Y*MPU9150G_2000dps;   // dps/LSB
+      Gyr.TrueZ = Gyr.Z*MPU9150G_2000dps;   // dps/LSB
+      Mag.TrueX = Mag.X*MPU9150M_1200uT;    // uT/LSB
+      Mag.TrueY = Mag.Y*MPU9150M_1200uT;    // uT/LSB
+      Mag.TrueZ = Mag.Z*MPU9150M_1200uT;    // uT/LSB
       Temp.TrueT = Temp.T*MPU9150T_85degC;  // degC/LSB
+
+      Ellipse[3] = ( Mag.X*arm_cos_f32(Mag.EllipseSita)+Mag.Y*arm_sin_f32(Mag.EllipseSita))/Mag.EllipseB;
+      Ellipse[4] = (-Mag.X*arm_sin_f32(Mag.EllipseSita)+Mag.Y*arm_cos_f32(Mag.EllipseSita))/Mag.EllipseA;
 
       AngE.Pitch = toDeg(atan2f(Acc.TrueY, Acc.TrueZ));
       AngE.Roll  = toDeg(-asinf(Acc.TrueX));
-      AngE.Yaw   = 0;
+      AngE.Yaw   = toDeg(atan2f(Ellipse[3], Ellipse[4]))+180.0f;
 
       Quaternion_ToNumQ(&NumQ, &AngE);
 
@@ -245,9 +254,6 @@ void SysTick_Handler( void )
       Mag.TrueX = Mag.X*MPU9150M_1200uT;    // uT/LSB
       Mag.TrueY = Mag.Y*MPU9150M_1200uT;    // uT/LSB
       Mag.TrueZ = Mag.Z*MPU9150M_1200uT;    // uT/LSB
-//      Mag.TrueX = Mag.TrueX*Mag.AdjustX;
-//      Mag.TrueY = Mag.TrueY*Mag.AdjustY;
-//      Mag.TrueZ = Mag.TrueZ*Mag.AdjustZ;
       Temp.TrueT = Temp.T*MPU9150T_85degC;  // degC/LSB
 
       /* Get Attitude Angle */
@@ -260,23 +266,23 @@ void SysTick_Handler( void )
 //      if(KEYR_R == 0)	{	PID_Roll.Kd += 0.0001f;	PID_Pitch.Kd += 0.0001f; }
 //      if(KEYR_D == 0)	{	PID_Roll.Kd -= 0.0001f;	PID_Pitch.Kd -= 0.0001f; }
 //      if(KEYR_L == 0)	{	PID_Roll.SumErr = 0.0f;	PID_Pitch.SumErr = 0.0f; }
-//      if(KEYL_U == 0)	{	PID_Yaw.Kp += 0.001f;    }
-//      if(KEYL_L == 0)	{	PID_Yaw.Kp -= 0.001f;    }
-//      if(KEYL_R == 0)	{	PID_Yaw.Ki += 0.0001f;	 }
-//      if(KEYL_D == 0)	{	PID_Yaw.Ki -= 0.0001f;	 }
-//      if(KEYR_R == 0)	{	PID_Yaw.Kd += 0.0001f;	 }
-//      if(KEYR_D == 0)	{	PID_Yaw.Kd -= 0.0001f;	 }
-//      if(KEYR_L == 0)	{	PID_Roll.SumErr = 0.0f;	 }
+      if(KEYL_U == 0)	{	PID_Yaw.Kp += 0.001f;    }
+      if(KEYL_L == 0)	{	PID_Yaw.Kp -= 0.001f;    }
+//      if(KEYL_R == 0)	{	PID_Yaw.Ki += 0.001f;	 }
+//      if(KEYL_D == 0)	{	PID_Yaw.Ki -= 0.001f;	 }
+      if(KEYR_R == 0)	{	PID_Yaw.Kd += 0.0001f;	 }
+      if(KEYR_D == 0)	{	PID_Yaw.Kd -= 0.0001f;	 }
+      if(KEYR_L == 0)	{	PID_Roll.SumErr = 0.0f;	 }
 
       /* Get ZeroErr */
-      PID_Pitch.ZeroErr = (float)((s16)Exp_Pitch/2.5f);
-      PID_Roll.ZeroErr  = (float)((s16)Exp_Roll/2.5f);
-      PID_Yaw.ZeroErr   = 180.0f+(float)((s16)Exp_Yaw);
+      PID_Pitch.ZeroErr = (float)((s16)Exp_Pitch/4.5f);
+      PID_Roll.ZeroErr  = (float)((s16)Exp_Roll/4.5f);
+      PID_Yaw.ZeroErr   = (float)((s16)Exp_Yaw)+180.0f;
 
       /* PID */
-      Roll  = (s16)PID_AHRS_Cal(&PID_Roll,  AngE.Roll,  Gyr.TrueX);
-      Pitch = (s16)PID_AHRS_Cal(&PID_Pitch, AngE.Pitch, Gyr.TrueY);
-//      Yaw   = (s16)PID_AHRS_Cal(&PID_Yaw,   AngE.Yaw,   Gyr.TrueZ);
+      Roll  = (s16)PID_AHRS_Cal(&PID_Roll,   AngE.Roll,  Gyr.TrueX);
+      Pitch = (s16)PID_AHRS_Cal(&PID_Pitch,  AngE.Pitch, Gyr.TrueY);
+//      Yaw   = (s16)PID_AHRS_CalYaw(&PID_Yaw, AngE.Yaw,   Gyr.TrueZ);
       Yaw   = (s16)(PID_Yaw.Kd*Gyr.TrueZ);
       Thr   = (s16)Exp_Thr;
 
@@ -287,7 +293,7 @@ void SysTick_Handler( void )
       Final_M4 = PWM_M4 + Thr + Pitch - Roll - Yaw;
 
       /* Check Connection */
-      #define NoSignal 1
+      #define NoSignal 1  // 1 sec
       if(KEYR_L == 0)
         Motor_Control(PWM_MOTOR_MIN, PWM_MOTOR_MIN, PWM_MOTOR_MIN, PWM_MOTOR_MIN);
       else if(((Time_Sec-RecvTime_Sec)>NoSignal) || ((Time_Sec-RecvTime_Sec)<-NoSignal))
@@ -296,10 +302,10 @@ void SysTick_Handler( void )
         Motor_Control(Final_M1, Final_M2, Final_M3, Final_M4);
 
       /* DeBug */
-      Tmp_PID_KP = PID_Pitch.Kp*1000;
-      Tmp_PID_KI = PID_Pitch.Ki*1000;
-      Tmp_PID_KD = PID_Pitch.Kd*1000;
-      Tmp_PID_Pitch = Roll;
+      Tmp_PID_KP = PID_Yaw.Kp*1000;
+      Tmp_PID_KI = PID_Yaw.Ki*1000;
+      Tmp_PID_KD = PID_Yaw.Kd*1000;
+      Tmp_PID_Pitch = Yaw;
 
       break;
   }

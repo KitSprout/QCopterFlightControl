@@ -64,7 +64,7 @@ void Motor_Config( void )
 
   /************************** PWM Output **************************************/
   /* 設定 TIM2 TIM3 TIM4 Time Base */
-  TIM_TimeBaseStruct.TIM_Period = (u16)(2500-1);              // 週期 = 2.5ms, 400Hz
+  TIM_TimeBaseStruct.TIM_Period = (u16)(2500-1);              // 週期 = 2.5ms, 400kHz
   TIM_TimeBaseStruct.TIM_Prescaler = (u16)(84-1);             // 除頻84 = 1M ( 1us )
   TIM_TimeBaseStruct.TIM_ClockDivision = TIM_CKD_DIV1;
   TIM_TimeBaseStruct.TIM_CounterMode = TIM_CounterMode_Up;		// 上數

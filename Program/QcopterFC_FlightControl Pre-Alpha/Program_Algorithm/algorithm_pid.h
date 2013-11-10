@@ -31,6 +31,7 @@ void PID_Init( PID_Struct *PID );
 float PID_IncCal( PID_Struct*, float );
 float PID_PosCal( PID_Struct*, float );
 float PID_AHRS_Cal( PID_Struct*, float, float );
+float PID_AHRS_CalYaw( PID_Struct *PID, float Angle, float Gyroscope );
 /*=====================================================================================================*/
 /*=====================================================================================================*/
 #endif	 

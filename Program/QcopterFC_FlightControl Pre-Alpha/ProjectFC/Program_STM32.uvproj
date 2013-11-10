@@ -429,6 +429,11 @@
               <FilePath>..\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_dma.c</FilePath>
             </File>
             <File>
+              <FileName>stm32f4xx_flash.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_flash.c</FilePath>
+            </File>
+            <File>
               <FileName>stm32f4xx_gpio.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_gpio.c</FilePath>
@@ -456,7 +461,7 @@
             <File>
               <FileName>stm32f4xx_conf.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\Program_Module\stm32f4xx_conf.h</FilePath>
+              <FilePath>..\Program_Dirver\stm32f4xx_conf.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -487,6 +492,11 @@
               <FileName>stm32f4_delay.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Program_Dirver\stm32f4_delay.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4_flash.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Program_Dirver\stm32f4_flash.c</FilePath>
             </File>
             <File>
               <FileName>stm32f4_usart.c</FileName>

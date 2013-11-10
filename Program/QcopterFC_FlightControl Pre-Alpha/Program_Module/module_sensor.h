@@ -29,7 +29,6 @@ typedef struct {
   float TrueY;
   float TrueZ;
 } SensorAcc;
-
 typedef struct {
   s16 X;
   s16 Y;
@@ -41,7 +40,6 @@ typedef struct {
   float TrueY;
   float TrueZ;
 } SensorGyr;
-
 typedef struct {
   s16 X;
   s16 Y;
@@ -52,8 +50,12 @@ typedef struct {
   float TrueX;
   float TrueY;
   float TrueZ;
+  float EllipseSita;
+  float EllipseX0;
+  float EllipseY0;
+  float EllipseA;
+  float EllipseB;
 } SensorMag;
-
 typedef struct {
   s16 T;
   s16 OffsetT;
@@ -64,14 +66,13 @@ typedef struct {
 extern SensorAcc Acc;
 extern SensorGyr Gyr;
 extern SensorMag Mag;
-//extern SensorMag Ang;
 extern SensorTemp Temp;
-extern float Ellipse[5];
 /*=====================================================================================================*/
 /*=====================================================================================================*/
 void Sensor_Config( void );
 u8 Sensor_Init( void );
 void EllipseFitting( float* Ans, s16* MagDataX, s16* MagDataY, u8 Num );
+u8 CompassDir( float Angle );
 /*=====================================================================================================*/
 /*=====================================================================================================*/
 #endif

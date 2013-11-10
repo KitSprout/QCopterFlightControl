@@ -7,8 +7,8 @@
 #include "algorithm_quaternion.h"
 /*=====================================================================================================*/
 /*=====================================================================================================*/
-#define Kp 5.0f
-#define Ki 0.025f
+#define Kp 15.0f
+#define Ki 0.020f//0.02f
 /*=====================================================================================================*/
 /*=====================================================================================================*/
 void AHRS_Init( Quaternion *pNumQ, EulerAngle *pAngE )
@@ -96,9 +96,8 @@ void AHRS_Update( void )
   Quaternion_Normalize(&NumQ);
   Quaternion_ToAngE(&NumQ, &AngE);
 
-//  AngE.Yaw = atan2f(Meg.TrueY, Meg.TrueX);
-  tempX = ( Mag.X*arm_cos_f32(Ellipse[0])+Mag.Y*arm_sin_f32(Ellipse[0]))/Ellipse[4];
-  tempY = (-Mag.X*arm_sin_f32(Ellipse[0])+Mag.Y*arm_cos_f32(Ellipse[0]))/Ellipse[3];
+  tempX    = ( Mag.X*arm_cos_f32(Mag.EllipseSita)+Mag.Y*arm_sin_f32(Mag.EllipseSita))/Mag.EllipseB;
+  tempY    = (-Mag.X*arm_sin_f32(Mag.EllipseSita)+Mag.Y*arm_cos_f32(Mag.EllipseSita))/Mag.EllipseA;
   AngE.Yaw = atan2f(tempX, tempY);
 
   AngE.Pitch = toDeg(AngE.Pitch);
@@ -106,8 +105,8 @@ void AHRS_Update( void )
   AngE.Yaw   = toDeg(AngE.Yaw)+180.0f;
 
   /* 互補濾波 Complementary Filter */
-  #define CF_A 0.985f
-  #define CF_B 0.015f
+  #define CF_A 0.9f
+  #define CF_B 0.1f
   AngZ_Temp = AngZ_Temp + GyrZ*SampleRate;
   AngZ_Temp = CF_A*AngZ_Temp + CF_B*AngE.Yaw;
   if(AngZ_Temp>360.0f)
