@@ -329,10 +329,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>0</ColumnNumber>
+      <ColumnNumber>3</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
       <TopLine>1</TopLine>
-      <CurrentLine>1</CurrentLine>
+      <CurrentLine>53</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\Program\stm32f4_usart.c</PathWithFileName>
       <FilenameWithoutPath>stm32f4_usart.c</FilenameWithoutPath>
@@ -356,7 +356,7 @@
       <ColumnNumber>1</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
       <TopLine>23</TopLine>
-      <CurrentLine>18</CurrentLine>
+      <CurrentLine>39</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\Program\experiment_stm32f4.c</PathWithFileName>
       <FilenameWithoutPath>experiment_stm32f4.c</FilenameWithoutPath>
@@ -377,10 +377,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>24</ColumnNumber>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>1</TopLine>
-      <CurrentLine>43</CurrentLine>
+      <TopLine>140</TopLine>
+      <CurrentLine>1</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\Program\module_rs232.c</PathWithFileName>
       <FilenameWithoutPath>module_rs232.c</FilenameWithoutPath>
