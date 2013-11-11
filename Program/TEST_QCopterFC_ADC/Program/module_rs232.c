@@ -31,7 +31,7 @@ void RS232_Config( void )
   GPIO_InitStruct.GPIO_Speed = GPIO_Speed_50MHz;
   GPIO_Init(GPIOB, &GPIO_InitStruct);
 
-  USART_InitStruct.USART_BaudRate = 115200;
+  USART_InitStruct.USART_BaudRate = 9600;
   USART_InitStruct.USART_WordLength = USART_WordLength_8b;
   USART_InitStruct.USART_StopBits = USART_StopBits_1;
   USART_InitStruct.USART_Parity = USART_Parity_No;
@@ -40,7 +40,7 @@ void RS232_Config( void )
   USART_Init(USART3, &USART_InitStruct);
   USART_Cmd(USART3, ENABLE);
 
-  USART_ClearFlag(USART3, USART_FLAG_TC);
+  USART_ClearFlag(USART1, USART_FLAG_TC);
 }
 /*=====================================================================================================*/
 /*=====================================================================================================*
