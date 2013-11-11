@@ -23,25 +23,22 @@ int main( void )
   u16 i = 0;
 	u8 Sta = ERROR;
   u8 FSM_Sta = 1;
-  u8 TrData[2][8] = {0};
 
 	SystemInit();
 	GPIO_Config();
 	RS232_Config();
 	nRF24L01_Config();
 
-	RS232_Print(USART3, (u8*)" ");
-
 	while(Sta == ERROR) {
-		RS232_Print(USART3, (u8*)"nRF24L01P Check ... ");
+		RS232_SendStr(USART3, (u8*)"nRF24L01P CHECK ... ");
 		Sta = nRF_Check();
 		if(Sta == ERROR)
-			RS232_Print(USART3, (u8*)"ERROR\r\n");
+			RS232_SendStr(USART3, (u8*)"ERROR\r\n");
 		else
-			RS232_Print(USART3, (u8*)"SUCCESS\r\n");
+			RS232_SendStr(USART3, (u8*)"SUCCESS\r\n");
 	}
 
-  RS232_Print(USART3, (u8*)"\r\n");
+  RS232_SendStr(USART3, (u8*)"\r\n");
 
 	while(1) {
 		LED_G = ~LED_G;
@@ -52,8 +49,8 @@ int main( void )
 				// FSM_Tx
         i++;
         if(i==65535)  i = 0;
-        TxBuf[0][2] = (u8)(i);
-        TxBuf[0][3] = (u8)(i>>8);
+        TxBuf[0][2] = Byte8L(i);
+        TxBuf[0][3] = Byte8H(i);
 				nRF_TX_Mode();
 				do {
 					Sta = nRF_Tx_Data(TxBuf[0]);
@@ -76,15 +73,12 @@ int main( void )
 /************************** FSM USART **************************************/
 			case 2:
 				// FSM_USART
-
-        NumToChar(Type_D, 5, TrData[0], (u16)((RxBuf[0][15]<<8) | RxBuf[0][14]));
-        RS232_Print(USART3, (u8*)"RxDara[14] = ");
-        RS232_Print(USART3, TrData[0]);
-        RS232_Print(USART3, (u8*)"\r\n");
-        NumToChar(Type_D, 5, TrData[1], (u16)((RxBuf[0][17]<<8) | RxBuf[0][16]));
-        RS232_Print(USART3, (u8*)"RxDara[16] = ");
-        RS232_Print(USART3, TrData[1]);
-        RS232_Print(USART3, (u8*)"\r\n\r\n");
+        RS232_SendStr(USART3, (u8*)"RxDara[14] = ");
+        RS232_SendNum(USART3, Type_D, 5, Byte16(RxBuf[0][15], RxBuf[0][14]));
+        RS232_SendStr(USART3, (u8*)"\r\n");
+        RS232_SendStr(USART3, (u8*)"RxDara[16] = ");
+        RS232_SendNum(USART3, Type_D, 5, Byte16(RxBuf[0][17], RxBuf[0][16]));
+        RS232_SendStr(USART3, (u8*)"\r\n\r\n");
 				// FSM_USART End
 				FSM_Sta = 0;
 				break;
