@@ -17,7 +17,7 @@
 void GPIO_Config( void );
 /*=====================================================================================================*/
 /*=====================================================================================================*/
-FATFS fatfs;
+FATFS FatFs;
 FRESULT res;
 FILINFO finfo;
 DIR dirs;
@@ -41,7 +41,7 @@ int main( void )
   RS232_SendStr(USART3, (u8*)" \r\n");
   RS232_SendStr(USART3, (u8*)"----------------------\r\n");
   RS232_SendStr(USART3, (u8*)"----------------------\r\n");
-  RS232_SendStr(USART3, (u8*)" SDIO SD Fatfs demo\r\n");
+  RS232_SendStr(USART3, (u8*)" SDIO SD FatFs demo\r\n");
   RS232_SendStr(USART3, (u8*)"----------------------\r\n");
   RS232_SendStr(USART3, (u8*)"----------------------\r\n\r\n");
   RS232_SendStr(USART3, (u8*)" SD Init ... ");
@@ -89,11 +89,11 @@ int main( void )
   RS232_SendStr(USART3, (u8*)" SD_Card Read Directory File\r\n");
   RS232_SendStr(USART3, (u8*)"----------------------\r\n\r\n");
 
-  res = f_mount(0, &fatfs);
+  res = f_mount(&FatFs, "", 1);
   res = f_opendir(&dirs, "0:/");
   res = f_readdir(&dirs, &finfo);
   while(res!= FR_OK) {
-    RS232_SendStr(USART3, (u8*)" Fatfs failed!!\r\n");
+    RS232_SendStr(USART3, (u8*)" FatFs failed!!\r\n");
     while(1) {
       LED_R = ~LED_R;
       Delay_100ms(2);

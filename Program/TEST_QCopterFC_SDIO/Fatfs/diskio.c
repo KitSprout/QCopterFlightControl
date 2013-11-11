@@ -59,7 +59,7 @@ DRESULT disk_read (
 	BYTE pdrv,		/* Physical drive nmuber (0..) */
 	BYTE *buff,		/* Data buffer to store read data */
 	DWORD sector,	/* Sector address (LBA) */
-	BYTE count		/* Number of sectors to read (1..128) */
+	UINT count		/* Number of sectors to read (1..128) */
 )
 {
 	SD_Error Status;
@@ -90,7 +90,7 @@ DRESULT disk_write (
 	BYTE pdrv,			/* Physical drive nmuber (0..) */
 	const BYTE *buff,	/* Data to be written */
 	DWORD sector,		/* Sector address (LBA) */
-	BYTE count			/* Number of sectors to write (1..128) */
+	UINT count			/* Number of sectors to write (1..128) */
 )
 {
 	SD_Error Status;
@@ -119,6 +119,8 @@ DRESULT disk_write (
 /*-----------------------------------------------------------------------*/
 /* Miscellaneous Functions                                               */
 /*-----------------------------------------------------------------------*/
+
+#if _USE_IOCTL
 DRESULT disk_ioctl (
 	BYTE pdrv,		/* Physical drive nmuber (0..) */
 	BYTE cmd,		/* Control code */
@@ -126,7 +128,7 @@ DRESULT disk_ioctl (
 )
 {
 	if(pdrv)
-		return RES_PARERR;  /* ¶È¤ä«ù³æºÏ½L¾Ş§@¡A§_«hªğ¦^°Ñ¼Æ¿ù»~ */
+		return RES_PARERR;  /* åƒ…æ”¯æŒå–®ç£ç›¤æ“ä½œï¼Œå¦å‰‡è¿”å›åƒæ•¸éŒ¯èª¤ */
 
 	switch(cmd) {
 	  case CTRL_SYNC:
@@ -157,10 +159,10 @@ DRESULT disk_ioctl (
 	}
 
 	return RES_PARERR;
-
 }
+#endif
 
-DWORD get_fattime (void)
+DWORD get_fattime( void )
 {
 	return 0;
 }
