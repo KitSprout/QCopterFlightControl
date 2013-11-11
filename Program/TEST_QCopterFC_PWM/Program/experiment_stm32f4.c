@@ -32,62 +32,49 @@ void PWM_Config( void );
 /*=====================================================================================================*/
 int main( void )
 {
-	u32 i = PWM_MOTOR_MIN;
+  u32 i = PWM_MOTOR_MIN;
 
-	SystemInit();
-	GPIO_Config();
-	PWM_Config();
-
-//	PWM1  = PWM_MOTOR_MIN;
-//	PWM2  = PWM_MOTOR_MIN;
-//	PWM3  = PWM_MOTOR_MIN;
-//	PWM4  = PWM_MOTOR_MIN;
-//	PWM5  = PWM_MOTOR_MIN;
-//	PWM6  = PWM_MOTOR_MIN;
-//	PWM7  = PWM_MOTOR_MIN;
-//	PWM8  = PWM_MOTOR_MIN;
-//	PWM9  = PWM_MOTOR_MIN;
-//	PWM10 = PWM_MOTOR_MIN;
-//	PWM11 = PWM_MOTOR_MIN;
-//	PWM12 = PWM_MOTOR_MIN;
+  SystemInit();
+  GPIO_Config();
+  PWM_Config();
 
   while(1) {
     LED_G = ~LED_G;
 
-		while(KEY == 1) {
-			PWM1  = i;
-			PWM2  = i;
-			PWM3  = i;
-			PWM4  = i;
-			PWM5  = i;
-			PWM6  = i;
-			PWM7  = i;
-			PWM8  = i;
-			PWM9  = i;
-			PWM10 = i;
-			PWM11 = i;
-			PWM12 = i;
-			i++;
-			if(i>=PWM_MOTOR_MAX) {
-				i = PWM_MOTOR_MIN;
-				LED_R = ~LED_R;
-			}
-			Delay_100us(5);
-		}
+    while(KEY == 1) {
+      PWM1  = i;
+      PWM2  = i;
+      PWM3  = i;
+      PWM4  = i;
+      PWM5  = i;
+      PWM6  = i;
+      PWM7  = i;
+      PWM8  = i;
+      PWM9  = i;
+      PWM10 = i;
+      PWM11 = i;
+      PWM12 = i;
+      i++;
+      if(i>=PWM_MOTOR_MAX) {
+      i = PWM_MOTOR_MIN;
+      LED_R = ~LED_R;
+      }
+      Delay_100us(5);
+    }
 
     Delay_100ms(1);
-	}
+  }
 }
 /*=====================================================================================================*/
 /*=====================================================================================================*/
 void GPIO_Config( void )
 {
-	GPIO_InitTypeDef GPIO_InitStruct;
+  GPIO_InitTypeDef GPIO_InitStruct;
 
   RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB | RCC_AHB1Periph_GPIOC, ENABLE);
 
   /* LED_R PC13 */  /* LED_G PC14 */  /* LED_B PC15 */
-	GPIO_InitStruct.GPIO_Pin = GPIO_Pin_13 | GPIO_Pin_14 | GPIO_Pin_15;
+  GPIO_InitStruct.GPIO_Pin = GPIO_Pin_13 | GPIO_Pin_14 | GPIO_Pin_15;
   GPIO_InitStruct.GPIO_Mode = GPIO_Mode_OUT;
   GPIO_InitStruct.GPIO_OType = GPIO_OType_PP;
   GPIO_InitStruct.GPIO_Speed = GPIO_Speed_50MHz;
@@ -95,7 +82,7 @@ void GPIO_Config( void )
   GPIO_Init(GPIOC, &GPIO_InitStruct);
 
   /* KEY PB2 */
-	GPIO_InitStruct.GPIO_Pin = GPIO_Pin_2;
+  GPIO_InitStruct.GPIO_Pin = GPIO_Pin_2;
   GPIO_InitStruct.GPIO_Mode = GPIO_Mode_IN;
   GPIO_InitStruct.GPIO_PuPd = GPIO_PuPd_NOPULL;
   GPIO_Init(GPIOB, &GPIO_InitStruct);
@@ -108,19 +95,19 @@ void GPIO_Config( void )
 /*=====================================================================================================*/
 void PWM_Config( void )
 {
-	GPIO_InitTypeDef GPIO_InitStruct;
-	TIM_TimeBaseInitTypeDef TIM_TimeBaseStruct;
-	TIM_OCInitTypeDef TIM_OCInitStruct;
+  GPIO_InitTypeDef GPIO_InitStruct;
+  TIM_TimeBaseInitTypeDef TIM_TimeBaseStruct;
+  TIM_OCInitTypeDef TIM_OCInitStruct;
 
-	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA | RCC_AHB1Periph_GPIOB | RCC_AHB1Periph_GPIOC, ENABLE);
-	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2 | RCC_APB1Periph_TIM3 | RCC_APB1Periph_TIM4, ENABLE);
-	RCC_APB2PeriphClockCmd(RCC_APB2Periph_TIM8, ENABLE);
+  RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA | RCC_AHB1Periph_GPIOB | RCC_AHB1Periph_GPIOC, ENABLE);
+  RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2 | RCC_APB1Periph_TIM3 | RCC_APB1Periph_TIM4, ENABLE);
+  RCC_APB2PeriphClockCmd(RCC_APB2Periph_TIM8, ENABLE);
 
   GPIO_PinAFConfig(GPIOA, GPIO_PinSource0, GPIO_AF_TIM2);
   GPIO_PinAFConfig(GPIOA, GPIO_PinSource1, GPIO_AF_TIM2);
-	GPIO_PinAFConfig(GPIOA, GPIO_PinSource2, GPIO_AF_TIM2);
-	GPIO_PinAFConfig(GPIOA, GPIO_PinSource3, GPIO_AF_TIM2);
-	GPIO_PinAFConfig(GPIOA, GPIO_PinSource6, GPIO_AF_TIM3);
+  GPIO_PinAFConfig(GPIOA, GPIO_PinSource2, GPIO_AF_TIM2);
+  GPIO_PinAFConfig(GPIOA, GPIO_PinSource3, GPIO_AF_TIM2);
+  GPIO_PinAFConfig(GPIOA, GPIO_PinSource6, GPIO_AF_TIM3);
   GPIO_PinAFConfig(GPIOA, GPIO_PinSource7, GPIO_AF_TIM3);
   GPIO_PinAFConfig(GPIOB, GPIO_PinSource0, GPIO_AF_TIM3);
   GPIO_PinAFConfig(GPIOB, GPIO_PinSource1, GPIO_AF_TIM3);
@@ -129,89 +116,102 @@ void PWM_Config( void )
   GPIO_PinAFConfig(GPIOC, GPIO_PinSource6, GPIO_AF_TIM8);
   GPIO_PinAFConfig(GPIOC, GPIO_PinSource7, GPIO_AF_TIM8);
 
-	/* TIM2 PWM1 PA0 */	/* TIM2 PWM2 PA1 */	/* TIM2 PWM3 PA2 */	/* TIM2 PWM4 PA3 */
-	/* TIM3 PWM5 PA6 */	/* TIM3 PWM6 PA7 */
-	GPIO_InitStruct.GPIO_Pin = GPIO_Pin_0 | GPIO_Pin_1 | GPIO_Pin_2 | GPIO_Pin_3 | GPIO_Pin_6 | GPIO_Pin_7;
+  /* TIM2 PWM1 PA0 */	/* TIM2 PWM2 PA1 */	/* TIM2 PWM3 PA2 */	/* TIM2 PWM4 PA3 */
+  /* TIM3 PWM5 PA6 */	/* TIM3 PWM6 PA7 */
+  GPIO_InitStruct.GPIO_Pin = GPIO_Pin_0 | GPIO_Pin_1 | GPIO_Pin_2 | GPIO_Pin_3 | GPIO_Pin_6 | GPIO_Pin_7;
   GPIO_InitStruct.GPIO_Mode = GPIO_Mode_AF;
   GPIO_InitStruct.GPIO_Speed = GPIO_Speed_100MHz;
   GPIO_InitStruct.GPIO_OType = GPIO_OType_PP;
   GPIO_InitStruct.GPIO_PuPd = GPIO_PuPd_UP;
-	GPIO_Init(GPIOA, &GPIO_InitStruct);
-	/* TIM3 PWM7 PB0 */	/* TIM3 PWM8 PB1 */	/* TIM4 PWM9 PB6 */	/* TIM4 PWM10 PB7 */
-	GPIO_InitStruct.GPIO_Pin = GPIO_Pin_0 | GPIO_Pin_1 | GPIO_Pin_6 | GPIO_Pin_7;
+  GPIO_Init(GPIOA, &GPIO_InitStruct);
+  /* TIM3 PWM7 PB0 */	/* TIM3 PWM8 PB1 */	/* TIM4 PWM9 PB6 */	/* TIM4 PWM10 PB7 */
+  GPIO_InitStruct.GPIO_Pin = GPIO_Pin_0 | GPIO_Pin_1 | GPIO_Pin_6 | GPIO_Pin_7;
   GPIO_InitStruct.GPIO_Mode = GPIO_Mode_AF;
   GPIO_InitStruct.GPIO_Speed = GPIO_Speed_100MHz;
   GPIO_InitStruct.GPIO_OType = GPIO_OType_PP;
   GPIO_InitStruct.GPIO_PuPd = GPIO_PuPd_UP;
-	GPIO_Init(GPIOB, &GPIO_InitStruct);
-	/* TIM8 PWM11 PC6 */	/* TIM8 PWM12 PC7 */
-	GPIO_InitStruct.GPIO_Pin = GPIO_Pin_6 | GPIO_Pin_7;
+  GPIO_Init(GPIOB, &GPIO_InitStruct);
+  /* TIM8 PWM11 PC6 */	/* TIM8 PWM12 PC7 */
+  GPIO_InitStruct.GPIO_Pin = GPIO_Pin_6 | GPIO_Pin_7;
   GPIO_InitStruct.GPIO_Mode = GPIO_Mode_AF;
   GPIO_InitStruct.GPIO_Speed = GPIO_Speed_100MHz;
   GPIO_InitStruct.GPIO_OType = GPIO_OType_PP;
   GPIO_InitStruct.GPIO_PuPd = GPIO_PuPd_UP;
-	GPIO_Init(GPIOC, &GPIO_InitStruct);
+  GPIO_Init(GPIOC, &GPIO_InitStruct);
 
-	TIM_DeInit(TIM2);
-	TIM_DeInit(TIM3);
-	TIM_DeInit(TIM4);
-	TIM_DeInit(TIM8);
+  TIM_DeInit(TIM2);
+  TIM_DeInit(TIM3);
+  TIM_DeInit(TIM4);
+  TIM_DeInit(TIM8);
 
-/************************** PWM Output **************************************/
-	/* ³]©w TIM2 TIM3 TIM4 Time Base */
-	TIM_TimeBaseStruct.TIM_Period = (u16)(2500-1);              // ¶g´Á = 2.5ms, 400Hz
-	TIM_TimeBaseStruct.TIM_Prescaler = (u16)(84-1);             // °£ÀW84 = 1M ( 1us )
-	TIM_TimeBaseStruct.TIM_ClockDivision = TIM_CKD_DIV1;
-	TIM_TimeBaseStruct.TIM_CounterMode = TIM_CounterMode_Up;		// ¤W¼Æ
-	TIM_TimeBaseInit(TIM2, &TIM_TimeBaseStruct);
-	TIM_TimeBaseInit(TIM3, &TIM_TimeBaseStruct);
-	TIM_TimeBaseInit(TIM4, &TIM_TimeBaseStruct);
-	/* ³]©wTIM8 Time Base */
-	TIM_TimeBaseStruct.TIM_Period = (u16)(2500-1);							// ¶g´Á = 2.5ms, 400kHz
-	TIM_TimeBaseStruct.TIM_Prescaler = (u16)(168-1);						// °£ÀW42 = 1M ( 1us )
-	TIM_TimeBaseStruct.TIM_ClockDivision = TIM_CKD_DIV1;
-	TIM_TimeBaseStruct.TIM_CounterMode = TIM_CounterMode_Up;		// ¤W¼Æ
-	TIM_TimeBaseInit(TIM8, &TIM_TimeBaseStruct);
+  /************************** PWM Output **************************************/
+  /* è¨­å®š TIM2 TIM3 TIM4 Time Base */
+  TIM_TimeBaseStruct.TIM_Period = (u16)(2500-1);              // é€±æœŸ = 2.5ms, 400Hz
+  TIM_TimeBaseStruct.TIM_Prescaler = (u16)(84-1);             // é™¤é »84 = 1M ( 1us )
+  TIM_TimeBaseStruct.TIM_ClockDivision = TIM_CKD_DIV1;
+  TIM_TimeBaseStruct.TIM_CounterMode = TIM_CounterMode_Up;    // ä¸Šæ•¸
+  TIM_TimeBaseInit(TIM2, &TIM_TimeBaseStruct);
+  TIM_TimeBaseInit(TIM3, &TIM_TimeBaseStruct);
+  TIM_TimeBaseInit(TIM4, &TIM_TimeBaseStruct);
+  /* è¨­å®šTIM8 Time Base */
+  TIM_TimeBaseStruct.TIM_Period = (u16)(2500-1);              // é€±æœŸ = 2.5ms, 400kHz
+  TIM_TimeBaseStruct.TIM_Prescaler = (u16)(168-1);            // é™¤é »42 = 1M ( 1us )
+  TIM_TimeBaseStruct.TIM_ClockDivision = TIM_CKD_DIV1;
+  TIM_TimeBaseStruct.TIM_CounterMode = TIM_CounterMode_Up;    // ä¸Šæ•¸
+  TIM_TimeBaseInit(TIM8, &TIM_TimeBaseStruct);
 
-	/* ³]©w TIM2 TIM3 TIM4 TIM8 OC */
-	TIM_OCInitStruct.TIM_OCMode = TIM_OCMode_PWM1;							// °t¸m¬° PWM1 ¼Ò¦¡
-	TIM_OCInitStruct.TIM_OutputState = TIM_OutputState_Enable;	// ­P¯à OC
-	TIM_OCInitStruct.TIM_Pulse = PWM_MOTOR_MAX;									// ³]¸m¸õÅÜ­È
-	TIM_OCInitStruct.TIM_OCPolarity = TIM_OCPolarity_High;			// ·í­p¼Æ­È¤p©ó PWM_MOTOR_MIN ®É¬°°ª¹q¥­
-	TIM_OC1Init(TIM2, &TIM_OCInitStruct);												// ªì©l¤Æ TIM2 OC1
-	TIM_OC2Init(TIM2, &TIM_OCInitStruct);												// ªì©l¤Æ TIM2 OC2
-	TIM_OC3Init(TIM2, &TIM_OCInitStruct);												// ªì©l¤Æ TIM2 OC3
-	TIM_OC4Init(TIM2, &TIM_OCInitStruct);												// ªì©l¤Æ TIM2 OC4
-	TIM_OC1Init(TIM3, &TIM_OCInitStruct);												// ªì©l¤Æ TIM3 OC1
-	TIM_OC2Init(TIM3, &TIM_OCInitStruct);												// ªì©l¤Æ TIM3 OC2
-	TIM_OC3Init(TIM3, &TIM_OCInitStruct);												// ªì©l¤Æ TIM3 OC3
-	TIM_OC4Init(TIM3, &TIM_OCInitStruct);												// ªì©l¤Æ TIM3 OC4
-	TIM_OC1Init(TIM4, &TIM_OCInitStruct);												// ªì©l¤Æ TIM4 OC1
-	TIM_OC2Init(TIM4, &TIM_OCInitStruct);												// ªì©l¤Æ TIM4 OC2
-	TIM_OC1Init(TIM8, &TIM_OCInitStruct);												// ªì©l¤Æ TIM8 OC1
-	TIM_OC2Init(TIM8, &TIM_OCInitStruct);												// ªì©l¤Æ TIM8 OC2
-	TIM_OC1PreloadConfig(TIM2, TIM_OCPreload_Enable);						// ­P¯à TIM2 OC1 ¹w¸Ë¸ü
-	TIM_OC2PreloadConfig(TIM2, TIM_OCPreload_Enable);						// ­P¯à TIM2 OC2 ¹w¸Ë¸ü
-	TIM_OC3PreloadConfig(TIM2, TIM_OCPreload_Enable);						// ­P¯à TIM2 OC3 ¹w¸Ë¸ü
-	TIM_OC4PreloadConfig(TIM2, TIM_OCPreload_Enable);						// ­P¯à TIM2 OC4 ¹w¸Ë¸ü
-	TIM_OC1PreloadConfig(TIM3, TIM_OCPreload_Enable);						// ­P¯à TIM3 OC1 ¹w¸Ë¸ü
-	TIM_OC2PreloadConfig(TIM3, TIM_OCPreload_Enable);						// ­P¯à TIM3 OC2 ¹w¸Ë¸ü
-	TIM_OC3PreloadConfig(TIM3, TIM_OCPreload_Enable);						// ­P¯à TIM3 OC3 ¹w¸Ë¸ü
-	TIM_OC4PreloadConfig(TIM3, TIM_OCPreload_Enable);						// ­P¯à TIM3 OC4 ¹w¸Ë¸ü
-	TIM_OC1PreloadConfig(TIM4, TIM_OCPreload_Enable);						// ­P¯à TIM4 OC1 ¹w¸Ë¸ü
-	TIM_OC2PreloadConfig(TIM4, TIM_OCPreload_Enable);						// ­P¯à TIM4 OC2 ¹w¸Ë¸ü
-	TIM_OC1PreloadConfig(TIM8, TIM_OCPreload_Enable);						// ­P¯à TIM8 OC1 ¹w¸Ë¸ü
-	TIM_OC2PreloadConfig(TIM8, TIM_OCPreload_Enable);						// ­P¯à TIM8 OC2 ¹w¸Ë¸ü
+  /* è¨­å®š TIM2 TIM3 TIM4 TIM8 OC */
+  TIM_OCInitStruct.TIM_OCMode = TIM_OCMode_PWM1;              // é…ç½®ç‚º PWM1 æ¨¡å¼
+  TIM_OCInitStruct.TIM_OutputState = TIM_OutputState_Enable;  // è‡´èƒ½ OC
+  TIM_OCInitStruct.TIM_Pulse = PWM_MOTOR_MAX;                 // è¨­ç½®è·³è®Šå€¼
+  TIM_OCInitStruct.TIM_OCPolarity = TIM_OCPolarity_High;      // ç•¶è¨ˆæ•¸å€¼å°æ–¼ PWM_MOTOR_MIN æ™‚ç‚ºé«˜é›»å¹³
+  TIM_OC1Init(TIM2, &TIM_OCInitStruct);                       // åˆå§‹åŒ– TIM2 OC1
+  TIM_OC2Init(TIM2, &TIM_OCInitStruct);                       // åˆå§‹åŒ– TIM2 OC2
+  TIM_OC3Init(TIM2, &TIM_OCInitStruct);                       // åˆå§‹åŒ– TIM2 OC3
+  TIM_OC4Init(TIM2, &TIM_OCInitStruct);                       // åˆå§‹åŒ– TIM2 OC4
+  TIM_OC1Init(TIM3, &TIM_OCInitStruct);                       // åˆå§‹åŒ– TIM3 OC1
+  TIM_OC2Init(TIM3, &TIM_OCInitStruct);                       // åˆå§‹åŒ– TIM3 OC2
+  TIM_OC3Init(TIM3, &TIM_OCInitStruct);                       // åˆå§‹åŒ– TIM3 OC3
+  TIM_OC4Init(TIM3, &TIM_OCInitStruct);                       // åˆå§‹åŒ– TIM3 OC4
+  TIM_OC1Init(TIM4, &TIM_OCInitStruct);                       // åˆå§‹åŒ– TIM4 OC1
+  TIM_OC2Init(TIM4, &TIM_OCInitStruct);                       // åˆå§‹åŒ– TIM4 OC2
+  TIM_OC1Init(TIM8, &TIM_OCInitStruct);                       // åˆå§‹åŒ– TIM8 OC1
+  TIM_OC2Init(TIM8, &TIM_OCInitStruct);                       // åˆå§‹åŒ– TIM8 OC2
+  TIM_OC1PreloadConfig(TIM2, TIM_OCPreload_Enable);           // è‡´èƒ½ TIM2 OC1 é è£è¼‰
+  TIM_OC2PreloadConfig(TIM2, TIM_OCPreload_Enable);           // è‡´èƒ½ TIM2 OC2 é è£è¼‰
+  TIM_OC3PreloadConfig(TIM2, TIM_OCPreload_Enable);           // è‡´èƒ½ TIM2 OC3 é è£è¼‰
+  TIM_OC4PreloadConfig(TIM2, TIM_OCPreload_Enable);           // è‡´èƒ½ TIM2 OC4 é è£è¼‰
+  TIM_OC1PreloadConfig(TIM3, TIM_OCPreload_Enable);           // è‡´èƒ½ TIM3 OC1 é è£è¼‰
+  TIM_OC2PreloadConfig(TIM3, TIM_OCPreload_Enable);           // è‡´èƒ½ TIM3 OC2 é è£è¼‰
+  TIM_OC3PreloadConfig(TIM3, TIM_OCPreload_Enable);           // è‡´èƒ½ TIM3 OC3 é è£è¼‰
+  TIM_OC4PreloadConfig(TIM3, TIM_OCPreload_Enable);           // è‡´èƒ½ TIM3 OC4 é è£è¼‰
+  TIM_OC1PreloadConfig(TIM4, TIM_OCPreload_Enable);           // è‡´èƒ½ TIM4 OC1 é è£è¼‰
+  TIM_OC2PreloadConfig(TIM4, TIM_OCPreload_Enable);           // è‡´èƒ½ TIM4 OC2 é è£è¼‰
+  TIM_OC1PreloadConfig(TIM8, TIM_OCPreload_Enable);           // è‡´èƒ½ TIM8 OC1 é è£è¼‰
+  TIM_OC2PreloadConfig(TIM8, TIM_OCPreload_Enable);           // è‡´èƒ½ TIM8 OC2 é è£è¼‰
 
-	/* ±Ò°Ê */
-	TIM_ARRPreloadConfig(TIM2, ENABLE);													// ­P¯à TIM2 ­«¸ü±H¦s¾¹ARR
-	TIM_ARRPreloadConfig(TIM3, ENABLE);													// ­P¯à TIM3 ­«¸ü±H¦s¾¹ARR
-	TIM_ARRPreloadConfig(TIM4, ENABLE);													// ­P¯à TIM4 ­«¸ü±H¦s¾¹ARR
-	TIM_ARRPreloadConfig(TIM8, ENABLE);													// ­P¯à TIM8 ­«¸ü±H¦s¾¹ARR
-	TIM_Cmd(TIM2, ENABLE);																			// ­P¯à TIM2
-	TIM_Cmd(TIM3, ENABLE);																			// ­P¯à TIM3
-	TIM_Cmd(TIM4, ENABLE);																			// ­P¯à TIM4
-	TIM_Cmd(TIM8, ENABLE);																			// ­P¯à TIM8
+  /* å•Ÿå‹• */
+  TIM_ARRPreloadConfig(TIM2, ENABLE);                         // è‡´èƒ½ TIM2 é‡è¼‰å¯„å­˜å™¨ARR
+  TIM_ARRPreloadConfig(TIM3, ENABLE);                         // è‡´èƒ½ TIM3 é‡è¼‰å¯„å­˜å™¨ARR
+  TIM_ARRPreloadConfig(TIM4, ENABLE);                         // è‡´èƒ½ TIM4 é‡è¼‰å¯„å­˜å™¨ARR
+  TIM_ARRPreloadConfig(TIM8, ENABLE);                         // è‡´èƒ½ TIM8 é‡è¼‰å¯„å­˜å™¨ARR
+  TIM_Cmd(TIM2, ENABLE);                                      // è‡´èƒ½ TIM2
+  TIM_Cmd(TIM3, ENABLE);                                      // è‡´èƒ½ TIM3
+  TIM_Cmd(TIM4, ENABLE);                                      // è‡´èƒ½ TIM4
+  TIM_Cmd(TIM8, ENABLE);                                      // è‡´èƒ½ TIM8
+
+  TIM2->CCR1 = PWM_MOTOR_MIN;
+  TIM2->CCR2 = PWM_MOTOR_MIN;
+  TIM2->CCR3 = PWM_MOTOR_MIN;
+  TIM2->CCR4 = PWM_MOTOR_MIN;
+  TIM3->CCR1 = PWM_MOTOR_MIN;
+  TIM3->CCR2 = PWM_MOTOR_MIN;
+  TIM3->CCR3 = PWM_MOTOR_MIN;
+  TIM3->CCR4 = PWM_MOTOR_MIN;
+  TIM4->CCR1 = PWM_MOTOR_MIN;
+  TIM4->CCR2 = PWM_MOTOR_MIN;
+  TIM8->CCR1 = PWM_MOTOR_MIN;
+  TIM8->CCR2 = PWM_MOTOR_MIN;
 }
 /*=====================================================================================================*/
 /*=====================================================================================================*/
