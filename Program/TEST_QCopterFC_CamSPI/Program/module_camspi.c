@@ -5,11 +5,11 @@
 #include "module_camspi.h"
 /*=====================================================================================================*/
 /*=====================================================================================================*
-**¨ç¼Æ : CamSPI_Config
-**¥\¯à : nRF24L01 °t¸m & ³]©w
-**¿é¤J : None
-**¿é¥X : None
-**¨Ï¥Î : CamSPI_Config();
+**å‡½æ•¸ : CamSPI_Config
+**åŠŸèƒ½ : CamSPI é…ç½® & è¨­å®š
+**è¼¸å…¥ : None
+**è¼¸å‡º : None
+**ä½¿ç”¨ : CamSPI_Config();
 **=====================================================================================================*/
 /*=====================================================================================================*/
 void CamSPI_Config( void )
@@ -48,7 +48,7 @@ void CamSPI_Config( void )
   DMA_DeInit(DMA1_Stream2);
   DMA_InitStruct.DMA_Channel = DMA_Channel_0;
   DMA_InitStruct.DMA_PeripheralBaseAddr = (u32)(&(SPI3->DR));
-  DMA_InitStruct.DMA_Memory0BaseAddr =(u32)0;
+  DMA_InitStruct.DMA_Memory0BaseAddr = (u32)0;
   DMA_InitStruct.DMA_DIR = DMA_DIR_PeripheralToMemory;
   DMA_InitStruct.DMA_BufferSize = 0xFFFF;
   DMA_InitStruct.DMA_PeripheralInc = DMA_PeripheralInc_Disable;
@@ -66,7 +66,7 @@ void CamSPI_Config( void )
   DMA_DeInit(DMA1_Stream5);
   DMA_InitStruct.DMA_Channel = DMA_Channel_0;
   DMA_InitStruct.DMA_PeripheralBaseAddr = (u32)(&(SPI3->DR));
-  DMA_InitStruct.DMA_Memory0BaseAddr =(u32)0;
+  DMA_InitStruct.DMA_Memory0BaseAddr = (u32)0;
   DMA_InitStruct.DMA_DIR = DMA_DIR_MemoryToPeripheral;
   DMA_InitStruct.DMA_BufferSize = 0xFFFF;
   DMA_InitStruct.DMA_PeripheralInc = DMA_PeripheralInc_Disable;
@@ -83,11 +83,11 @@ void CamSPI_Config( void )
 }
 /*=====================================================================================================*/
 /*=====================================================================================================*
-**¨ç¼Æ : CamSPI_RW
-**¥\¯à : Åª¼g¼È¦s¾¹
-**¿é¤J : WriteData, ReadData, WriteNum
-**¿é¥X : None
-**¨Ï¥Î : CamSPI_RW( WriteData, ReadData, BufSize )
+**å‡½æ•¸ : CamSPI_RW
+**åŠŸèƒ½ : è®€å¯«æš«å­˜å™¨
+**è¼¸å…¥ : WriteData, ReadData, WriteNum
+**è¼¸å‡º : None
+**ä½¿ç”¨ : CamSPI_RW( WriteData, ReadData, BufSize )
 **=====================================================================================================*/
 /*=====================================================================================================*/
 void CamSPI_RW( u8* WriteData, u8* ReadData, u16 BufSize )
