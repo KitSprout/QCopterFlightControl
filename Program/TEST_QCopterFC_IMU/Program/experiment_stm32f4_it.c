@@ -18,19 +18,19 @@ Sensor_Mode SensorMode = Mode_GyrCorrect;
 void SysTick_Handler( void )
 {
   u8 IMU_Buf[20] = {0};
+  float Ellipse[5] = {0};
 
   static u8  BaroCnt = 0;
   static s16 ACC_FIFO[3][256] = {0};
   static s16 GYR_FIFO[3][256] = {0};
   static s16 MAG_FIFO[3][256] = {0};
-  static s16 TEMP_FIFO[1][16] = {0};
 
   static s16 MagDataX[8] = {0};
   static s16 MagDataY[8] = {0};
 
   static u16 Correction_Time = 0;
 
-  /* 400Hz, Read Accelerometer, Gyroscope, Magnetometer */
+  /* 500Hz, Read Accelerometer, Gyroscope, Magnetometer */
   MPU9150_Read(IMU_Buf);
 
   Acc.X  = (s16)((IMU_Buf[0]  << 8) | IMU_Buf[1]);
@@ -46,7 +46,7 @@ void SysTick_Handler( void )
 
   /* 100Hz, Read Barometer */
   BaroCnt++;
-  if(BaroCnt == 4) {
+  if(BaroCnt == 5) {
     MS5611_Read(&Baro, MS5611_D1_OSR_4096);
     BaroCnt = 0;
   }
@@ -58,9 +58,9 @@ void SysTick_Handler( void )
   Gyr.X  -= Gyr.OffsetX;
   Gyr.Y  -= Gyr.OffsetY;
   Gyr.Z  -= Gyr.OffsetZ;
-  Mag.X  -= Mag.OffsetX;
-  Mag.Y  -= Mag.OffsetY;
-  Mag.Z  -= Mag.OffsetZ;
+  Mag.X  *= Mag.AdjustX;
+  Mag.Y  *= Mag.AdjustY;
+  Mag.Z  *= Mag.AdjustZ;
   Temp.T -= Temp.OffsetT;
 
   #define MovegAveFIFO_Size 250
@@ -153,8 +153,11 @@ void SysTick_Handler( void )
         default:
           LED_B = 1;
           EllipseFitting(Ellipse, MagDataX, MagDataY, 8);
-          Mag.OffsetX = Ellipse[1];
-          Mag.OffsetY = Ellipse[2];
+          Mag.EllipseSita = Ellipse[0];
+          Mag.EllipseX0   = Ellipse[1];
+          Mag.EllipseY0   = Ellipse[2];
+          Mag.EllipseA    = Ellipse[3];
+          Mag.EllipseB    = Ellipse[4];
 
           Correction_Time = 0;
           SensorMode = Mode_Quaternion;
@@ -166,19 +169,22 @@ void SysTick_Handler( void )
     case Mode_Quaternion:
       LED_R = !LED_R;
       /* To Physical */
-      Acc.TrueX = Acc.X*MPU9150A_4g;      // g/LSB
-      Acc.TrueY = Acc.Y*MPU9150A_4g;      // g/LSB
-      Acc.TrueZ = Acc.Z*MPU9150A_4g;      // g/LSB
-      Gyr.TrueX = Gyr.X*MPU9150G_2000dps; // dps/LSB
-      Gyr.TrueY = Gyr.Y*MPU9150G_2000dps; // dps/LSB
-      Gyr.TrueZ = Gyr.Z*MPU9150G_2000dps; // dps/LSB
-      Mag.TrueX = Mag.X*MPU9150M_1200uT;  // uT/LSB
-      Mag.TrueY = Mag.Y*MPU9150M_1200uT;  // uT/LSB
-      Mag.TrueZ = Mag.Z*MPU9150M_1200uT;  // uT/LSB
+      Acc.TrueX = Acc.X*MPU9150A_4g;        // g/LSB
+      Acc.TrueY = Acc.Y*MPU9150A_4g;        // g/LSB
+      Acc.TrueZ = Acc.Z*MPU9150A_4g;        // g/LSB
+      Gyr.TrueX = Gyr.X*MPU9150G_2000dps;   // dps/LSB
+      Gyr.TrueY = Gyr.Y*MPU9150G_2000dps;   // dps/LSB
+      Gyr.TrueZ = Gyr.Z*MPU9150G_2000dps;   // dps/LSB
+      Mag.TrueX = Mag.X*MPU9150M_1200uT;    // uT/LSB
+      Mag.TrueY = Mag.Y*MPU9150M_1200uT;    // uT/LSB
+      Mag.TrueZ = Mag.Z*MPU9150M_1200uT;    // uT/LSB
+
+      Ellipse[3] = ( Mag.X*arm_cos_f32(Mag.EllipseSita)+Mag.Y*arm_sin_f32(Mag.EllipseSita))/Mag.EllipseB;
+      Ellipse[4] = (-Mag.X*arm_sin_f32(Mag.EllipseSita)+Mag.Y*arm_cos_f32(Mag.EllipseSita))/Mag.EllipseA;
 
       AngE.Pitch = toDeg(atan2f(Acc.TrueY, Acc.TrueZ));
       AngE.Roll  = toDeg(-asinf(Acc.TrueX));
-      AngE.Yaw   = 0;
+      AngE.Yaw   = toDeg(atan2f(Ellipse[3], Ellipse[4]))+180.0f;
 
       Quaternion_ToNumQ(&NumQ, &AngE);
 
@@ -189,27 +195,26 @@ void SysTick_Handler( void )
     case Mode_Algorithm:
 
       /* 加權移動平均法 Weighted Moving Average */
-      Acc.X  = (s16)MoveAve_WMA(Acc.X,  ACC_FIFO[0],  8);
-      Acc.Y  = (s16)MoveAve_WMA(Acc.Y,  ACC_FIFO[1],  8);
-      Acc.Z  = (s16)MoveAve_WMA(Acc.Z,  ACC_FIFO[2],  8);
-      Gyr.X  = (s16)MoveAve_WMA(Gyr.X,  GYR_FIFO[0],  8);
-      Gyr.Y  = (s16)MoveAve_WMA(Gyr.Y,  GYR_FIFO[1],  8);
-      Gyr.Z  = (s16)MoveAve_WMA(Gyr.Z,  GYR_FIFO[2],  8);
-      Mag.X  = (s16)MoveAve_WMA(Mag.X,  MAG_FIFO[0],  8);
-      Mag.Y  = (s16)MoveAve_WMA(Mag.Y,  MAG_FIFO[1],  8);
-      Mag.Z  = (s16)MoveAve_WMA(Mag.Z,  MAG_FIFO[2],  8);
-      Temp.T = (s16)MoveAve_WMA(Temp.T, TEMP_FIFO[0], 8);
+      Acc.X = (s16)MoveAve_WMA(Acc.X, ACC_FIFO[0], 8);
+      Acc.Y = (s16)MoveAve_WMA(Acc.Y, ACC_FIFO[1], 8);
+      Acc.Z = (s16)MoveAve_WMA(Acc.Z, ACC_FIFO[2], 8);
+      Gyr.X = (s16)MoveAve_WMA(Gyr.X, GYR_FIFO[0], 8);
+      Gyr.Y = (s16)MoveAve_WMA(Gyr.Y, GYR_FIFO[1], 8);
+      Gyr.Z = (s16)MoveAve_WMA(Gyr.Z, GYR_FIFO[2], 8);
+      Mag.X = (s16)MoveAve_WMA(Mag.X, MAG_FIFO[0], 64);
+      Mag.Y = (s16)MoveAve_WMA(Mag.Y, MAG_FIFO[1], 64);
+      Mag.Z = (s16)MoveAve_WMA(Mag.Z, MAG_FIFO[2], 64);
 
       /* To Physical */
-      Acc.TrueX  = Acc.X*MPU9150A_4g;       // g/LSB
-      Acc.TrueY  = Acc.Y*MPU9150A_4g;       // g/LSB
-      Acc.TrueZ  = Acc.Z*MPU9150A_4g;       // g/LSB
-      Gyr.TrueX  = Gyr.X*MPU9150G_2000dps;  // dps/LSB
-      Gyr.TrueY  = Gyr.Y*MPU9150G_2000dps;  // dps/LSB
-      Gyr.TrueZ  = Gyr.Z*MPU9150G_2000dps;  // dps/LSB
-      Mag.TrueX  = Mag.X*MPU9150M_1200uT;   // uT/LSB
-      Mag.TrueY  = Mag.Y*MPU9150M_1200uT;   // uT/LSB
-      Mag.TrueZ  = Mag.Z*MPU9150M_1200uT;   // uT/LSB
+      Acc.TrueX = Acc.X*MPU9150A_4g;        // g/LSB
+      Acc.TrueY = Acc.Y*MPU9150A_4g;        // g/LSB
+      Acc.TrueZ = Acc.Z*MPU9150A_4g;        // g/LSB
+      Gyr.TrueX = Gyr.X*MPU9150G_2000dps;   // dps/LSB
+      Gyr.TrueY = Gyr.Y*MPU9150G_2000dps;   // dps/LSB
+      Gyr.TrueZ = Gyr.Z*MPU9150G_2000dps;   // dps/LSB
+      Mag.TrueX = Mag.X*MPU9150M_1200uT;    // uT/LSB
+      Mag.TrueY = Mag.Y*MPU9150M_1200uT;    // uT/LSB
+      Mag.TrueZ = Mag.Z*MPU9150M_1200uT;    // uT/LSB
       Temp.TrueT = Temp.T*MPU9150T_85degC;  // degC/LSB
 
       /* Get Attitude Angle */
@@ -222,13 +227,13 @@ void SysTick_Handler( void )
 /*=====================================================================================================*/
 void DMA1_Stream0_IRQHandler( void )
 {
-	I2C1_Recv_DMA_IRQ();
+  I2C_RX_DMA_IRQ();
 }
 /*=====================================================================================================*/
 /*=====================================================================================================*/
 void DMA1_Stream6_IRQHandler( void )
 {
-	I2C1_Send_DMA_IRQ();
+  I2C_TX_DMA_IRQ();
 }
 /*=====================================================================================================*/
 /*=====================================================================================================*/

@@ -4,6 +4,7 @@
 #include "stm32f4_usart.h"
 #include "stm32f4_i2c.h"
 #include "experiment_stm32f4.h"
+#include "QCopterFC_ahrs.h"
 #include "module_rs232.h"
 #include "module_sensor.h"
 #include "module_mpu9150.h"
@@ -23,13 +24,12 @@ void System_Init( void )
   /* Sensor Init */
   LED_G = (Sensor_Init() == SUCCESS) ? 0 : 1;
   Delay_10ms(10);
-
-  Delay_10ms(2);
 }
 /*=====================================================================================================*/
 /*=====================================================================================================*/
 int main( void )
 {
+  u8 i = 0;
   u8 UART_BUF[32] = {0};
   u16 TMP_BUF[16] = {0};
 
@@ -37,7 +37,7 @@ int main( void )
   System_Init();
 
   /* Systick Config */
-  if(SysTick_Config(420000)) {    // 168MHz / 420000 = 400Hz = 2.5ms
+  if(SysTick_Config(SystemCoreClock/SampleRateFreg)) {  // SampleRateFreg = 500 Hz
     while(1);
   }
 
@@ -57,45 +57,26 @@ int main( void )
     TMP_BUF[3]  = (s16)(Gyr.TrueX*100);   // 10 mdps/LSB
     TMP_BUF[4]  = (s16)(Gyr.TrueY*100);   // 10 mdps/LSB
     TMP_BUF[5]  = (s16)(Gyr.TrueZ*100);   // 10 mdps/LSB
-    TMP_BUF[6]  = (s16)(Mag.TrueX*10);    // 100 nTesla/LSB
-    TMP_BUF[7]  = (s16)(Mag.TrueY*10);    // 100 nTesla/LSB
-    TMP_BUF[8]  = (s16)(Mag.TrueZ*10);    // 100 nTesla/LSB
+    TMP_BUF[6]  = (s16)(Mag.TrueX);       // 100 nTesla/LSB
+    TMP_BUF[7]  = (s16)(Mag.TrueY);       // 100 nTesla/LSB
+    TMP_BUF[8]  = (s16)(Mag.TrueZ);       // 100 nTesla/LSB
     TMP_BUF[9]  = (s16)(Temp.TrueT*100);  // 0.01 degC/LSB
-    TMP_BUF[10] = (s16)(Baro.Temp*100);   // 0.01 degC/LSB
-    TMP_BUF[11] = (s16)(Baro.Press*10);   // 0.1 mbar/LSB
-    TMP_BUF[12] = (s16)(Baro.High);
+    TMP_BUF[10] = (s16)(AngE.Pitch*100);  // 0.01 deg/LSB
+    TMP_BUF[11] = (s16)(AngE.Roll*100);   // 0.01 deg/LSB
+    TMP_BUF[12] = (s16)(AngE.Yaw*10);     // 0.1 deg/LSB
+    TMP_BUF[13] = (s16)(Baro.Temp*100);   // 0.01 degC/LSB
+    TMP_BUF[14] = (s16)(Baro.Press*10);   // 0.1 mbar/LSB
+    TMP_BUF[15] = (s16)(Baro.High);
 
-    UART_BUF[0]  = (u8)(TMP_BUF[0]);
-    UART_BUF[1]  = (u8)(TMP_BUF[0] >> 8);
-    UART_BUF[2]  = (u8)(TMP_BUF[1]);
-    UART_BUF[3]  = (u8)(TMP_BUF[1] >> 8);
-    UART_BUF[4]  = (u8)(TMP_BUF[2]);
-    UART_BUF[5]  = (u8)(TMP_BUF[2] >> 8);
-    UART_BUF[6]  = (u8)(TMP_BUF[3]);
-    UART_BUF[7]  = (u8)(TMP_BUF[3] >> 8);
-    UART_BUF[8]  = (u8)(TMP_BUF[4]);
-    UART_BUF[9]  = (u8)(TMP_BUF[4] >> 8);
-    UART_BUF[10] = (u8)(TMP_BUF[5]);
-    UART_BUF[11] = (u8)(TMP_BUF[5] >> 8);
-    UART_BUF[12] = (u8)(TMP_BUF[6]);
-    UART_BUF[13] = (u8)(TMP_BUF[6] >> 8);
-    UART_BUF[14] = (u8)(TMP_BUF[7]);
-    UART_BUF[15] = (u8)(TMP_BUF[7] >> 8);
-    UART_BUF[16] = (u8)(TMP_BUF[8]);
-    UART_BUF[17] = (u8)(TMP_BUF[8] >> 8);
-    UART_BUF[18] = (u8)(TMP_BUF[9]);
-    UART_BUF[19] = (u8)(TMP_BUF[9] >> 8);
-    UART_BUF[20] = (u8)(TMP_BUF[10]);
-    UART_BUF[21] = (u8)(TMP_BUF[10] >> 8);
-    UART_BUF[22] = (u8)(TMP_BUF[11]);
-    UART_BUF[23] = (u8)(TMP_BUF[11] >> 8);
-    UART_BUF[24] = (u8)(TMP_BUF[12]);
-    UART_BUF[25] = (u8)(TMP_BUF[12] >> 8);
+    for(i=0; i<16; i++) {
+      UART_BUF[(i<<1)]   = Byte8L(TMP_BUF[i]);
+      UART_BUF[(i<<1)+1] = Byte8H(TMP_BUF[i]);
+    }
 
     if(KEY == 1)
       RS232_VisualScope(USART3, UART_BUF, 8);
     else
-      RS232_VisualScope(USART3, UART_BUF+18, 8);
+      RS232_VisualScope(USART3, UART_BUF+20, 8);
   }
 }
 /*=====================================================================================================*/

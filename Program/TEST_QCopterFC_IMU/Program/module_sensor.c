@@ -1,18 +1,40 @@
 /*=====================================================================================================*/
 /*=====================================================================================================*/
 #include "stm32f4_system.h"
+#include "stm32f4_i2c.h"
 #include "module_sensor.h"
 #include "module_mpu9150.h"
 #include "module_ms5611.h"
 #include "algorithm_mathUnit.h"
 /*=====================================================================================================*/
 /*=====================================================================================================*/
-Sensor Acc = {0};
-Sensor Gyr = {0};
-Sensor Mag = {0};
-Sensor Ang = {0};
+SensorAcc Acc = {0};
+SensorGyr Gyr = {0};
+SensorMag Mag = {0};
 SensorTemp Temp = {0};
-float Ellipse[5] = {0};
+/*=====================================================================================================*/
+/*=====================================================================================================*
+**函數 : Sensor_Config
+**功能 : Sensor Config
+**輸入 : None
+**輸出 : None
+**使用 : Sensor_Config();
+**=====================================================================================================*/
+/*=====================================================================================================*/
+void Sensor_Config( void )
+{
+  GPIO_InitTypeDef GPIO_InitStruct;
+
+  RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOC, ENABLE);
+
+  /* INT PC3 */
+  GPIO_InitStruct.GPIO_Pin = GPIO_Pin_3;
+  GPIO_InitStruct.GPIO_Mode = GPIO_Mode_IN;
+  GPIO_InitStruct.GPIO_PuPd = GPIO_PuPd_NOPULL;
+  GPIO_Init(GPIOC, &GPIO_InitStruct);
+
+  I2C_Config();
+}
 /*=====================================================================================================*/
 /*=====================================================================================================*
 **函數 : Sensor_Init
@@ -29,9 +51,9 @@ u8 Sensor_Init( void )
   Acc.X = 0;
   Acc.Y = 0;
   Acc.Z = 0;
-  Acc.OffsetX = -480;
-  Acc.OffsetY = +165;
-  Acc.OffsetZ = +550;
+  Acc.OffsetX = 0;
+  Acc.OffsetY = 0;
+  Acc.OffsetZ = 0;
   Acc.TrueX = 0.0f;
   Acc.TrueY = 0.0f;
   Acc.TrueZ = 0.0f;
@@ -49,24 +71,12 @@ u8 Sensor_Init( void )
   Mag.X = 0;
   Mag.Y = 0;
   Mag.Z = 0;
-  Mag.OffsetX = 0;
-  Mag.OffsetY = 0;
-  Mag.OffsetX = 0;
-  Mag.OffsetY = 0;
-  Mag.OffsetZ = 0;
+  Mag.AdjustX = 0;
+  Mag.AdjustY = 0;
+  Mag.AdjustZ = 0;
   Mag.TrueX = 0.0f;
   Mag.TrueY = 0.0f;
   Mag.TrueZ = 0.0f;
-
-  Ang.X = 0;
-  Ang.Y = 0;
-  Ang.Z = 0;
-  Ang.OffsetX = 0;
-  Ang.OffsetY = 0;
-  Ang.OffsetZ = 0;
-  Ang.TrueX = 0.0f;
-  Ang.TrueY = 0.0f;
-  Ang.TrueZ = 0.0f;
 
   Temp.T = 0;
   Temp.OffsetT = TEMP_OFFSET;
@@ -195,6 +205,34 @@ void EllipseFitting( float* Ans, s16* MagDataX, s16* MagDataY, u8 Num )
   Ans[2] = Ans[2]*1000.0f;
   Ans[3] = Ans[3]*1000.0f;
   Ans[4] = Ans[4]*1000.0f;
+}
+/*=====================================================================================================*/
+/*=====================================================================================================*
+**函數 : CompassDir
+**功能 : Compass Direction
+**輸入 : Angle
+**輸出 : Direction
+**使用 : CompDir = CompassDir(Angle);
+**=====================================================================================================*/
+/*=====================================================================================================*/
+u8 CompassDir( float Angle )
+{
+  if((Angle>22.5f) && (Angle<=67.5f))
+    return 1;
+  else if((Angle>67.5f) && (Angle<=112.5f))
+    return 2;
+  else if((Angle>112.5f) && (Angle<=157.5f))
+    return 3;
+  else if((Angle>157.5f) && (Angle<=202.5f))
+    return 4;
+  else if((Angle>202.5f) && (Angle<=247.5f))
+    return 5;
+  else if((Angle>247.5f) && (Angle<=292.5f))
+    return 6;
+  else if((Angle>292.5f) && (Angle<=337.5f))
+    return 7;
+  else
+    return 0;
 }
 /*=====================================================================================================*/
 /*=====================================================================================================*/
