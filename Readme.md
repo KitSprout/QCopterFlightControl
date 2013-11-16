@@ -3,7 +3,7 @@
 * File Name   : Readme.md
 * Author      : Hom19910422
 * Version     : v2.0
-* Update      : 2013/11/11
+* Update      : 2013/11/16
 * Description : QCopterFlightControl Information
 * Wiki        : https://github.com/Hom19910422/QCopterFlightControl/wiki
 
@@ -35,6 +35,7 @@ Test
 * QCopterFC UART
 * QCopterFC PWM ( TIM8 目前無法輸出 PWM )
 * QCopterFC ADC
+* QCopterFC FLASH
 * QCopterFC CamSPI-Master
 * QCopterFC IMU ( Use MPU-9150 + MS5611 )
 * QCopterFC NRF ( Use nRF24L01P )
