@@ -1,7 +1,7 @@
 ﻿QCopter Flight Control
 ========
 * File Name   : Readme.md
-* Author      : Hom19910422
+* Author      : [Hom](https://github.com/Hom19910422)
 * Version     : v2.0
 * Update      : 2013/11/16
 * Description : QCopterFlightControl Information
@@ -31,7 +31,7 @@ Program
 
 Test
 ========
-* [QCopterFC LED](Program/TEST_QCopterFC_LED)
+* QCopterFC LED
 * QCopterFC UART
 * QCopterFC PWM ( TIM8 目前無法輸出 PWM )
 * QCopterFC ADC
