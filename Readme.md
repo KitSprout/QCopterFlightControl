@@ -1,10 +1,8 @@
-﻿QCopter Flight Control
+﻿QCopter FC
 ========
-* File Name   : Readme.md
 * Author      : [Hom](https://github.com/Hom19910422)
 * Version     : v2.0
-* Update      : 2013/11/16
-* Description : QCopterFlightControl Information
+* Update      : 2013/11/26
 * Wiki        : https://github.com/Hom19910422/QCopterFlightControl/wiki
 
 飛控板　FlightControl
@@ -12,12 +10,25 @@
 * 控制器　STM32F405R 64Pin 168MHz DSP FPU
 * 感測器　IMU_10-DOF (MPU-9150 + MS5611)
 * 無線傳輸　nRF24L01P + PA + LNA
-* 儲存紀錄　SD卡，使用SDIO操作
-* 1個SPI接口　與攝像板連接、外擴其他裝置
-* 1個USB接口　外擴其他裝置
+* 儲存紀錄　micro SD，使用SDIO操作
 * 2個ADC通道　測量電量
-* 12個PWM通道　連接電調、LED、PPM
-* 1個UART接口　可擴充 GPS 模組、藍芽模組、RS232
+* 1個USB接口　外擴其他裝置
+* 1個SPI接口　與QCopterMV、QCopterRC Mini連接
+* 1個UART接口　可擴充GPS模組、藍芽模組、RS232
+* 12個PWM通道　ESC、LED、PPM
+
+飛控板　FlightControl( 預計 v2.1 版 )
+========
+* 控制器　STM32F405R 64Pin 168MHz DSP FPU
+* 感測器　IMU_10-DOF (MPU-9150 + MS5611)
+* 無線傳輸　nRF24L01P + PA + LNA
+* 儲存紀錄　micro SD，使用SDIO操作
+* 2個ADC通道　測量電量
+* 1個USB接口　外擴其他裝置
+* 1個SPI接口　與QCopterMV、QCopterRC Mini連接
+* 1個can接口　與QCopterESC連接
+* 1個UART接口　可擴充GPS模組、藍芽模組、RS232
+* 10個PWM通道　ESC、LED、PPM
 
 Hardware
 ========
