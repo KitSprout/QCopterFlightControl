@@ -67,56 +67,56 @@ void Motor_Config( void )
   TIM_TimeBaseStruct.TIM_Period = (u16)(2500-1);              // 週期 = 2.5ms, 400kHz
   TIM_TimeBaseStruct.TIM_Prescaler = (u16)(84-1);             // 除頻84 = 1M ( 1us )
   TIM_TimeBaseStruct.TIM_ClockDivision = TIM_CKD_DIV1;
-  TIM_TimeBaseStruct.TIM_CounterMode = TIM_CounterMode_Up;		// 上數
+  TIM_TimeBaseStruct.TIM_CounterMode = TIM_CounterMode_Up;    // 上數
   TIM_TimeBaseInit(TIM2, &TIM_TimeBaseStruct);
   TIM_TimeBaseInit(TIM3, &TIM_TimeBaseStruct);
   TIM_TimeBaseInit(TIM4, &TIM_TimeBaseStruct);
   /* 設定TIM8 Time Base */
-  TIM_TimeBaseStruct.TIM_Period = (u16)(2500-1);							// 週期 = 2.5ms, 400kHz
-  TIM_TimeBaseStruct.TIM_Prescaler = (u16)(168-1);						// 除頻42 = 1M ( 1us )
+  TIM_TimeBaseStruct.TIM_Period = (u16)(2500-1);              // 週期 = 2.5ms, 400kHz
+  TIM_TimeBaseStruct.TIM_Prescaler = (u16)(168-1);            // 除頻42 = 1M ( 1us )
   TIM_TimeBaseStruct.TIM_ClockDivision = TIM_CKD_DIV1;
-  TIM_TimeBaseStruct.TIM_CounterMode = TIM_CounterMode_Up;		// 上數
+  TIM_TimeBaseStruct.TIM_CounterMode = TIM_CounterMode_Up;    // 上數
   TIM_TimeBaseInit(TIM8, &TIM_TimeBaseStruct);
 
   /* 設定 TIM2 TIM3 TIM4 TIM8 OC */
-  TIM_OCInitStruct.TIM_OCMode = TIM_OCMode_PWM1;							// 配置為 PWM1 模式
-  TIM_OCInitStruct.TIM_OutputState = TIM_OutputState_Enable;	// 致能 OC
-  TIM_OCInitStruct.TIM_Pulse = PWM_MOTOR_MAX;									// 設置跳變值
-  TIM_OCInitStruct.TIM_OCPolarity = TIM_OCPolarity_High;			// 當計數值小於 PWM_MOTOR_MIN 時為高電平
-  TIM_OC1Init(TIM2, &TIM_OCInitStruct);												// 初始化 TIM2 OC1
-  TIM_OC2Init(TIM2, &TIM_OCInitStruct);												// 初始化 TIM2 OC2
-  TIM_OC3Init(TIM2, &TIM_OCInitStruct);												// 初始化 TIM2 OC3
-  TIM_OC4Init(TIM2, &TIM_OCInitStruct);												// 初始化 TIM2 OC4
-  TIM_OC1Init(TIM3, &TIM_OCInitStruct);												// 初始化 TIM3 OC1
-  TIM_OC2Init(TIM3, &TIM_OCInitStruct);												// 初始化 TIM3 OC2
-  TIM_OC3Init(TIM3, &TIM_OCInitStruct);												// 初始化 TIM3 OC3
-  TIM_OC4Init(TIM3, &TIM_OCInitStruct);												// 初始化 TIM3 OC4
-  TIM_OC1Init(TIM4, &TIM_OCInitStruct);												// 初始化 TIM4 OC1
-  TIM_OC2Init(TIM4, &TIM_OCInitStruct);												// 初始化 TIM4 OC2
-  TIM_OC1Init(TIM8, &TIM_OCInitStruct);												// 初始化 TIM8 OC1
-  TIM_OC2Init(TIM8, &TIM_OCInitStruct);												// 初始化 TIM8 OC2
-  TIM_OC1PreloadConfig(TIM2, TIM_OCPreload_Enable);						// 致能 TIM2 OC1 預裝載
-  TIM_OC2PreloadConfig(TIM2, TIM_OCPreload_Enable);						// 致能 TIM2 OC2 預裝載
-  TIM_OC3PreloadConfig(TIM2, TIM_OCPreload_Enable);						// 致能 TIM2 OC3 預裝載
-  TIM_OC4PreloadConfig(TIM2, TIM_OCPreload_Enable);						// 致能 TIM2 OC4 預裝載
-  TIM_OC1PreloadConfig(TIM3, TIM_OCPreload_Enable);						// 致能 TIM3 OC1 預裝載
-  TIM_OC2PreloadConfig(TIM3, TIM_OCPreload_Enable);						// 致能 TIM3 OC2 預裝載
-  TIM_OC3PreloadConfig(TIM3, TIM_OCPreload_Enable);						// 致能 TIM3 OC3 預裝載
-  TIM_OC4PreloadConfig(TIM3, TIM_OCPreload_Enable);						// 致能 TIM3 OC4 預裝載
-  TIM_OC1PreloadConfig(TIM4, TIM_OCPreload_Enable);						// 致能 TIM4 OC1 預裝載
-  TIM_OC2PreloadConfig(TIM4, TIM_OCPreload_Enable);						// 致能 TIM4 OC2 預裝載
-  TIM_OC1PreloadConfig(TIM8, TIM_OCPreload_Enable);						// 致能 TIM8 OC1 預裝載
-  TIM_OC2PreloadConfig(TIM8, TIM_OCPreload_Enable);						// 致能 TIM8 OC2 預裝載
+  TIM_OCInitStruct.TIM_OCMode = TIM_OCMode_PWM1;              // 配置為 PWM1 模式
+  TIM_OCInitStruct.TIM_OutputState = TIM_OutputState_Enable;  // 致能 OC
+  TIM_OCInitStruct.TIM_Pulse = PWM_MOTOR_MAX;                 // 設置跳變值
+  TIM_OCInitStruct.TIM_OCPolarity = TIM_OCPolarity_High;      // 當計數值小於 PWM_MOTOR_MIN 時為高電平
+  TIM_OC1Init(TIM2, &TIM_OCInitStruct);                       // 初始化 TIM2 OC1
+  TIM_OC2Init(TIM2, &TIM_OCInitStruct);                       // 初始化 TIM2 OC2
+  TIM_OC3Init(TIM2, &TIM_OCInitStruct);                       // 初始化 TIM2 OC3
+  TIM_OC4Init(TIM2, &TIM_OCInitStruct);                       // 初始化 TIM2 OC4
+  TIM_OC1Init(TIM3, &TIM_OCInitStruct);                       // 初始化 TIM3 OC1
+  TIM_OC2Init(TIM3, &TIM_OCInitStruct);                       // 初始化 TIM3 OC2
+  TIM_OC3Init(TIM3, &TIM_OCInitStruct);                       // 初始化 TIM3 OC3
+  TIM_OC4Init(TIM3, &TIM_OCInitStruct);                       // 初始化 TIM3 OC4
+  TIM_OC1Init(TIM4, &TIM_OCInitStruct);                       // 初始化 TIM4 OC1
+  TIM_OC2Init(TIM4, &TIM_OCInitStruct);                       // 初始化 TIM4 OC2
+  TIM_OC1Init(TIM8, &TIM_OCInitStruct);                       // 初始化 TIM8 OC1
+  TIM_OC2Init(TIM8, &TIM_OCInitStruct);                       // 初始化 TIM8 OC2
+  TIM_OC1PreloadConfig(TIM2, TIM_OCPreload_Enable);           // 致能 TIM2 OC1 預裝載
+  TIM_OC2PreloadConfig(TIM2, TIM_OCPreload_Enable);           // 致能 TIM2 OC2 預裝載
+  TIM_OC3PreloadConfig(TIM2, TIM_OCPreload_Enable);           // 致能 TIM2 OC3 預裝載
+  TIM_OC4PreloadConfig(TIM2, TIM_OCPreload_Enable);           // 致能 TIM2 OC4 預裝載
+  TIM_OC1PreloadConfig(TIM3, TIM_OCPreload_Enable);           // 致能 TIM3 OC1 預裝載
+  TIM_OC2PreloadConfig(TIM3, TIM_OCPreload_Enable);           // 致能 TIM3 OC2 預裝載
+  TIM_OC3PreloadConfig(TIM3, TIM_OCPreload_Enable);           // 致能 TIM3 OC3 預裝載
+  TIM_OC4PreloadConfig(TIM3, TIM_OCPreload_Enable);           // 致能 TIM3 OC4 預裝載
+  TIM_OC1PreloadConfig(TIM4, TIM_OCPreload_Enable);           // 致能 TIM4 OC1 預裝載
+  TIM_OC2PreloadConfig(TIM4, TIM_OCPreload_Enable);           // 致能 TIM4 OC2 預裝載
+  TIM_OC1PreloadConfig(TIM8, TIM_OCPreload_Enable);           // 致能 TIM8 OC1 預裝載
+  TIM_OC2PreloadConfig(TIM8, TIM_OCPreload_Enable);           // 致能 TIM8 OC2 預裝載
 
   /* 啟動 */
-  TIM_ARRPreloadConfig(TIM2, ENABLE);													// 致能 TIM2 重載寄存器ARR
-  TIM_ARRPreloadConfig(TIM3, ENABLE);													// 致能 TIM3 重載寄存器ARR
-  TIM_ARRPreloadConfig(TIM4, ENABLE);													// 致能 TIM4 重載寄存器ARR
-  TIM_ARRPreloadConfig(TIM8, ENABLE);													// 致能 TIM8 重載寄存器ARR
-  TIM_Cmd(TIM2, ENABLE);																			// 致能 TIM2
-  TIM_Cmd(TIM3, ENABLE);																			// 致能 TIM3
-  TIM_Cmd(TIM4, ENABLE);																			// 致能 TIM4
-  TIM_Cmd(TIM8, ENABLE);																			// 致能 TIM8
+  TIM_ARRPreloadConfig(TIM2, ENABLE);                         // 致能 TIM2 重載寄存器ARR
+  TIM_ARRPreloadConfig(TIM3, ENABLE);                         // 致能 TIM3 重載寄存器ARR
+  TIM_ARRPreloadConfig(TIM4, ENABLE);                         // 致能 TIM4 重載寄存器ARR
+  TIM_ARRPreloadConfig(TIM8, ENABLE);                         // 致能 TIM8 重載寄存器ARR
+  TIM_Cmd(TIM2, ENABLE);                                      // 致能 TIM2
+  TIM_Cmd(TIM3, ENABLE);                                      // 致能 TIM3
+  TIM_Cmd(TIM4, ENABLE);                                      // 致能 TIM4
+  TIM_Cmd(TIM8, ENABLE);                                      // 致能 TIM8
 
   PWM_Motor1 = PWM_MOTOR_MIN;
   PWM_Motor2 = PWM_MOTOR_MIN;

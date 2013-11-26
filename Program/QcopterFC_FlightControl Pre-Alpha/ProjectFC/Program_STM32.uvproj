@@ -594,6 +594,11 @@
               <FilePath>..\Program_Algorithm\algorithm_pid.c</FilePath>
             </File>
             <File>
+              <FileName>algorithm_string.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Program_Algorithm\algorithm_string.c</FilePath>
+            </File>
+            <File>
               <FileName>algorithm_moveAve.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Program_Algorithm\algorithm_moveAve.c</FilePath>

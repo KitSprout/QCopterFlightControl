@@ -67,14 +67,14 @@ void I2C_Config( void )
   NVIC_InitTypeDef NVIC_InitStruct;
   I2C_InitTypeDef I2C_InitStruct;
 
-	RCC_APB1PeriphClockCmd(I2Cx_CLK, ENABLE);
+  RCC_APB1PeriphClockCmd(I2Cx_CLK, ENABLE);
   RCC_AHB1PeriphClockCmd(DMAx_CLK, ENABLE);
-	RCC_AHB1PeriphClockCmd(I2Cx_SCL_GPIO_CLK | I2Cx_SDA_GPIO_CLK, ENABLE);
+  RCC_AHB1PeriphClockCmd(I2Cx_SCL_GPIO_CLK | I2Cx_SDA_GPIO_CLK, ENABLE);
 
   RCC_APB1PeriphResetCmd(I2Cx_CLK, DISABLE);
 
-	GPIO_PinAFConfig(I2Cx_SCL_GPIO_PORT, I2Cx_SCL_SOURCE, I2Cx_SCL_AF);
-	GPIO_PinAFConfig(I2Cx_SDA_GPIO_PORT, I2Cx_SDA_SOURCE, I2Cx_SDA_AF);
+  GPIO_PinAFConfig(I2Cx_SCL_GPIO_PORT, I2Cx_SCL_SOURCE, I2Cx_SCL_AF);
+  GPIO_PinAFConfig(I2Cx_SDA_GPIO_PORT, I2Cx_SDA_SOURCE, I2Cx_SDA_AF);
 
   /* SCL I2Cx_SCL_PIN */  /* SDA I2Cx_SDA_PIN*/
   GPIO_InitStruct.GPIO_Pin = I2Cx_SCL_PIN;
@@ -156,7 +156,6 @@ void I2C_Config( void )
   I2C_Init(I2Cx, &I2C_InitStruct);
 
   I2C_DMACmd(I2Cx, ENABLE);
-
 }
 /*=====================================================================================================*/
 /*=====================================================================================================*

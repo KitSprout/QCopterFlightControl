@@ -21,7 +21,7 @@
 
 #define CHANAL          40  // 頻道選擇
 
-// SPI(nRF24L01) commands ,	NRF的SPI命令宏定義，詳見NRF功能使用文檔
+// SPI(nRF24L01) commands, NRF的SPI命令宏定義，詳見NRF功能使用文檔
 #define NRF_READ      0x00  // Define read command to register
 #define NRF_WRITE     0x20  // Define write command to register
 #define RD_RX_PLOAD   0x61  // Define RX payload register address
@@ -31,7 +31,7 @@
 #define REUSE_TX_PL   0xE3  // Define reuse TX payload register command
 #define NOP           0xFF  // Define No Operation, might be used to read status register
 
-// SPI(nRF24L01) registers(addresses) ，NRF24L01 相關寄存器地址的宏定義
+// SPI(nRF24L01) registers(addresses), NRF24L01 相關寄存器地址的宏定義
 #define CONFIG        0x00  // 'Config' register address
 #define EN_AA         0x01  // 'Enable Auto Acknowledgment' register address
 #define EN_RXADDR     0x02  // 'Enabled RX addresses' register address
@@ -58,7 +58,7 @@
 #define FIFO_STATUS   0x17  // 'FIFO Status Register' register address
 
 #define MAX_RT        0x10  // 達到最大重發次數中斷標誌位
-#define TX_DS         0x20 	// 發送完成中斷標誌位
+#define TX_DS         0x20  // 發送完成中斷標誌位
 
 #define RX_DR         0x40  // 接收到數據中斷標誌位
 /*=====================================================================================================*/

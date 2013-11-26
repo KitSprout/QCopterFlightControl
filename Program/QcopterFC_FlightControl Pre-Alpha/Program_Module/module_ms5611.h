@@ -8,19 +8,19 @@
 /*=====================================================================================================*/
 #define MS5611_I2C_ADDR       ((u8)0xEE)
 
-#define	MS5611_ADC            ((u8)0x00)  // ADC Read
+#define MS5611_ADC            ((u8)0x00)  // ADC Read
 #define MS5611_RESET          ((u8)0x1E)  // RESET
 
-#define	MS5611_D1_OSR_256     ((u8)0x40)  // 3 bytes
-#define	MS5611_D1_OSR_512     ((u8)0x42)  // 3 bytes
-#define	MS5611_D1_OSR_1024    ((u8)0x44)  // 3 bytes
-#define	MS5611_D1_OSR_2048    ((u8)0x46)  // 3 bytes
-#define	MS5611_D1_OSR_4096    ((u8)0x48)  // 3 bytes
-#define	MS5611_D2_OSR_256     ((u8)0x50)  // 3 bytes
-#define	MS5611_D2_OSR_512     ((u8)0x52)  // 3 bytes
-#define	MS5611_D2_OSR_1024    ((u8)0x54)  // 3 bytes
-#define	MS5611_D2_OSR_2048    ((u8)0x56)  // 3 bytes
-#define	MS5611_D2_OSR_4096    ((u8)0x58)  // 3 bytes
+#define MS5611_D1_OSR_256     ((u8)0x40)  // 3 bytes
+#define MS5611_D1_OSR_512     ((u8)0x42)  // 3 bytes
+#define MS5611_D1_OSR_1024    ((u8)0x44)  // 3 bytes
+#define MS5611_D1_OSR_2048    ((u8)0x46)  // 3 bytes
+#define MS5611_D1_OSR_4096    ((u8)0x48)  // 3 bytes
+#define MS5611_D2_OSR_256     ((u8)0x50)  // 3 bytes
+#define MS5611_D2_OSR_512     ((u8)0x52)  // 3 bytes
+#define MS5611_D2_OSR_1024    ((u8)0x54)  // 3 bytes
+#define MS5611_D2_OSR_2048    ((u8)0x56)  // 3 bytes
+#define MS5611_D2_OSR_4096    ((u8)0x58)  // 3 bytes
 
 #define MS5611_PROM_COEFF_1   ((u8)0xA2)  // 2 bytes
 #define MS5611_PROM_COEFF_2   ((u8)0xA4)  // 2 bytes

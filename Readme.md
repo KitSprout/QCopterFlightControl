@@ -26,7 +26,7 @@
 * 2個ADC通道　測量電量
 * 1個USB接口　外擴其他裝置
 * 1個SPI接口　與QCopterMV、QCopterRC Mini連接
-* 1個can接口　與QCopterESC連接
+* 1個CAN接口　與QCopterESC連接
 * 1個UART接口　可擴充GPS模組、藍芽模組、RS232
 * 10個PWM通道　ESC、LED、PPM
 

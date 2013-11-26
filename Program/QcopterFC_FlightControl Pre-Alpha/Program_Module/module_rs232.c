@@ -3,6 +3,7 @@
 #include "stm32f4_system.h"
 #include "stm32f4_usart.h"
 #include "module_rs232.h"
+#include "algorithm_string.h"
 /*=====================================================================================================*/
 /*=====================================================================================================*
 **函數 : RS232_Config
@@ -72,7 +73,7 @@ void RS232_SendNum( USART_TypeDef* USARTx, u8 Type, u8 NumLen, s32 SendData )
   u8 TrData[32] = {0};
   u8 *pWord = TrData;
 
-  NumToChar(Type, NumLen, TrData, SendData);
+  Str_NumToChar(Type, NumLen, TrData, SendData);
   
   while(*pWord != '\0') {
     USART_SendByte(USARTx, (u8*)pWord);

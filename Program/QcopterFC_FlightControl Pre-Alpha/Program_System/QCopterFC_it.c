@@ -206,6 +206,7 @@ void SysTick_Handler( void )
   /************************** Algorithm Mode **************************************/
     case Mode_Quaternion:
       LED_R = !LED_R;
+
       /* To Physical */
       Acc.TrueX = Acc.X*MPU9150A_4g;        // g/LSB
       Acc.TrueY = Acc.Y*MPU9150A_4g;        // g/LSB
@@ -266,13 +267,13 @@ void SysTick_Handler( void )
 //      if(KEYR_R == 0)	{	PID_Roll.Kd += 0.0001f;	PID_Pitch.Kd += 0.0001f; }
 //      if(KEYR_D == 0)	{	PID_Roll.Kd -= 0.0001f;	PID_Pitch.Kd -= 0.0001f; }
 //      if(KEYR_L == 0)	{	PID_Roll.SumErr = 0.0f;	PID_Pitch.SumErr = 0.0f; }
-      if(KEYL_U == 0)	{	PID_Yaw.Kp += 0.001f;    }
-      if(KEYL_L == 0)	{	PID_Yaw.Kp -= 0.001f;    }
+//      if(KEYL_U == 0)	{	PID_Yaw.Kp += 0.001f;    }
+//      if(KEYL_L == 0)	{	PID_Yaw.Kp -= 0.001f;    }
 //      if(KEYL_R == 0)	{	PID_Yaw.Ki += 0.001f;	 }
 //      if(KEYL_D == 0)	{	PID_Yaw.Ki -= 0.001f;	 }
-      if(KEYR_R == 0)	{	PID_Yaw.Kd += 0.0001f;	 }
-      if(KEYR_D == 0)	{	PID_Yaw.Kd -= 0.0001f;	 }
-      if(KEYR_L == 0)	{	PID_Roll.SumErr = 0.0f;	 }
+//      if(KEYR_R == 0)	{	PID_Yaw.Kd += 0.0001f;	 }
+//      if(KEYR_D == 0)	{	PID_Yaw.Kd -= 0.0001f;	 }
+//      if(KEYR_L == 0)	{	PID_Roll.SumErr = 0.0f;	 }
 
       /* Get ZeroErr */
       PID_Pitch.ZeroErr = (float)((s16)Exp_Pitch/4.5f);
