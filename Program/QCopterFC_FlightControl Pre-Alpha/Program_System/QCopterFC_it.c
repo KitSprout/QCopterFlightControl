@@ -44,7 +44,7 @@ void SysTick_Handler( void )
 
   float Ellipse[5] = {0};
 
-  static u8  BaroCnt = 0;
+  static u8 BaroCnt = 0;
 
   static s16 ACC_FIFO[3][256] = {0};
   static s16 GYR_FIFO[3][256] = {0};
@@ -53,7 +53,7 @@ void SysTick_Handler( void )
   static s16 MagDataX[8] = {0};
   static s16 MagDataY[8] = {0};
 
-  static u16 Correction_Time = 0;
+  static u32 Correction_Time = 0;
 
   /* Time Count */
   SysTick_Cnt++;
@@ -68,12 +68,12 @@ void SysTick_Handler( void )
     }
   }
 
-  /* 400Hz, Read Sensor ( Accelerometer, Gyroscope, Magnetometer ) */
+  /* 500Hz, Read Sensor ( Accelerometer, Gyroscope, Magnetometer ) */
   MPU9150_Read(IMU_Buf);
 
   /* 100Hz, Read Barometer */
   BaroCnt++;
-  if(BaroCnt == 4) {
+  if(BaroCnt == SampleRateFreg/100) {
     MS5611_Read(&Baro, MS5611_D1_OSR_4096);
     BaroCnt = 0;
   }
@@ -112,13 +112,13 @@ void SysTick_Handler( void )
       Gyr.Z = (s16)MoveAve_SMA(Gyr.Z, GYR_FIFO[2], MovegAveFIFO_Size);
 
       Correction_Time++;  // 等待 FIFO 填滿空值 or 填滿靜態資料
-      if(Correction_Time == 400) {
+      if(Correction_Time == SampleRateFreg) {
         Gyr.OffsetX += (Gyr.X - GYR_X_OFFSET);  // 角速度為 0dps
         Gyr.OffsetY += (Gyr.Y - GYR_Y_OFFSET);  // 角速度為 0dps
         Gyr.OffsetZ += (Gyr.Z - GYR_Z_OFFSET);  // 角速度為 0dps
 
         Correction_Time = 0;
-        SensorMode = Mode_MagCorrect; // Mode_AccCorrect;
+        SensorMode = Mode_AccCorrect;
       }
       break;
  
@@ -131,7 +131,7 @@ void SysTick_Handler( void )
       Acc.Z = (s16)MoveAve_SMA(Acc.Z, ACC_FIFO[2], MovegAveFIFO_Size);
 
       Correction_Time++;  // 等待 FIFO 填滿空值 or 填滿靜態資料
-      if(Correction_Time == 400) {
+      if(Correction_Time == SampleRateFreg) {
         Acc.OffsetX += (Acc.X - ACC_X_OFFSET);  // 重力加速度為 0g
         Acc.OffsetY += (Acc.Y - ACC_Y_OFFSET);  // 重力加速度為 0g
         Acc.OffsetZ += (Acc.Z - ACC_Z_OFFSET);  // 重力加速度為 1g
@@ -143,7 +143,7 @@ void SysTick_Handler( void )
 
   /************************** Mode_CorrectMag **************************************/
     #define MagCorrect_Ave    100
-    #define MagCorrect_Delay  600   // 2.5ms * 600 = 1.5s
+    #define MagCorrect_Delay  600   // DelayTime : SampleRate * 600
     case Mode_MagCorrect:
       LED_R = !LED_R;
       Correction_Time++;
