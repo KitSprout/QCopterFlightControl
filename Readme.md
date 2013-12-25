@@ -1,8 +1,8 @@
-﻿[QCopterFC](https://github.com/Hom19910422/QCopterFC)
+﻿[QCopterFC](https://github.com/Hom19910422/QCopterFlightControl)
 ========
-* Author      : [Hom](https://github.com/Hom19910422)
-* Version     : v2.0
-* Update      : 2013/12/20
+* Author  : [Hom](https://github.com/Hom19910422)
+* Version : v2.0
+* Update  : 2013/12/26
 
 Description
 ========
@@ -15,13 +15,17 @@ Hardware
 * 感測器　 : [IMU_10-DOF](https://github.com/Hom19910422/IMU_10-DOF) ( [MPU-9150](http://www.invensense.com/mems/gyro/mpu9150.html) + [MS5611](http://www.meas-spec.com/product/pressure/MS5611-01BA03.aspx) )
 * 無線傳輸 : [nRF24L01P](http://www.nordicsemi.com/eng/Products/2.4GHz-RF/nRF24L01P) + PA + LNA
 * 儲存紀錄 : micro SD，使用 SDIO 操作
-* 其他外接 : 2*ADC、1*USB ( micro )、1*SPI、1*UART、12*PWM
+* 外接介面 : 2*ADC、1*USB ( Micro )、1*SPI ( FFC16 )、1*UART、12*PWM
 * PCB 尺寸 : 52 * 35mm ( Screws M3: 30 * 30mm )
 * 設計軟體 [Altium Designer 13](http://www.altium.com/en/products/altium-designer) ( [PcbLib](https://github.com/CYACAcademic/AltiumDesigner_PcbLibrary) use AD PcbLib v0.? )
 
 **** v2.1 版本預計減少 2 個 PWM 通道，並新增 1 個 CAN Bus ****
 
 <img src="https://lh3.googleusercontent.com/-rm8MVLJdUs4/Uk_NJPWXKSI/AAAAAAAAD48/YXHRJBrHHRs/s800/QCopterFC_System.png" height="685" width="689" /><br>
+
+Related Documents
+========
+* [Google Drive](https://drive.google.com/folderview?id=0BzL2wwAot6oPS0thRUVrb0VadTQ&usp=sharing)
 
 Program
 ========
@@ -39,10 +43,6 @@ Test
 * QCopterFC IMU ( Use MPU-9150 + MS5611 )
 * QCopterFC NRF ( Use nRF24L01P )
 * QCopterFC SDIO ( Use [Fatfs](http://elm-chan.org/fsw/ff/00index_e.html) 0.10 )
-
-Related Documents
-========
-* [Google Drive](https://drive.google.com/folderview?id=0BzL2wwAot6oPS0thRUVrb0VadTQ&usp=sharing)
 
 View
 ========
@@ -62,6 +62,9 @@ Config
 <img src="https://lh5.googleusercontent.com/-eOYB9qvfXkA/Uk_NEUlk4UI/AAAAAAAAD48/66StQySN_O0/s800/QCopterFC_Config_PIN.png" height="417" width="800" />
 <img src="https://lh3.googleusercontent.com/-htom-WouTZM/Uk_NERTK6dI/AAAAAAAAD48/9TcFCyOX_2s/s1600/QCopterFC_Config_AF.png" width="800" />
 <img src="https://lh6.googleusercontent.com/-wvzaurZbA1s/Uk_NEceZAVI/AAAAAAAAD48/Id1RUrmwaUI/s800/QCopterFC_Config_DMA.png" height="436" width="800" />
+
+*** 傳輸資料格式 QFC_TO_QRC
+<img src="https://lh3.googleusercontent.com/-eIh5NvuE0aw/UrsPnzmAcZI/AAAAAAAAGDc/mu5YwwC-S1s/s1600/QFC_TO_QRC.png" height="678" width="800" />
 
 Schematic
 ========
