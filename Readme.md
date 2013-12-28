@@ -6,10 +6,8 @@
 
 Description
 ========
-QCopterFC 是一個基於 STM32F4 的飛行控制器，可以應用於固定翼、旋翼飛行器上面，用來實現濾波、平衡、控制等演算法的平台。
-板子上有 9 個自由度的慣性測量元件 MPU-9150，可以讀取加速度、角速度、磁力資訊，計算出當下的姿態角度、氣壓計 MS5611，
-讀取環境氣壓，計算高度、工作於 2.4GHz 頻段的無線傳輸模組 nRF24L01，傳輸飛行器上相關資訊，同時也可以藉由該模組從外部接收
-飛行控制指令，另外還有 Micro USB 與 Micro SD，並且引出了 ADC、PWM、SPI、UART，使的 QCopterFC 可以有更多的應用、擴充。
+QCopterFC 是一個基於 STM32F4 的飛行控制器，可以應用於固定翼、旋翼飛行器上面，用來實現濾波、平衡、控制等演算法的平台。板子上有 9 個自由度的慣性測量元件 MPU-9150，可以讀取加速度、角速度、磁力資訊，計算出當下的姿態角度、氣壓計 MS5611，
+讀取環境氣壓，計算高度、工作於 2.4GHz 頻段的無線傳輸模組 nRF24L01，傳輸飛行器上相關資訊，同時也可以藉由該模組從外部接收飛行控制指令，另外還有 Micro USB 與 Micro SD，並且引出了 ADC、PWM、SPI、UART，使的 QCopterFC 可以有更多的應用、擴充。
 
 Hardware
 ========
@@ -37,7 +35,7 @@ Program
 Test
 ========
 * [QCopterFC-LED](https://github.com/Hom19910422/QCopterFlightControl/tree/master/Program/TEST_QCopterFC_LED)
-* QCopterFC UART
+* [QCopterFC UART](https://github.com/Hom19910422/QCopterFlightControl/tree/master/Program/TEST_QCopterFC_UART)
 * QCopterFC PWM ( TIM8 目前無法輸出 PWM )
 * QCopterFC ADC
 * QCopterFC FLASH
