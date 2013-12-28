@@ -3,13 +3,14 @@
 #include "stm32f4_system.h"
 #include "stm32f4_usart.h"
 #include "module_rs232.h"
+#include "algorithm_string.h"
 /*=====================================================================================================*/
 /*=====================================================================================================*
 **函數 : RS232_Config
-**功能 : 
-**輸入 : 
-**輸出 : 
-**使用 : 
+**功能 : RS232 配置
+**輸入 : None
+**輸出 : None
+**使用 : RS232_Config();
 **=====================================================================================================*/
 /*=====================================================================================================*/
 void RS232_Config( void )
@@ -17,13 +18,14 @@ void RS232_Config( void )
   GPIO_InitTypeDef GPIO_InitStruct;
   USART_InitTypeDef USART_InitStruct;
 
+  /* UART Clk Init *************************************************************/
   RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB,  ENABLE);
   RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART3, ENABLE);
 
   GPIO_PinAFConfig(GPIOB, GPIO_PinSource10, GPIO_AF_USART3);
   GPIO_PinAFConfig(GPIOB, GPIO_PinSource11, GPIO_AF_USART3);
 
-  /* USART1 Tx PB10 */	/* USART1 Rx PB11 */
+  /* USART3 Tx PB10 */	/* USART3 Rx PB11 */
   GPIO_InitStruct.GPIO_Pin = GPIO_Pin_10 | GPIO_Pin_11;
   GPIO_InitStruct.GPIO_Mode = GPIO_Mode_AF;
   GPIO_InitStruct.GPIO_OType = GPIO_OType_PP;
@@ -31,6 +33,7 @@ void RS232_Config( void )
   GPIO_InitStruct.GPIO_Speed = GPIO_Speed_50MHz;
   GPIO_Init(GPIOB, &GPIO_InitStruct);
 
+  /* UART Init *****************************************************************/
   USART_InitStruct.USART_BaudRate = 115200;
   USART_InitStruct.USART_WordLength = USART_WordLength_8b;
   USART_InitStruct.USART_StopBits = USART_StopBits_1;
@@ -72,7 +75,7 @@ void RS232_SendNum( USART_TypeDef* USARTx, u8 Type, u8 NumLen, s32 SendData )
   u8 TrData[32] = {0};
   u8 *pWord = TrData;
 
-  NumToChar(Type, NumLen, TrData, SendData);
+  Str_NumToChar(Type, NumLen, TrData, SendData);
   
   while(*pWord != '\0') {
     USART_SendByte(USARTx, (u8*)pWord);
@@ -133,13 +136,13 @@ void RS232_RecvData( USART_TypeDef* USARTx, u8 *RecvData, u16 DataLen )
 /*=====================================================================================================*/
 /*=====================================================================================================*
 **函數 : RS232_VisualScope_CRC16
-**功能 : 
-**輸入 : 
-**輸出 : 
-**使用 : 
+**功能 : VisualScope CRC
+**輸入 : *Array, Len
+**輸出 : USART_CRC
+**使用 : Temp = RS232_VisualScope_CRC16(pWord, Len);
 **=====================================================================================================*/
 /*=====================================================================================================*/
-static u16 RS232_VisualScope_CRC16( u8 *Array, u16 Len )
+static u16 RS232_VisualScope_CRC16( u8* Array, u16 Len )
 {
   u16 USART_IX, USART_IY, USART_CRC;
 
@@ -158,13 +161,13 @@ static u16 RS232_VisualScope_CRC16( u8 *Array, u16 Len )
 /*=====================================================================================================*/
 /*=====================================================================================================*
 **函數 : RS232_VisualScope
-**功能 : 
-**輸入 : 
-**輸出 : 
-**使用 : 
+**功能 : VisualScope
+**輸入 : USARTx, *pWord, Len
+**輸出 : None
+**使用 : RS232_VisualScope(USART3, SendBuf, 8);
 **=====================================================================================================*/
 /*=====================================================================================================*/
-void RS232_VisualScope( USART_TypeDef* USARTx, u8 *pWord, u16 Len )
+void RS232_VisualScope( USART_TypeDef* USARTx, u8* pWord, u16 Len )
 {
   u8 i = 0;
   u16 Temp = 0;

@@ -3,6 +3,7 @@
 #include "stm32f4_system.h"
 #include "stm32f4_usart.h"
 #include "module_rs232.h"
+#include "algorithm_string.h"
 /*=====================================================================================================*/
 /*=====================================================================================================*/
 #define KEY   PBI(2)
@@ -42,9 +43,10 @@ void GPIO_Config( void )
 {
   GPIO_InitTypeDef GPIO_InitStruct;
 
+  /* GPIO Clk Init *************************************************************/
   RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB | RCC_AHB1Periph_GPIOC, ENABLE);
 
-  /* LED_R PC13 */  /* LED_G PC14 */  /* LED_B PC15 */
+  /* LED_R PC15 */  /* LED_G PC14 */  /* LED_B PC13 */
   GPIO_InitStruct.GPIO_Pin = GPIO_Pin_13 | GPIO_Pin_14 | GPIO_Pin_15;
   GPIO_InitStruct.GPIO_Mode = GPIO_Mode_OUT;
   GPIO_InitStruct.GPIO_OType = GPIO_OType_PP;

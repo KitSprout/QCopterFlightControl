@@ -6,20 +6,22 @@
 
 Description
 ========
-QCopteFC 是一個基於 STM32 的飛行控制器，可以應用於固定翼、旋翼飛行器上面，  
-這裡主要應用於四軸飛行器，用來實現濾波、平衡、控制等演算法的平台。
+QCopterFC 是一個基於 STM32F4 的飛行控制器，可以應用於固定翼、旋翼飛行器上面，用來實現濾波、平衡、控制等演算法的平台。
+板子上有 9 個自由度的慣性測量元件 MPU-9150，可以讀取加速度、角速度、磁力資訊，計算出當下的姿態角度、氣壓計 MS5611，
+讀取環境氣壓，計算高度、工作於 2.4GHz 頻段的無線傳輸模組 nRF24L01，傳輸飛行器上相關資訊，同時也可以藉由該模組從外部接收
+飛行控制指令，另外還有 Micro USB 與 Micro SD，並且引出了 ADC、PWM、SPI、UART，使的 QCopterFC 可以有更多的應用、擴充。
 
 Hardware
 ========
 * 控制器　 : [STM32F405R](http://www.st.com/web/catalog/mmc/FM141/SC1169/SS1577/LN1035/PF252144) 64Pin 168MHz DSP FPU
 * 感測器　 : [IMU_10-DOF](https://github.com/Hom19910422/IMU_10-DOF) ( [MPU-9150](http://www.invensense.com/mems/gyro/mpu9150.html) + [MS5611](http://www.meas-spec.com/product/pressure/MS5611-01BA03.aspx) )
 * 無線傳輸 : [nRF24L01P](http://www.nordicsemi.com/eng/Products/2.4GHz-RF/nRF24L01P) + PA + LNA
-* 儲存紀錄 : micro SD，使用 SDIO 操作
+* 儲存紀錄 : Micro SD，使用 SDIO 操作
 * 外接介面 : 2*ADC、1*USB ( Micro )、1*SPI ( FFC16 )、1*UART、12*PWM
 * PCB 尺寸 : 52 * 35mm ( Screws M3: 30 * 30mm )
 * 設計軟體 [Altium Designer 13](http://www.altium.com/en/products/altium-designer) ( [PcbLib](https://github.com/CYACAcademic/AltiumDesigner_PcbLibrary) use AD PcbLib v0.? )
 
-**** v2.1 版本預計減少 2 個 PWM 通道，並新增 1 個 CAN Bus ****
+**** v2.1 版本預計減少 2 個 PWM 通道，並新增 2 個 CAN Bus ****
 
 <img src="https://lh3.googleusercontent.com/-rm8MVLJdUs4/Uk_NJPWXKSI/AAAAAAAAD48/YXHRJBrHHRs/s800/QCopterFC_System.png" height="685" width="689" /><br>
 
