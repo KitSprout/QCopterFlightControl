@@ -2,7 +2,7 @@
 ========
 * Author  : [Hom](https://github.com/Hom19910422)
 * Version : v2.0
-* Update  : 2013/12/26
+* Update  : 2013/12/29
 
 Description
 ========
@@ -34,7 +34,7 @@ Program
 
 Test
 ========
-* QCopterFC LED
+* [QCopterFC-LED](https://github.com/Hom19910422/QCopterFlightControl/tree/master/Program/TEST_QCopterFC_LED)
 * QCopterFC UART
 * QCopterFC PWM ( TIM8 目前無法輸出 PWM )
 * QCopterFC ADC
