@@ -17,8 +17,8 @@ PC15 - LED_R
 * UART  
 PB10 - USART3 Tx  
 PB11 - USART3 Rx  
-BaudRate = 115200  
-ByteSize = 8  
-StopBits = 1  
-Parity = 'N'  
-ardwareFlowControl = None  
+> BaudRate = 115200  
+> ByteSize = 8  
+> StopBits = 1  
+> Parity = 'N'  
+> ardwareFlowControl = None  
