@@ -24,6 +24,7 @@ QCopterFC v2.2 預計修改 ( MPU-9250 可以採購時實行 )：
 >2. IMU 改為 SPI 操作的 MPU-9250，來增加讀取速度。  
 >3. 將 PWM 部分的電源線連接起來，以增加擴展裝置的方便性。  
 >4. 體積將小幅度縮小。  
+>5. 更改 CamSPI 名稱為 FFCSPI，並修改腳位，使其可以連接 [QMV v2.0](https://github.com/Hom19910422/QCopterMachineVision)、[QRC](https://github.com/Hom19910422/QCopterRemoteControl)、[TFT_2.2](https://github.com/Hom19910422/TFT_2.2-inch) 等裝置。  
 
 <img src="https://lh3.googleusercontent.com/-rm8MVLJdUs4/Uk_NJPWXKSI/AAAAAAAAD48/YXHRJBrHHRs/s800/QCopterFC_System.png" height="685" width="689" /><br>
 
