@@ -2,7 +2,7 @@
 ========
 * Author  : [Hom](https://github.com/Hom19910422)
 * Version : v2.0
-* Update  : 2013/12/29
+* Update  : 2014/01/01
 
 Description
 ========
@@ -19,7 +19,7 @@ Hardware
 * PCB 尺寸 : 52 * 35mm ( Screws M3: 30 * 30mm )
 * 設計軟體 [Altium Designer 13](http://www.altium.com/en/products/altium-designer) ( [PcbLib](https://github.com/CYACAcademic/AltiumDesigner_PcbLibrary) use AD PcbLib v0.? )
 
-**** v2.1 版本預計減少 2 個 PWM 通道，並新增 2 個 CAN Bus ****
+**** v2.2 版本預計減少 2 個 PWM 通道，並新增 1 個 CAN Bus ****
 
 <img src="https://lh3.googleusercontent.com/-rm8MVLJdUs4/Uk_NJPWXKSI/AAAAAAAAD48/YXHRJBrHHRs/s800/QCopterFC_System.png" height="685" width="689" /><br>
 
@@ -35,6 +35,7 @@ Program
 Test
 ========
 * [QCopterFC-LED](https://github.com/Hom19910422/QCopterFlightControl/tree/master/Program/TEST_QCopterFC_LED)
+* [QCopterFC SDIO](https://github.com/Hom19910422/QCopterFlightControl/tree/master/Program/TEST_QCopterFC_SDIO) ( Use [Fatfs](http://elm-chan.org/fsw/ff/00index_e.html) 0.10 )
 * [QCopterFC UART](https://github.com/Hom19910422/QCopterFlightControl/tree/master/Program/TEST_QCopterFC_UART)
 * QCopterFC PWM ( TIM8 目前無法輸出 PWM )
 * QCopterFC ADC
@@ -42,7 +43,7 @@ Test
 * QCopterFC CamSPI-Master
 * QCopterFC IMU ( Use MPU-9150 + MS5611 )
 * QCopterFC NRF ( Use nRF24L01P )
-* QCopterFC SDIO ( Use [Fatfs](http://elm-chan.org/fsw/ff/00index_e.html) 0.10 )
+
 
 View
 ========

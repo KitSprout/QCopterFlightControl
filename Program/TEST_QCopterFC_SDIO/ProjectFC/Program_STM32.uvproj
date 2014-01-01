@@ -454,11 +454,6 @@
           <GroupName>Driver</GroupName>
           <Files>
             <File>
-              <FileName>stm32f4_system.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Program\stm32f4_system.c</FilePath>
-            </File>
-            <File>
               <FileName>stm32f4_delay.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Program\stm32f4_delay.c</FilePath>
@@ -517,6 +512,13 @@
         </Group>
         <Group>
           <GroupName>Algorithm</GroupName>
+          <Files>
+            <File>
+              <FileName>algorithm_string.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Program\algorithm_string.c</FilePath>
+            </File>
+          </Files>
         </Group>
         <Group>
           <GroupName>Dou</GroupName>

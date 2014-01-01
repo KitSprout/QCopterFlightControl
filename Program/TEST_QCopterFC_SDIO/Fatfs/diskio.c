@@ -68,9 +68,9 @@ DRESULT disk_read (
     return RES_PARERR;
 
 	if(count==1)
-		Status = SD_ReadBlock(buff ,sector<< 9 , SDCardInfo.CardBlockSize );                                                              
+		Status = SD_ReadBlock(buff, sector<<9 ,SDCardInfo.CardBlockSize);
 	else
-		Status = SD_ReadMultiBlocks(buff ,sector<< 9 ,SDCardInfo.CardBlockSize,count);
+		Status = SD_ReadMultiBlocks(buff, sector<< 9, SDCardInfo.CardBlockSize, count);
 
   /* Check if the Transfer is finished */
   Status = SD_WaitReadOperation();
@@ -99,14 +99,14 @@ DRESULT disk_write (
     return RES_PARERR;
 
 	if(count==1)
-		Status = SD_WriteBlock((u8 *)buff ,sector << 9 , SDCardInfo.CardBlockSize);                                                
+		Status = SD_WriteBlock((u8 *)buff, sector << 9 ,SDCardInfo.CardBlockSize);
 	else {
-		Status = SD_WriteMultiBlocks((u8 *)buff ,sector << 9 ,SDCardInfo.CardBlockSize,count);	  
+		Status = SD_WriteMultiBlocks((u8 *)buff, sector << 9 ,SDCardInfo.CardBlockSize, count);
 		Status = SD_WaitWriteOperation();
 	}
 
   /* Check if the Transfer is finished */
-  Status = SD_WaitReadOperation();
+  Status = SD_WaitWriteOperation();
 	while(SD_GetStatus() != SD_TRANSFER_OK);
 	
 	if(Status == SD_OK)

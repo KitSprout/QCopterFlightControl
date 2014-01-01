@@ -52,6 +52,7 @@
 #define S32_MAX    ((s32)2147483647)
 #define S32_MIN    ((s32)-2147483648)
 
+#define Byte32(ByteHH, ByteH, ByteL, ByteLL) ((u32)(((ByteHH)<<24) | ((ByteH)<<16) | ((ByteL)<<8) | (ByteLL)))
 #define Byte16(ByteH, ByteL) ((u16)(((ByteH)<<8) | (ByteL)))
 #define Byte8H(ByteH)        ((u8)((ByteH)>>8))
 #define Byte8L(ByteL)        ((u8)(ByteL))
@@ -83,7 +84,7 @@ typedef struct {
 typedef struct {
   u16 L:8;
   u16 H:8;
-}	HL_Struct;
+} HL_Struct;
 /*=====================================================================================================*/
 /*=====================================================================================================*/
 #endif
