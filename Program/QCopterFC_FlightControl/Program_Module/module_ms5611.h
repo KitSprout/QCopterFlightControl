@@ -57,9 +57,9 @@ typedef struct {
   uint64_t SENS;
   s32 rPress;
 
-  float Temp;   // -4000~8500, 0.01'C/LSB
-  float Press;  // 1000~120000, 0.01mbar/LSB
-  float High;   // 0.01mbar ~ 9.5238cm(10.5mbar/100m) or 8.92857(11.2mbar/100m)
+  float Temp;   // -40.00~85.00, 0.01'C/LSB
+  float Press;  // 10.00~1200.00, 0.01mbar/LSB
+  float Height; // 0.01mbar ~ 9.5238cm(10.5mbar/100m) or 8.92857(11.2mbar/100m)
 } MS5611_ST;
 
 typedef __IO enum {

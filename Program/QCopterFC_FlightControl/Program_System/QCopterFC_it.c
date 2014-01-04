@@ -3,11 +3,10 @@
 #include "stm32f4_system.h"
 #include "stm32f4_i2c.h"
 #include "QCopterFC.h"
+#include "QCopterFC_board.h"
 #include "QCopterFC_ctrl.h"
 #include "QCopterFC_ahrs.h"
 #include "QCopterFC_transport.h"
-#include "module_board.h"
-#include "module_motor.h"
 #include "module_sensor.h"
 #include "module_mpu9150.h"
 #include "module_ms5611.h"
@@ -23,24 +22,15 @@ vu8 RecvTime_Sec = 0;
 vu8 RecvTime_Min = 0;
 vu16 SysTick_Cnt = 0;
 
-vs16 Tmp_PID_KP;
-vs16 Tmp_PID_KI;
-vs16 Tmp_PID_KD;
-vs16 Tmp_PID_Pitch;
-
 Sensor_Mode SensorMode = Mode_GyrCorrect;
 /*=====================================================================================================*/
 /*=====================================================================================================*/
 void SysTick_Handler( void )
 {
   u8 IMU_Buf[20] = {0};
+  u16 BLDC_M[4] = {0};
 
-  u16 Final_M1 = 0;
-  u16 Final_M2 = 0;
-  u16 Final_M3 = 0;
-  u16 Final_M4 = 0;
-
-  s16 Thr = 0, Pitch = 0, Roll = 0, Yaw = 0;
+  s16 Pitch = 0, Roll = 0, Yaw = 0;
 
   float Ellipse[5] = {0};
 
@@ -68,7 +58,7 @@ void SysTick_Handler( void )
     }
   }
 
-  /* 500Hz, Read Sensor ( Accelerometer, Gyroscope, Magnetometer ) */
+  /* 500Hz, Read Accelerometer, Gyroscope, Magnetometer */
   MPU9150_Read(IMU_Buf);
 
   /* 100Hz, Read Barometer */
@@ -203,7 +193,7 @@ void SysTick_Handler( void )
       }
       break;
 
-  /************************** Algorithm Mode **************************************/
+  /************************** Mode_Quaternion **************************************/
     case Mode_Quaternion:
       LED_R = !LED_R;
 
@@ -231,7 +221,7 @@ void SysTick_Handler( void )
       SensorMode = Mode_Algorithm;
       break;
 
-  /************************** Algorithm Mode ****************************************/
+  /************************** Mode_Algorithm ***************************************/
     case Mode_Algorithm:
 
       /* 加權移動平均法 Weighted Moving Average */
@@ -246,34 +236,32 @@ void SysTick_Handler( void )
       Mag.Z = (s16)MoveAve_WMA(Mag.Z, MAG_FIFO[2], 64);
 
       /* To Physical */
-      Acc.TrueX = Acc.X*MPU9150A_4g;        // g/LSB
-      Acc.TrueY = Acc.Y*MPU9150A_4g;        // g/LSB
-      Acc.TrueZ = Acc.Z*MPU9150A_4g;        // g/LSB
-      Gyr.TrueX = Gyr.X*MPU9150G_2000dps;   // dps/LSB
-      Gyr.TrueY = Gyr.Y*MPU9150G_2000dps;   // dps/LSB
-      Gyr.TrueZ = Gyr.Z*MPU9150G_2000dps;   // dps/LSB
-      Mag.TrueX = Mag.X*MPU9150M_1200uT;    // uT/LSB
-      Mag.TrueY = Mag.Y*MPU9150M_1200uT;    // uT/LSB
-      Mag.TrueZ = Mag.Z*MPU9150M_1200uT;    // uT/LSB
+      Acc.TrueX  = Acc.X*MPU9150A_4g;       // g/LSB
+      Acc.TrueY  = Acc.Y*MPU9150A_4g;       // g/LSB
+      Acc.TrueZ  = Acc.Z*MPU9150A_4g;       // g/LSB
+      Gyr.TrueX  = Gyr.X*MPU9150G_2000dps;  // dps/LSB
+      Gyr.TrueY  = Gyr.Y*MPU9150G_2000dps;  // dps/LSB
+      Gyr.TrueZ  = Gyr.Z*MPU9150G_2000dps;  // dps/LSB
+      Mag.TrueX  = Mag.X*MPU9150M_1200uT;   // uT/LSB
+      Mag.TrueY  = Mag.Y*MPU9150M_1200uT;   // uT/LSB
+      Mag.TrueZ  = Mag.Z*MPU9150M_1200uT;   // uT/LSB
       Temp.TrueT = Temp.T*MPU9150T_85degC;  // degC/LSB
 
-      /* Get Attitude Angle */
+      /* Get Attitude */
       AHRS_Update();
 
-//      if(KEYL_U == 0)	{	PID_Roll.Kp += 0.001f;	PID_Pitch.Kp += 0.001f;  }
-//      if(KEYL_L == 0)	{	PID_Roll.Kp -= 0.001f;	PID_Pitch.Kp -= 0.001f;  }
-//      if(KEYL_R == 0)	{	PID_Roll.Ki += 0.0001f;	PID_Pitch.Ki += 0.0001f; }
-//      if(KEYL_D == 0)	{	PID_Roll.Ki -= 0.0001f;	PID_Pitch.Ki -= 0.0001f; }
-//      if(KEYR_R == 0)	{	PID_Roll.Kd += 0.0001f;	PID_Pitch.Kd += 0.0001f; }
-//      if(KEYR_D == 0)	{	PID_Roll.Kd -= 0.0001f;	PID_Pitch.Kd -= 0.0001f; }
-//      if(KEYR_L == 0)	{	PID_Roll.SumErr = 0.0f;	PID_Pitch.SumErr = 0.0f; }
-//      if(KEYL_U == 0)	{	PID_Yaw.Kp += 0.001f;    }
-//      if(KEYL_L == 0)	{	PID_Yaw.Kp -= 0.001f;    }
-//      if(KEYL_R == 0)	{	PID_Yaw.Ki += 0.001f;	 }
-//      if(KEYL_D == 0)	{	PID_Yaw.Ki -= 0.001f;	 }
-//      if(KEYR_R == 0)	{	PID_Yaw.Kd += 0.0001f;	 }
-//      if(KEYR_D == 0)	{	PID_Yaw.Kd -= 0.0001f;	 }
-//      if(KEYR_L == 0)	{	PID_Roll.SumErr = 0.0f;	 }
+//      if(KEY_RL == KEY_ON)  {	PID_Roll.Kp += 0.001f;	PID_Pitch.Kp += 0.001f;  }
+//      if(KEY_RL == KEY_ON)  {	PID_Roll.Kp -= 0.001f;	PID_Pitch.Kp -= 0.001f;  }
+//      if(KEY_RL == KEY_ON)  {	PID_Roll.Ki += 0.0001f;	PID_Pitch.Ki += 0.0001f; }
+//      if(KEY_RL == KEY_ON)  {	PID_Roll.Ki -= 0.0001f;	PID_Pitch.Ki -= 0.0001f; }
+//      if(KEY_RL == KEY_ON)  {	PID_Roll.Kd += 0.0001f;	PID_Pitch.Kd += 0.0001f; }
+//      if(KEY_RL == KEY_ON)  {	PID_Roll.Kd -= 0.0001f;	PID_Pitch.Kd -= 0.0001f; }
+//      if(KEY_RL == KEY_ON)  {	PID_Yaw.Kp += 0.001f;  }
+//      if(KEY_RL == KEY_ON)  {	PID_Yaw.Kp -= 0.001f;  }
+//      if(KEY_RL == KEY_ON)  {	PID_Yaw.Ki += 0.001f;  }
+//      if(KEY_RL == KEY_ON)  {	PID_Yaw.Ki -= 0.001f;  }
+//      if(KEY_RL == KEY_ON)  {	PID_Yaw.Kd += 0.0001f; }
+//      if(KEY_RL == KEY_ON)  {	PID_Yaw.Kd -= 0.0001f; }
 
       /* Get ZeroErr */
       PID_Pitch.ZeroErr = (float)((s16)Exp_Pitch/4.5f);
@@ -285,28 +273,33 @@ void SysTick_Handler( void )
       Pitch = (s16)PID_AHRS_Cal(&PID_Pitch,  AngE.Pitch, Gyr.TrueY);
 //      Yaw   = (s16)PID_AHRS_CalYaw(&PID_Yaw, AngE.Yaw,   Gyr.TrueZ);
       Yaw   = (s16)(PID_Yaw.Kd*Gyr.TrueZ);
-      Thr   = (s16)Exp_Thr;
 
       /* Motor Ctrl */
-      Final_M1 = PWM_M1 + Thr + Pitch + Roll + Yaw;
-      Final_M2 = PWM_M2 + Thr - Pitch + Roll - Yaw;
-      Final_M3 = PWM_M3 + Thr - Pitch - Roll + Yaw;
-      Final_M4 = PWM_M4 + Thr + Pitch - Roll - Yaw;
+      BLDC_M[0] = BasicThr/* + Thr + Pitch + Roll + Yaw*/;
+      BLDC_M[1] = BasicThr/* + Thr - Pitch + Roll - Yaw*/;
+      BLDC_M[2] = BasicThr/* + Thr - Pitch - Roll + Yaw*/;
+      BLDC_M[3] = BasicThr/* + Thr + Pitch - Roll - Yaw*/;
 
       /* Check Connection */
       #define NoSignal 1  // 1 sec
-      if(KEYR_L == 0)
-        Motor_Control(PWM_MOTOR_MIN, PWM_MOTOR_MIN, PWM_MOTOR_MIN, PWM_MOTOR_MIN);
-      else if(((Time_Sec-RecvTime_Sec)>NoSignal) || ((Time_Sec-RecvTime_Sec)<-NoSignal))
-        Motor_Control(PWM_MOTOR_MIN, PWM_MOTOR_MIN, PWM_MOTOR_MIN, PWM_MOTOR_MIN);
-      else
-        Motor_Control(Final_M1, Final_M2, Final_M3, Final_M4);
+      if(KEY_RL == KEY_ON) {
+        // 手動關閉油門
+        PID_Pitch.SumErr = 0.0f;
+        PID_Roll.SumErr  = 0.0f;
+        PID_Yaw.SumErr   = 0.0f;
+        BLDC_CtrlPWM(BLDC_PWM_MIN, BLDC_PWM_MIN, BLDC_PWM_MIN, BLDC_PWM_MIN);
+      }
+//      else if(((Time_Sec-RecvTime_Sec)>NoSignal) || ((Time_Sec-RecvTime_Sec)<-NoSignal))
+//        Motor_Control(PWM_MOTOR_MIN, PWM_MOTOR_MIN, PWM_MOTOR_MIN, PWM_MOTOR_MIN);
+      else {
+        // 透過油門比例來控制油門
+        BLDC_CtrlTHR(BLDC_M[0], BLDC_M[1], BLDC_M[2], BLDC_M[3]);
+      }
 
-      /* DeBug */
-      Tmp_PID_KP = PID_Yaw.Kp*1000;
-      Tmp_PID_KI = PID_Yaw.Ki*1000;
-      Tmp_PID_KD = PID_Yaw.Kd*1000;
-      Tmp_PID_Pitch = Yaw;
+      RF_SendData.Thr.CH1 = BLDC_M[0];
+      RF_SendData.Thr.CH2 = BLDC_M[1];
+      RF_SendData.Thr.CH3 = BLDC_M[2];
+      RF_SendData.Thr.CH4 = BLDC_M[3];
 
       break;
   }

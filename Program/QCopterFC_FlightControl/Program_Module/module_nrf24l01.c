@@ -5,6 +5,9 @@
 #include "module_nrf24l01.h"
 /*=====================================================================================================*/
 /*=====================================================================================================*/
+u8 TxBuf[TxBufSize] = {0};
+u8 RxBuf[RxBufSize] = {0};
+
 u8 TX_ADDRESS[TX_ADR_WIDTH] = { 0x34,0x43,0x10,0x10,0x01 };   // 定義一個靜態發送地址
 u8 RX_ADDRESS[RX_ADR_WIDTH] = { 0x34,0x43,0x10,0x10,0x01 };
 /*=====================================================================================================*/
@@ -61,11 +64,11 @@ void nRF24L01_Config( void )
 
   SPI_InitStruct.SPI_Direction = SPI_Direction_2Lines_FullDuplex;   // 雙線全雙工
   SPI_InitStruct.SPI_Mode = SPI_Mode_Master;                        // 主模式
-  SPI_InitStruct.SPI_DataSize = SPI_DataSize_8b;                    // 數據大小8位
+  SPI_InitStruct.SPI_DataSize = SPI_DataSize_8b;                    // 數據大小 8 位
   SPI_InitStruct.SPI_CPOL = SPI_CPOL_Low;                           // 時鐘極性，空閒時為低
-  SPI_InitStruct.SPI_CPHA = SPI_CPHA_1Edge;                         // 第1個邊沿有效，上升沿為采樣時刻
-  SPI_InitStruct.SPI_NSS = SPI_NSS_Soft;                            // NSS信號由軟件產生
-  SPI_InitStruct.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_8;   // 8分頻，9MHz
+  SPI_InitStruct.SPI_CPHA = SPI_CPHA_1Edge;                         // 第 1 個邊沿有效，上升沿為采樣時刻
+  SPI_InitStruct.SPI_NSS = SPI_NSS_Soft;                            // NSS 信號由軟體產生
+  SPI_InitStruct.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_4;   // 4 分頻，10.5 MHz
   SPI_InitStruct.SPI_FirstBit = SPI_FirstBit_MSB;                   // 高位在前
   SPI_InitStruct.SPI_CRCPolynomial = 7;
   SPI_Init(SPI2, &SPI_InitStruct);
@@ -169,12 +172,12 @@ void nRF_RX_Mode( void )
 {
   NRF_CE = 0;
   nRF_WriteBuf(NRF_WRITE+RX_ADDR_P0, RX_ADDRESS, RX_ADR_WIDTH);   // 寫RX節點地址
-  nRF_WriteReg(NRF_WRITE+EN_AA, 0x01);              // 使能通道0的自動應答
-  nRF_WriteReg(NRF_WRITE+EN_RXADDR, 0x01);          // 使能通道0的接收地址
-  nRF_WriteReg(NRF_WRITE+RF_CH, CHANAL);            // 設置RF通信頻率
+  nRF_WriteReg(NRF_WRITE+EN_AA, 0x01);              // 使能通道 0 的自動應答
+  nRF_WriteReg(NRF_WRITE+EN_RXADDR, 0x01);          // 使能通道 0 的接收地址
+  nRF_WriteReg(NRF_WRITE+RF_CH, CHANAL);            // 設置 RF 通信頻率
   nRF_WriteReg(NRF_WRITE+RX_PW_P0, RX_PLOAD_WIDTH); // 選擇通道0的有效數據寬度
   nRF_WriteReg(NRF_WRITE+RF_SETUP, 0x0f);           // 設置TX發射參數, 0db增益, 2Mbps, 低噪聲增益開啟
-  nRF_WriteReg(NRF_WRITE+CONFIG, 0x0f);             // 配置基本工作模式的參數;PWR_UP,EN_CRC, 16BIT_CRC, 接收模式
+  nRF_WriteReg(NRF_WRITE+CONFIG, 0x0f);             // 配置基本工作模式的參數; PWR_UP, EN_CRC, 16BIT_CRC, 接收模式
   NRF_CE = 1;
 }
 /*=====================================================================================================*/
@@ -189,17 +192,17 @@ void nRF_RX_Mode( void )
 void nRF_TX_Mode( void )
 {
   NRF_CE = 0;
-  nRF_WriteBuf(NRF_WRITE+TX_ADDR, TX_ADDRESS, TX_ADR_WIDTH);    // 寫TX節點地址
-  nRF_WriteBuf(NRF_WRITE+RX_ADDR_P0, RX_ADDRESS, RX_ADR_WIDTH); // 設置TX節點地址, 主要為了使能ACK
-  nRF_WriteReg(NRF_WRITE+EN_AA, 0x01);      // 使能通道0的自動應答
-  nRF_WriteReg(NRF_WRITE+EN_RXADDR, 0x01);  // 使能通道0的接收地址
-  nRF_WriteReg(NRF_WRITE+SETUP_RETR, 0x05); // 設置自動重發間隔時間:250us + 86us;最大自動重發次數:5次
-  nRF_WriteReg(NRF_WRITE+RF_CH, CHANAL);    // 設置RF通道為CHANAL
-  nRF_WriteReg(NRF_WRITE+RF_SETUP, 0x0f);   // 設置TX發射參數,0db增益,2Mbps,低噪聲增益開啟
-  nRF_WriteReg(NRF_WRITE+CONFIG, 0x0e);     // 配置基本工作模式的參數;PWR_UP,EN_CRC,16BIT_CRC,發射模式,開啟所有中斷
+  nRF_WriteBuf(NRF_WRITE+TX_ADDR, TX_ADDRESS, TX_ADR_WIDTH);    // 寫 TX 節點地址
+  nRF_WriteBuf(NRF_WRITE+RX_ADDR_P0, RX_ADDRESS, RX_ADR_WIDTH); // 設置 TX 節點地址, 主要為了使能 ACK
+  nRF_WriteReg(NRF_WRITE+EN_AA, 0x01);      // 使能通道 0 的自動應答
+  nRF_WriteReg(NRF_WRITE+EN_RXADDR, 0x01);  // 使能通道 0 的接收地址
+  nRF_WriteReg(NRF_WRITE+SETUP_RETR, 0x05); // 設置自動重發間隔時間 : 250us + 86us，最大自動重發次數 : 5 次
+  nRF_WriteReg(NRF_WRITE+RF_CH, CHANAL);    // 設置 RF 通道為 CHANAL
+  nRF_WriteReg(NRF_WRITE+RF_SETUP, 0x0f);   // 設置 TX 發射參數, 0db增益, 2Mbps, 低噪聲增益開啟
+  nRF_WriteReg(NRF_WRITE+CONFIG, 0x0e);     // 配置基本工作模式的參數; PWR_UP, EN_CRC, 16BIT_CRC, 發射模式, 開啟所有中斷
   NRF_CE = 1;
 
-  Delay_1us(12); // CE要拉高一段時間才進入發送模式
+//  Delay_1us(12); // CE 要拉高一段時間才進入發送模式
 }
 /*=====================================================================================================*/
 /*=====================================================================================================*
@@ -223,9 +226,9 @@ u8 nRF_Check( void )
     if(CheckBuf[i]!=0xC2)	break;
 
   if(i==5)
-    return SUCCESS;   // MCU 與 NRF 成功連接
+    return SUCCESS;   // MCU 與 NRF 連接成功
   else
-    return ERROR;     // MCU 與 NRF 不正常連接
+    return ERROR;     // MCU 與 NRF 連接失敗
 }
 /*=====================================================================================================*/
 /*=====================================================================================================*

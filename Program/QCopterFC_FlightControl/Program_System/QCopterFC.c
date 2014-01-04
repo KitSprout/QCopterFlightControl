@@ -2,18 +2,23 @@
 /*=====================================================================================================*/
 #include "stm32f4_system.h"
 #include "QCopterFC.h"
+#include "QCopterFC_board.h"
 #include "QCopterFC_ctrl.h"
 #include "QCopterFC_ahrs.h"
 #include "QCopterFC_transport.h"
-#include "module_board.h"
 #include "module_rs232.h"
-#include "module_motor.h"
 #include "module_sensor.h"
 #include "module_nrf24l01.h"
+#include "algorithm_pid.h"
 /*=====================================================================================================*/
 /*=====================================================================================================*/
-void System_Init( void )
+void VisualScope_Send( USART_TypeDef* USARTx );
+/*=====================================================================================================*/
+/*=====================================================================================================*/
+void QCopterFC_Init( void )
 {
+  u8 Sta = ERROR;
+
   SystemInit();
 
   LED_Config();
@@ -39,35 +44,40 @@ void System_Init( void )
   PID_Yaw.Ki   = +0.0f;
   PID_Yaw.Kd   = +0.0f;
 
-  Delay_10ms(2);
-}
-/*=====================================================================================================*/
-/*=====================================================================================================*/
-int main( void )
-{
-  u8 Sta = ERROR;
-  FSM_Mode FSM_State = FSM_Rx;
-
-  /* System Init */
-  System_Init();
+  RF_SendData.Packet = 0x00;
 
   /* Throttle Config */
-  if(KEY == 1) {
+  if(KEY == KEY_ON) {
     LED_B = 0;
-    Motor_Control(PWM_MOTOR_MAX, PWM_MOTOR_MAX, PWM_MOTOR_MAX, PWM_MOTOR_MAX);
+    BLDC_CtrlPWM(BLDC_PWM_MAX, BLDC_PWM_MAX, BLDC_PWM_MAX, BLDC_PWM_MAX);
   }
-  while(KEY == 1);
+  while(KEY == KEY_ON);
   LED_B = 1;
-  Motor_Control(PWM_MOTOR_MIN, PWM_MOTOR_MIN, PWM_MOTOR_MIN, PWM_MOTOR_MIN);
+  BLDC_CtrlPWM(BLDC_PWM_MIN, BLDC_PWM_MIN, BLDC_PWM_MIN, BLDC_PWM_MIN);
 
   /* nRF Check */
   while(Sta == ERROR)
     Sta = nRF_Check();
 
+  Delay_10ms(10);
+
   /* Sensor Init */
   if(Sensor_Init() == SUCCESS)
     LED_G = 0;
+
   Delay_10ms(10);
+}
+/*=====================================================================================================*/
+/*=====================================================================================================*/
+int main( void )
+{
+  u8 i = 0;
+  u8 Sta = 0;
+
+  FSM_Mode FSM_State = FSM_Rx;
+
+  /* System Init */
+  QCopterFC_Init();
 
   /* Systick Config */
   if(SysTick_Config(SystemCoreClock/SampleRateFreg)) {  // SampleRateFreg = 500 Hz
@@ -81,11 +91,10 @@ int main( void )
   LED_R = 1;
   LED_G = 1;
   LED_B = 1;
-  while(!KEY) {
+  while(KEY != KEY_ON) {
     LED_B = ~LED_B;
     Delay_10ms(1);
-    Transport_Send(TxBuf[0]);
-    RS232_VisualScope(USART3, TxBuf[0]+20, 8);
+    VisualScope_Send(USART3);
   }
   LED_B = 1;
 
@@ -98,9 +107,14 @@ int main( void )
     case FSM_Tx:
       // FSM_Tx
       nRF_TX_Mode();
-      do {
-        Sta = nRF_Tx_Data(TxBuf[0]);
-      } while(Sta == MAX_RT);
+      for(i=0; i<3; i++) {
+        RF_SendData.Packet++;
+        Transport_Send(TxBuf);
+        do {
+          Sta = nRF_Tx_Data(TxBuf);
+        } while(Sta == MAX_RT);
+      }
+      RF_SendData.Packet = 0x00;
       // FSM_Tx End
       FSM_State = FSM_Rx;
       break;
@@ -109,9 +123,9 @@ int main( void )
     case FSM_Rx:
       // FSM_Rx
       nRF_RX_Mode();
-      Sta = nRF_Rx_Data(RxBuf[0]);
+      Sta = nRF_Rx_Data(RxBuf);
       if(Sta == RX_DR) {
-        Transport_Recv(RxBuf[0]);
+        Transport_Recv(RxBuf);
       }
       // FSM_Rx End
       FSM_State = FSM_CTRL;
@@ -120,7 +134,7 @@ int main( void )
     /************************** FSM CTRL **************************************/
     case FSM_CTRL:
       // FSM_CTRL
-      CTRL_FlightControl();
+      Ctrl_BasicThr();
       // FSM_CTRL End
       FSM_State = FSM_UART;
       break;
@@ -128,7 +142,7 @@ int main( void )
     /************************** FSM UART ***************************************/
     case FSM_UART:
       // FSM_USART
-      RS232_VisualScope(USART3, TxBuf[0]+20, 8);
+      RS232_VisualScope(USART3, TxBuf+20, 8);
       // FSM_USART End
       FSM_State = FSM_DATA;
       break;
@@ -136,12 +150,33 @@ int main( void )
     /************************** FSM DATA **************************************/
     case FSM_DATA:
       // FSM_DATA
-      Transport_Send(TxBuf[0]);
+
       // FSM_DATA End
       FSM_State = FSM_Tx;
       break;
     }
   }
+}
+/*=====================================================================================================*/
+/*=====================================================================================================*/
+void VisualScope_Send( USART_TypeDef* USARTx )
+{
+  u8 VisualScopeBuf[8] = {0};
+
+  RF_SendData.Ang.X = (s16)(AngE.Pitch*100);  // 10 mdeg/LSB
+  RF_SendData.Ang.Y = (s16)(AngE.Roll*100);   // 10 mdeg/LSB
+  RF_SendData.Ang.Z = (s16)(AngE.Yaw*10);     // 100 mdeg/LSB
+
+  VisualScopeBuf[0] = (u8)Byte8L(RF_SendData.Ang.X);
+  VisualScopeBuf[1] = (u8)Byte8H(RF_SendData.Ang.X);
+  VisualScopeBuf[2] = (u8)Byte8L(RF_SendData.Ang.Y);
+  VisualScopeBuf[3] = (u8)Byte8H(RF_SendData.Ang.Y);
+  VisualScopeBuf[4] = (u8)Byte8L(RF_SendData.Ang.Z);
+  VisualScopeBuf[5] = (u8)Byte8H(RF_SendData.Ang.Z);
+  VisualScopeBuf[6] = (u8)(0);
+  VisualScopeBuf[7] = (u8)(0);
+
+  RS232_VisualScope(USARTx, VisualScopeBuf, 8);
 }
 /*=====================================================================================================*/
 /*=====================================================================================================*/

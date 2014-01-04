@@ -484,11 +484,6 @@
           <GroupName>Driver</GroupName>
           <Files>
             <File>
-              <FileName>stm32f4_system.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Program_Dirver\stm32f4_system.c</FilePath>
-            </File>
-            <File>
               <FileName>stm32f4_delay.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Program_Dirver\stm32f4_delay.c</FilePath>
@@ -529,6 +524,11 @@
               <FilePath>..\Program_System\QCopterFC_it.c</FilePath>
             </File>
             <File>
+              <FileName>QCopterFC_board.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Program_System\QCopterFC_board.c</FilePath>
+            </File>
+            <File>
               <FileName>QCopterFC_ctrl.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Program_System\QCopterFC_ctrl.c</FilePath>
@@ -549,19 +549,9 @@
           <GroupName>Module</GroupName>
           <Files>
             <File>
-              <FileName>module_board.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Program_Module\module_board.c</FilePath>
-            </File>
-            <File>
               <FileName>module_rs232.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Program_Module\module_rs232.c</FilePath>
-            </File>
-            <File>
-              <FileName>module_motor.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Program_Module\module_motor.c</FilePath>
             </File>
             <File>
               <FileName>module_nrf24l01.c</FileName>

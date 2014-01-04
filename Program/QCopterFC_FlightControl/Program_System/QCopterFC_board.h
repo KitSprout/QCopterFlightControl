@@ -1,7 +1,7 @@
-/* #include "module_board.h" */
+/* #include "QCopterFC_board.h" */
 
-#ifndef __MODULE_BOARD_S_H
-#define __MODULE_BOARD_S_H
+#ifndef __COPTERFC_BOARD_H
+#define __COPTERFC_BOARD_H
 
 #include "stm32f4xx.h"
 /*====================================================================================================*/
@@ -10,6 +10,11 @@
 #define LED_R PCO(15)
 #define LED_G PCO(14)
 #define LED_B PCO(13)
+
+/* KEY Define */
+#define KEY_ON   (1)
+#define KEY_OFF  (0)
+#define KEY_LONG (2)
 /*====================================================================================================*/
 /*====================================================================================================*/
 void LED_Config( void );

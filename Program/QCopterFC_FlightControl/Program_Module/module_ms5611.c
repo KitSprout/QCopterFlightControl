@@ -119,9 +119,9 @@ static void MS5611_Calculate( MS5611_ST* COEFF )
   COEFF->SENS = (int64_t)(COEFF->C[1]*POW_2_15 + (COEFF->C[3]*COEFF->dT)/POW_2_8);  // SENS = C1*2^15 + (C3*dT)/2^8
   COEFF->rPress = (s32)((COEFF->D[1]*COEFF->SENS)/POW_2_21 - COEFF->OFF)/POW_2_15;  // Press = (D1*SENS/2^21 - OFF)/2^15
 
-  COEFF->Temp  = (float)(COEFF->rTemp/100.0f);
-  COEFF->Press = (float)(COEFF->rPress/100.0f);
-  COEFF->High  = (float)((COEFF->rPress-101333)*9.5238f);
+  COEFF->Temp   = (float)(COEFF->rTemp/100.0f);
+  COEFF->Press  = (float)(COEFF->rPress/100.0f);
+  COEFF->Height = (float)((COEFF->rPress-101333)*9.5238f);
 }
 /*=====================================================================================================*/
 /*=====================================================================================================*
