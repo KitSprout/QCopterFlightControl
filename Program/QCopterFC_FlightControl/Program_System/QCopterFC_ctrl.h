@@ -35,8 +35,8 @@
 /*=====================================================================================================*/
 void Motor_Config( void );
 
-void BLDC_CtrlPWM( u16 Motor_1, u16 Motor_2, u16 Motor_3, u16 Motor_4 );
-void BLDC_CtrlTHR( u16 Motor_1, u16 Motor_2, u16 Motor_3, u16 Motor_4 );
+void BLDC_CtrlPWM( s16 Motor_1, s16 Motor_2, s16 Motor_3, s16 Motor_4 );
+void BLDC_CtrlTHR( s16 Motor_1, s16 Motor_2, s16 Motor_3, s16 Motor_4 );
 
 void Ctrl_BasicThr( void );
 /*=====================================================================================================*/

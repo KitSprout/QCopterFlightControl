@@ -114,7 +114,7 @@ void Motor_Config( void )
 **使用 : BLDC_CtrlPWM(BLDC_M[0], BLDC_M[1], BLDC_M[2], BLDC_M[3]);
 **=====================================================================================================*/
 /*=====================================================================================================*/
-void BLDC_CtrlPWM( u16 Motor_1, u16 Motor_2, u16 Motor_3, u16 Motor_4 )
+void BLDC_CtrlPWM( s16 Motor_1, s16 Motor_2, s16 Motor_3, s16 Motor_4 )
 {
   if(Motor_1>BLDC_PWM_MAX)      Motor_1 = BLDC_PWM_MAX;
   else if(Motor_1<BLDC_PWM_MIN) Motor_1 = BLDC_PWM_MIN;
@@ -142,14 +142,31 @@ void BLDC_CtrlPWM( u16 Motor_1, u16 Motor_2, u16 Motor_3, u16 Motor_4 )
 **使用 : BLDC_CtrlTHR(BLDC_M[0], BLDC_M[1], BLDC_M[2], BLDC_M[3]);
 **=====================================================================================================*/
 /*=====================================================================================================*/
-void BLDC_CtrlTHR( u16 Motor_1, u16 Motor_2, u16 Motor_3, u16 Motor_4 )
+void BLDC_CtrlTHR( s16 Motor_1, s16 Motor_2, s16 Motor_3, s16 Motor_4 )
 {
   u16 tempPWM[4] = {0};
 
-  tempPWM[0] = (u16)(Motor_1*BLDC_THR_TO_PWM);
-  tempPWM[1] = (u16)(Motor_2*BLDC_THR_TO_PWM);
-  tempPWM[2] = (u16)(Motor_3*BLDC_THR_TO_PWM);
-  tempPWM[3] = (u16)(Motor_4*BLDC_THR_TO_PWM);
+  if(Motor_1>BLDC_THR_MAX)      Motor_1 = BLDC_THR_MAX;
+  else if(Motor_1<BLDC_THR_MIN) Motor_1 = BLDC_THR_MIN;
+
+  if(Motor_2>BLDC_THR_MAX)      Motor_2 = BLDC_THR_MAX;
+  else if(Motor_2<BLDC_THR_MIN) Motor_2 = BLDC_THR_MIN;
+
+  if(Motor_3>BLDC_THR_MAX)      Motor_3 = BLDC_THR_MAX;
+  else if(Motor_3<BLDC_THR_MIN) Motor_3 = BLDC_THR_MIN;
+
+  if(Motor_4>BLDC_THR_MAX)      Motor_4 = BLDC_THR_MAX;
+  else if(Motor_4<BLDC_THR_MIN) Motor_4 = BLDC_THR_MIN;
+
+  RF_SendData.Thr.CH1 = Motor_1;
+  RF_SendData.Thr.CH2 = Motor_2;
+  RF_SendData.Thr.CH3 = Motor_3;
+  RF_SendData.Thr.CH4 = Motor_4;
+
+  tempPWM[0] = (u16)(BLDC_PWM_MIN + Motor_1*BLDC_THR_TO_PWM);
+  tempPWM[1] = (u16)(BLDC_PWM_MIN + Motor_2*BLDC_THR_TO_PWM);
+  tempPWM[2] = (u16)(BLDC_PWM_MIN + Motor_3*BLDC_THR_TO_PWM);
+  tempPWM[3] = (u16)(BLDC_PWM_MIN + Motor_4*BLDC_THR_TO_PWM);
 
   BLDC_CtrlPWM(tempPWM[0], tempPWM[1], tempPWM[2], tempPWM[3]);
 }

@@ -28,7 +28,7 @@ Sensor_Mode SensorMode = Mode_GyrCorrect;
 void SysTick_Handler( void )
 {
   u8 IMU_Buf[20] = {0};
-  u16 BLDC_M[4] = {0};
+  s16 BLDC_M[4] = {0};
 
   s16 Pitch = 0, Roll = 0, Yaw = 0;
 
@@ -264,10 +264,12 @@ void SysTick_Handler( void )
 //      if(KEY_RL == KEY_ON)  {	PID_Yaw.Kd -= 0.0001f; }
 
       /* Get ZeroErr */
-      PID_Pitch.ZeroErr = (float)((s16)Exp_Pitch/4.5f);
-      PID_Roll.ZeroErr  = (float)((s16)Exp_Roll/4.5f);
-      PID_Yaw.ZeroErr   = (float)((s16)Exp_Yaw)+180.0f;
-
+//      PID_Pitch.ZeroErr = (float)((s16)Exp_Pitch/4.5f);
+//      PID_Roll.ZeroErr  = (float)((s16)Exp_Roll/4.5f);
+//      PID_Yaw.ZeroErr   = (float)((s16)Exp_Yaw)+180.0f;
+      PID_Pitch.ZeroErr = (float)(0);
+      PID_Roll.ZeroErr  = (float)(0);
+      PID_Yaw.ZeroErr   = (float)(0);
       /* PID */
       Roll  = (s16)PID_AHRS_Cal(&PID_Roll,   AngE.Roll,  Gyr.TrueX);
       Pitch = (s16)PID_AHRS_Cal(&PID_Pitch,  AngE.Pitch, Gyr.TrueY);
@@ -275,10 +277,10 @@ void SysTick_Handler( void )
       Yaw   = (s16)(PID_Yaw.Kd*Gyr.TrueZ);
 
       /* Motor Ctrl */
-      BLDC_M[0] = BasicThr/* + Thr + Pitch + Roll + Yaw*/;
-      BLDC_M[1] = BasicThr/* + Thr - Pitch + Roll - Yaw*/;
-      BLDC_M[2] = BasicThr/* + Thr - Pitch - Roll + Yaw*/;
-      BLDC_M[3] = BasicThr/* + Thr + Pitch - Roll - Yaw*/;
+      BLDC_M[0] = BasicThr + Pitch + Roll + Yaw;
+      BLDC_M[1] = BasicThr - Pitch + Roll - Yaw;
+      BLDC_M[2] = BasicThr - Pitch - Roll + Yaw;
+      BLDC_M[3] = BasicThr + Pitch - Roll - Yaw;
 
       /* Check Connection */
       #define NoSignal 1  // 1 sec
@@ -287,7 +289,7 @@ void SysTick_Handler( void )
         PID_Pitch.SumErr = 0.0f;
         PID_Roll.SumErr  = 0.0f;
         PID_Yaw.SumErr   = 0.0f;
-        BLDC_CtrlPWM(BLDC_PWM_MIN, BLDC_PWM_MIN, BLDC_PWM_MIN, BLDC_PWM_MIN);
+        BLDC_CtrlTHR(BLDC_THR_MIN, BLDC_THR_MIN, BLDC_THR_MIN, BLDC_THR_MIN);
       }
 //      else if(((Time_Sec-RecvTime_Sec)>NoSignal) || ((Time_Sec-RecvTime_Sec)<-NoSignal))
 //        Motor_Control(PWM_MOTOR_MIN, PWM_MOTOR_MIN, PWM_MOTOR_MIN, PWM_MOTOR_MIN);
@@ -295,12 +297,6 @@ void SysTick_Handler( void )
         // 透過油門比例來控制油門
         BLDC_CtrlTHR(BLDC_M[0], BLDC_M[1], BLDC_M[2], BLDC_M[3]);
       }
-
-      RF_SendData.Thr.CH1 = BLDC_M[0];
-      RF_SendData.Thr.CH2 = BLDC_M[1];
-      RF_SendData.Thr.CH3 = BLDC_M[2];
-      RF_SendData.Thr.CH4 = BLDC_M[3];
-
       break;
   }
 }
