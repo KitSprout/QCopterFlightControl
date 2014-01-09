@@ -12,19 +12,19 @@ QCopterFC 是一個基於 STM32F4 的飛行控制器，可以應用於固定翼�
 Hardware
 ========
 * 控制器　 : [STM32F405R](http://www.st.com/web/catalog/mmc/FM141/SC1169/SS1577/LN1035/PF252144) 64Pin 168MHz DSP FPU
-* 感測器　 : [IMU_10-DOF](https://github.com/Hom19910422/IMU_10-DOF) ( [MPU-9150](http://www.invensense.com/mems/gyro/mpu9150.html) + [MS5611](http://www.meas-spec.com/product/pressure/MS5611-01BA03.aspx) )
+* 感測器　 : [IMU_10-DOF](https://github.com/OpenPCB/IMU_10-DOF) ( [MPU-9150](http://www.invensense.com/mems/gyro/mpu9150.html) + [MS5611](http://www.meas-spec.com/product/pressure/MS5611-01BA03.aspx) )
 * 無線傳輸 : [nRF24L01P](http://www.nordicsemi.com/eng/Products/2.4GHz-RF/nRF24L01P) + PA + LNA
 * 儲存紀錄 : Micro SD，使用 SDIO 操作
 * 外接介面 : 2*ADC、1*USB ( Micro )、1*SPI ( FFC16 )、1*UART、12*PWM
 * PCB 尺寸 : 52 * 35mm ( Screws M3: 30 * 30mm )
-* 設計軟體 [Altium Designer 13](http://www.altium.com/en/products/altium-designer) ( [PcbLib](https://github.com/CYACAcademic/AltiumDesigner_PcbLibrary) use AD PcbLib v0.? )
+* 設計軟體 [Altium Designer 13](http://www.altium.com/en/products/altium-designer) ( PcbLib use AD [PcbLib v?](https://github.com/OpenPCB/AltiumDesigner_PcbLibrary) )
 
 QCopterFC v2.2 預計修改 ( MPU-9250 可以採購時實行 )：  
 >1. 減少 2 個 PWM 通道，並新增 1 個 CAN BUS ( 該 PIN 還是可以使用 PWM )  
 >2. IMU 改為 SPI 操作的 MPU-9250，來增加讀取速度。  
 >3. 將 PWM 部分的電源線連接起來，以增加擴展裝置的方便性。  
 >4. 體積將小幅度縮小。  
->5. 更改 CamSPI 名稱為 FFCSPI，並修改腳位，使其可以連接 [QMV v2.0](https://github.com/Hom19910422/QCopterMachineVision)、[QRC](https://github.com/Hom19910422/QCopterRemoteControl)、[TFT_2.2](https://github.com/Hom19910422/TFT_2.2-inch) 等裝置。  
+>5. 更改 CamSPI 名稱為 FFCSPI，並修改腳位，使其可以連接 [QMV v2.0](https://github.com/Hom19910422/QCopterMachineVision)、[QRC](https://github.com/Hom19910422/QCopterRemoteControl)、[TFT_2.2](https://github.com/OpenPCB/TFT_2.2-inch) 等裝置。  
 
 <img src="https://lh3.googleusercontent.com/-rm8MVLJdUs4/Uk_NJPWXKSI/AAAAAAAAD48/YXHRJBrHHRs/s800/QCopterFC_System.png" width="689" />
 
@@ -34,8 +34,8 @@ Related Documents
 
 Program
 ========
-* QcopterFC FlightControl Pre-Alpha ( MDK 5.0, StdPeriph_Lib v1.3 )
-* QcopterFC FlightRecorder Pre-Alpha
+* QcopterFC FlightControl ( MDK 5.0, StdPeriph_Lib v1.3 )
+* QcopterFC FlightRecorder
 
 Test
 ========
