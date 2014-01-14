@@ -1,8 +1,8 @@
-﻿[QCopterFC](https://github.com/Hom19910422/QCopterFlightControl)
+﻿[QCopterFC](https://github.com/QCopter/QCopterFlightControl)
 ========
 * Author  : [Hom](https://github.com/Hom19910422)
 * Version : v2.0
-* Update  : 2014/01/06
+* Update  : 2014/01/14
 
 Description
 ========
@@ -24,7 +24,7 @@ QCopterFC v2.2 預計修改 ( MPU-9250 可以採購時實行 )：
 >2. IMU 改為 SPI 操作的 MPU-9250，來增加讀取速度。  
 >3. 將 PWM 部分的電源線連接起來，以增加擴展裝置的方便性。  
 >4. 體積將小幅度縮小。  
->5. 更改 CamSPI 名稱為 FFCSPI，並修改腳位，使其可以連接 [QMV v2.0](https://github.com/Hom19910422/QCopterMachineVision)、[QRC](https://github.com/Hom19910422/QCopterRemoteControl)、[TFT_2.2](https://github.com/OpenPCB/TFT_2.2-inch) 等裝置。  
+>5. 更改 CamSPI 為 FFCSPI，並修改腳位，使其可以連接 [QMV v2.0](https://github.com/Hom19910422/QCopterMachineVision)、[QRC](https://github.com/Hom19910422/QCopterRemoteControl)、[TFT_2.2](https://github.com/OpenPCB/TFT_2.2-inch) 等裝置。  
 
 <img src="https://lh3.googleusercontent.com/-rm8MVLJdUs4/Uk_NJPWXKSI/AAAAAAAAD48/YXHRJBrHHRs/s800/QCopterFC_System.png" width="689" />
 
@@ -34,7 +34,7 @@ Related Documents
 
 Program
 ========
-* QcopterFC FlightControl ( MDK 5.0, StdPeriph_Lib v1.3 )
+* QcopterFC FlightControl
 * QcopterFC FlightRecorder
 
 Test
@@ -48,7 +48,6 @@ Test
 * QCopterFC CamSPI-Master
 * QCopterFC IMU ( Use MPU-9150 + MS5611 )
 * QCopterFC NRF ( Use nRF24L01P )
-
 
 View
 ========
@@ -108,4 +107,4 @@ Schematic
 <img src="https://lh5.googleusercontent.com/-nIBTA3RL8Hk/Ug8wr_ly3-I/AAAAAAAADFY/hAfv5LAzHag/s144/oshw-logo-800-px.png">
 <br />
 <br />
-<a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/tw/deed.zh_TW"><img alt="創用 CC 授權條款" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/3.0/tw/88x31.png" /></a><br /><span xmlns:dct="http://purl.org/dc/terms/" property="dct:title"> QCopterFlightControl </span>由<a xmlns:cc="http://creativecommons.org/ns#" href="https://plus.google.com/u/0/112822505513154783828/posts" property="cc:attributionName" rel="cc:attributionURL"> Hom </a>製作，以<a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/tw/deed.zh_TW">創用CC 姓名標示-相同方式分享 3.0 台灣 授權條款</a>釋出。<br />此作品衍生自<a xmlns:dct="http://purl.org/dc/terms/" href="https://github.com/Hom19910422" rel="dct:source"> Hom-GitHub </a>
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/tw/deed.zh_TW"><img alt="創用 CC 授權條款" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/3.0/tw/88x31.png" /></a><br /><span xmlns:dct="http://purl.org/dc/terms/" property="dct:title"> QCopterFlightControl </span>由<a xmlns:cc="http://creativecommons.org/ns#" href="https://plus.google.com/u/0/112822505513154783828/posts" property="cc:attributionName" rel="cc:attributionURL"> Hom </a>製作，以<a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/tw/deed.zh_TW">創用CC 姓名標示-相同方式分享 3.0 台灣 授權條款</a>釋出。<br />此作品衍生自<a xmlns:dct="http://purl.org/dc/terms/" href="https://github.com/QCopter" rel="dct:source"> QCopterTech </a>
