@@ -1,18 +1,15 @@
-/* #include "stm32f4_delay.h" */
+/* #include "algorithm_compare.h" */
 
-#ifndef __STM32F4_DELAY_H
-#define __STM32F4_DELAY_H
+#ifndef __ALGORITHM_COMPARE_H
+#define __ALGORITHM_COMPARE_H
 
 #include "stm32f4xx.h"
 /*=====================================================================================================*/
 /*=====================================================================================================*/
-void Delay_nop( vu32 );
-void Delay_1us( vu32 );
-void Delay_10us( vu32 );
-void Delay_100us( vu32 );
-void Delay_1ms( vu32 );
-void Delay_10ms( vu32 );
-void Delay_100ms( vu32 );
+u8 Cmp_ArrU8( uc8 *Arr1, uc8 *Arr2, u32 DataLen );
+u8 Cmp_ArrU16( uc16 *Arr1, uc16 *Arr2, u32 DataLen );
+u8 Cmp_ArrU32( uc32 *Arr1, uc32 *Arr2, u32 DataLen );
+u8 Cmp_ArrU8U16( uc8 *Arr1, uc16 *Arr2, u32 DataLen );
 /*=====================================================================================================*/
 /*=====================================================================================================*/
-#endif	 
+#endif

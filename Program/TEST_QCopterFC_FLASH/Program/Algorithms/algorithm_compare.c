@@ -4,20 +4,20 @@
 #include "algorithm_compare.h"
 /*=====================================================================================================*/
 /*=====================================================================================================*
-**函數 : CmpArr_U8
+**函數 : Cmp_ArrU8
 **功能 : 比較 u8 Arr1 與 u8 Arr2
-**輸入 : Arr1, Arr2, dataLen
+**輸入 : Arr1, Arr2, DataLen
 **輸出 : SUCCESS/ERROR
-**使用 : CmpArr_U8(Arr1, Arr2, sizeof(Arr1));
+**使用 : Cmp_ArrU8(Arr1, Arr2, sizeof(Arr1));
 **=====================================================================================================*/
 /*=====================================================================================================*/
-u8 CmpArr_U8( uc8* Arr1, uc8* Arr2, u32 dataLen )
+u8 Cmp_ArrU8( uc8* Arr1, uc8* Arr2, u32 DataLen )
 {
   u32 ErrCount = 0;
 
-  while(dataLen) {
-    dataLen--;
-    if(Arr1[dataLen] != Arr2[dataLen])
+  while(DataLen) {
+    DataLen--;
+    if(Arr1[DataLen] != Arr2[DataLen])
       ErrCount++;
   }
 
@@ -25,20 +25,20 @@ u8 CmpArr_U8( uc8* Arr1, uc8* Arr2, u32 dataLen )
 }
 /*=====================================================================================================*/
 /*=====================================================================================================*
-**函數 : CmpArr_U16
+**函數 : Cmp_ArrU16
 **功能 : 比較 u16 Arr1 與 u16 Arr2
-**輸入 : Arr1, Arr2, dataLen
+**輸入 : Arr1, Arr2, DataLen
 **輸出 : SUCCESS/ERROR
-**使用 : CmpArr_U16(Arr1, Arr2, sizeof(Arr1));
+**使用 : Cmp_ArrU16(Arr1, Arr2, sizeof(Arr1));
 **=====================================================================================================*/
 /*=====================================================================================================*/
-u8 CmpArr_U16( uc16* Arr1, uc16* Arr2, u32 dataLen )
+u8 Cmp_ArrU16( uc16* Arr1, uc16* Arr2, u32 DataLen )
 {
   u32 ErrCount = 0;
 
-  while(dataLen) {
-    dataLen--;
-    if(Arr1[dataLen] != Arr2[dataLen])
+  while(DataLen) {
+    DataLen--;
+    if(Arr1[DataLen] != Arr2[DataLen])
       ErrCount++;
   }
 
@@ -46,20 +46,20 @@ u8 CmpArr_U16( uc16* Arr1, uc16* Arr2, u32 dataLen )
 }
 /*=====================================================================================================*/
 /*=====================================================================================================*
-**函數 : CmpArr_U32
+**函數 : Cmp_ArrU32
 **功能 : 比較 u32 Arr1 與 u32 Arr2
-**輸入 : Arr1, Arr2, dataLen
+**輸入 : Arr1, Arr2, DataLen
 **輸出 : SUCCESS/ERROR
-**使用 : CmpArr_U32(Arr1, Arr2, sizeof(Arr1));
+**使用 : Cmp_ArrU32(Arr1, Arr2, sizeof(Arr1));
 **=====================================================================================================*/
 /*=====================================================================================================*/
-u8 CmpArr_U32( uc32 *Arr1, uc32 *Arr2, u32 dataLen )
+u8 Cmp_ArrU32( uc32 *Arr1, uc32 *Arr2, u32 DataLen )
 {
   u32 ErrCount = 0;
 
-  while(dataLen) {
-    dataLen--;
-    if(Arr1[dataLen] != Arr2[dataLen])
+  while(DataLen) {
+    DataLen--;
+    if(Arr1[DataLen] != Arr2[DataLen])
       ErrCount++;
   }
 
@@ -67,20 +67,20 @@ u8 CmpArr_U32( uc32 *Arr1, uc32 *Arr2, u32 dataLen )
 }
 /*=====================================================================================================*/
 /*=====================================================================================================*
-**函數 : CmpArr_U8U16
+**函數 : Cmp_ArrU8U16
 **功能 : 比較 u8 Arr1 與 u16 Arr2
-**輸入 : Arr1, Arr2, dataLen
+**輸入 : Arr1, Arr2, DataLen
 **輸出 : SUCCESS/ERROR
-**使用 : CmpArr_U8U16(Arr1, Arr2, sizeof(Arr1));
+**使用 : Cmp_ArrU8U16(Arr1, Arr2, sizeof(Arr1));
 **=====================================================================================================*/
 /*=====================================================================================================*/
-u8 CmpArr_U8U16( uc8* Arr1, uc16* Arr2, u32 dataLen )
+u8 Cmp_ArrU8U16( uc8* Arr1, uc16* Arr2, u32 DataLen )
 {
   u32 ErrCount = 0;
 
-  while(dataLen) {
-    dataLen--;
-    if(Byte16(Arr1[(dataLen<<1)], Arr1[(dataLen<<1)+1]) != Arr2[dataLen])
+  while(DataLen) {
+    DataLen--;
+    if(Byte16(Arr1[(DataLen<<1)], Arr1[(DataLen<<1)+1]) != Arr2[DataLen])
       ErrCount++;
   }
 

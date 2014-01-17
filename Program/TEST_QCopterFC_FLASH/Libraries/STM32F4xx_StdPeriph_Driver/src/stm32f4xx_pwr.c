@@ -2,8 +2,8 @@
   ******************************************************************************
   * @file    stm32f4xx_pwr.c
   * @author  MCD Application Team
-  * @version V1.2.1
-  * @date    19-September-2013
+  * @version V1.3.0
+  * @date    08-November-2013
   * @brief   This file provides firmware functions to manage the following 
   *          functionalities of the Power Controller (PWR) peripheral:           
   *           + Backup Domain Access
@@ -861,7 +861,7 @@ void PWR_ClearFlag(uint32_t PWR_FLAG)
   }
 #endif /* STM32F427_437xx ||  STM32F429_439xx */
 
-#if defined (STM32F40_41xxx) 
+#if defined (STM32F40_41xxx) || defined (STM32F401xx) 
   PWR->CR |=  PWR_FLAG << 2;
 #endif /* STM32F40_41xxx */
 }

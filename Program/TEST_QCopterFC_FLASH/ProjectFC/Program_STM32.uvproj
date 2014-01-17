@@ -357,7 +357,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F40XX, USE_STDPERIPH_DRIVER, __FPU_PRESENT=1, __FPU_USED =1, ARM_MATH_CM4, __CC_ARM</Define>
               <Undefine></Undefine>
-              <IncludePath>..\;..\Libraries\CMSIS;..\Libraries\CMSIS\startup;..\Libraries\STM32F4xx_StdPeriph_Driver\inc;..\Libraries\STM32F4xx_StdPeriph_Driver\src;..\Program_Dirver;..\Program_Algorithm;..\Program_Slave;..\Program</IncludePath>
+              <IncludePath>..\;..\Libraries\CMSIS;..\Libraries\STM32F4xx_StdPeriph_Driver\inc;..\Libraries\STM32F4xx_StdPeriph_Driver\src;..\Program;..\Program\Algorithms;..\Program\Dirvers;..\Program\Modules</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -419,14 +419,14 @@
               <FilePath>..\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_rcc.c</FilePath>
             </File>
             <File>
-              <FileName>stm32f4xx_flash.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_flash.c</FilePath>
-            </File>
-            <File>
               <FileName>stm32f4xx_gpio.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_gpio.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_flash.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_flash.c</FilePath>
             </File>
             <File>
               <FileName>stm32f4xx_conf.h</FileName>
@@ -436,22 +436,17 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>Driver</GroupName>
+          <GroupName>Drivers</GroupName>
           <Files>
             <File>
-              <FileName>stm32f4_system.c</FileName>
+              <FileName>stm32f4_delay.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Program\stm32f4_system.c</FilePath>
+              <FilePath>..\Program\Dirvers\stm32f4_delay.c</FilePath>
             </File>
             <File>
               <FileName>stm32f4_flash.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Program\stm32f4_flash.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f4_delay.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Program\stm32f4_delay.c</FilePath>
+              <FilePath>..\Program\Dirvers\stm32f4_flash.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -463,23 +458,35 @@
               <FileType>1</FileType>
               <FilePath>..\Program\experiment_stm32f4.c</FilePath>
             </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>Module</GroupName>
-        </Group>
-        <Group>
-          <GroupName>Algorithm</GroupName>
-          <Files>
             <File>
-              <FileName>algorithm_compare.c</FileName>
+              <FileName>QCopterFC_board.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Program\algorithm_compare.c</FilePath>
+              <FilePath>..\Program\QCopterFC_board.c</FilePath>
             </File>
           </Files>
         </Group>
         <Group>
-          <GroupName>Dou</GroupName>
+          <GroupName>Modules</GroupName>
+        </Group>
+        <Group>
+          <GroupName>Algorithms</GroupName>
+          <Files>
+            <File>
+              <FileName>algorithm_compare.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Program\Algorithms\algorithm_compare.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Document</GroupName>
+          <Files>
+            <File>
+              <FileName>Readme.md</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Readme.md</FilePath>
+            </File>
+          </Files>
         </Group>
       </Groups>
     </Target>
