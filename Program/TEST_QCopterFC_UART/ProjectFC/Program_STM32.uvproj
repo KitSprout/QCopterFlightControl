@@ -357,7 +357,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F40XX, USE_STDPERIPH_DRIVER, __FPU_PRESENT=1, __FPU_USED =1, ARM_MATH_CM4, __CC_ARM</Define>
               <Undefine></Undefine>
-              <IncludePath>..\;..\Libraries\CMSIS;..\Libraries\CMSIS\startup;..\Libraries\STM32F4xx_StdPeriph_Driver\inc;..\Libraries\STM32F4xx_StdPeriph_Driver\src;..\Program_Dirver;..\Program_Algorithm;..\Program_Slave;..\Program</IncludePath>
+              <IncludePath>..\;..\Libraries\CMSIS;..\Libraries\STM32F4xx_StdPeriph_Driver\inc;..\Libraries\STM32F4xx_StdPeriph_Driver\src;..\Program;..\Program\Algorithms;..\Program\Dirvers;..\Program\Modules</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -436,17 +436,17 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>Driver</GroupName>
+          <GroupName>Drivers</GroupName>
           <Files>
             <File>
               <FileName>stm32f4_delay.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Program\stm32f4_delay.c</FilePath>
+              <FilePath>..\Program\Dirvers\stm32f4_delay.c</FilePath>
             </File>
             <File>
               <FileName>stm32f4_usart.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Program\stm32f4_usart.c</FilePath>
+              <FilePath>..\Program\Dirvers\stm32f4_usart.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -458,30 +458,35 @@
               <FileType>1</FileType>
               <FilePath>..\Program\experiment_stm32f4.c</FilePath>
             </File>
+            <File>
+              <FileName>QCopterFC_board.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Program\QCopterFC_board.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
-          <GroupName>Module</GroupName>
+          <GroupName>Modules</GroupName>
           <Files>
             <File>
               <FileName>module_rs232.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Program\module_rs232.c</FilePath>
+              <FilePath>..\Program\Modules\module_rs232.c</FilePath>
             </File>
           </Files>
         </Group>
         <Group>
-          <GroupName>Algorithm</GroupName>
+          <GroupName>Algorithms</GroupName>
           <Files>
             <File>
               <FileName>algorithm_string.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Program\algorithm_string.c</FilePath>
+              <FilePath>..\Program\Algorithms\algorithm_string.c</FilePath>
             </File>
           </Files>
         </Group>
         <Group>
-          <GroupName>Dou</GroupName>
+          <GroupName>Document</GroupName>
           <Files>
             <File>
               <FileName>Readme.md</FileName>

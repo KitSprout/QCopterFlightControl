@@ -14,8 +14,8 @@
 void Str_NumToChar( u8 Type, u8 NumLen, u8 *CharData, s32 NumData )
 {
   u8 i = 0;
-  u32 Tmp[48] = {0};
-  u32 NumTmp = 1;
+  u32 TmpStr[48] = {0};
+  u32 TmpNum = 1;
 
   switch(Type) {
 
@@ -24,11 +24,11 @@ void Str_NumToChar( u8 Type, u8 NumLen, u8 *CharData, s32 NumData )
     case Type_D:
     case Type_H:
       for(i=0; i<NumLen; i++) {
-        Tmp[i] = ((u32)NumData) / NumTmp;
-        NumTmp = NumTmp * Type;
+        TmpStr[i] = ((u32)NumData) / TmpNum;
+        TmpNum = TmpNum * Type;
       }
       for(i=0; i<NumLen; i++) {
-        CharData[NumLen-i-1] = Tmp[i] - Tmp[i+1]*Type;
+        CharData[NumLen-i-1] = TmpStr[i] - TmpStr[i+1]*Type;
         if(CharData[NumLen-i-1]>9)
           CharData[NumLen-i-1] += 55;	// 65-10
         else
@@ -42,11 +42,11 @@ void Str_NumToChar( u8 Type, u8 NumLen, u8 *CharData, s32 NumData )
         CharData[0] = '-';
         NumData = (~NumData) + 1;
         for(i=1; i<NumLen+1; i++) {
-          Tmp[i-1] = ((u32)NumData) / NumTmp;
-          NumTmp = NumTmp * 10;
+          TmpStr[i-1] = ((u32)NumData) / TmpNum;
+          TmpNum = TmpNum * 10;
         }
         for(i=1; i<NumLen+1; i++) {
-          CharData[NumLen-i+1] = Tmp[i-1] - Tmp[i]*10;
+          CharData[NumLen-i+1] = TmpStr[i-1] - TmpStr[i]*10;
           CharData[NumLen-i+1] += 48;
         }
         CharData[NumLen+1] = '\0';
@@ -55,11 +55,11 @@ void Str_NumToChar( u8 Type, u8 NumLen, u8 *CharData, s32 NumData )
         CharData[0] = '+';
         //NumData = (~NumData) + 1;
         for(i=1; i<NumLen+1; i++) {
-          Tmp[i-1] = ((u32)NumData) / NumTmp;
-          NumTmp = NumTmp*10;
+          TmpStr[i-1] = ((u32)NumData) / TmpNum;
+          TmpNum = TmpNum*10;
         }
         for(i=1; i<NumLen+1; i++) {
-          CharData[NumLen-i+1] = Tmp[i-1] - Tmp[i]*10;
+          CharData[NumLen-i+1] = TmpStr[i-1] - TmpStr[i]*10;
           CharData[NumLen-i+1] += 48;
         }
         CharData[NumLen+1] = '\0';

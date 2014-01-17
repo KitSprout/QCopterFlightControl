@@ -52,13 +52,14 @@
 #define S32_MAX    ((s32)2147483647)
 #define S32_MIN    ((s32)-2147483648)
 
-#define Byte32(ByteHH, ByteH, ByteL, ByteLL) ((u32)(((ByteHH)<<24) | ((ByteH)<<16) | ((ByteL)<<8) | (ByteLL)))
-#define Byte16(ByteH, ByteL) ((u16)(((ByteH)<<8) | (ByteL)))
-#define Byte8H(ByteH)        ((u8)((ByteH)>>8))
-#define Byte8L(ByteL)        ((u8)(ByteL))
+#define Byte32(Byte4, Byte3, Byte2, Byte1)  ((u32)((((u8)(Byte4))<<24) | (((u8)(Byte3))<<16) | (((u8)(Byte2))<<8) | ((u8)(Byte1))))
+#define Byte16(ByteH, ByteL)  ((u16)((((u8)(ByteH))<<8) | ((u8)(ByteL))))
+#define Byte8H(ByteH)         ((u8)(((u8)(ByteH))>>8))
+#define Byte8L(ByteL)         ((u8)(ByteL))
 
 #define NULL 0
-
+/*=====================================================================================================*/
+/*=====================================================================================================*/
 typedef float  fp32;
 typedef double fp64;
 
@@ -69,22 +70,6 @@ typedef float  const fpc32;
 typedef double const fpc64;
 
 typedef enum {FALSE = 0, TRUE = !FALSE} bool;
-/*=====================================================================================================*/
-/*=====================================================================================================*/
-typedef struct {
-  u8 Bit0:1;
-  u8 Bit1:1;
-  u8 Bit2:1;
-  u8 Bit3:1;
-  u8 Bit4:1;
-  u8 Bit5:1;
-  u8 Bit6:1;
-  u8 Bit7:1;
-} BitField;
-typedef struct {
-  u16 L:8;
-  u16 H:8;
-} HL_Struct;
 /*=====================================================================================================*/
 /*=====================================================================================================*/
 #endif

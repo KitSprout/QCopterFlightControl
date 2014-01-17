@@ -1,7 +1,7 @@
 QCopterFC UART Example
 ========
 * Author  : [Hom](https://github.com/Hom19910422)
-* Update  : 2013/12/29
+* Update  : 2014/01/18
 
 Description
 ========
@@ -21,4 +21,4 @@ PB11 - USART3 Rx
 > ByteSize = 8  
 > StopBits = 1  
 > Parity = 'N'  
-> ardwareFlowControl = None  
+> HardwareFlowControl = None  
