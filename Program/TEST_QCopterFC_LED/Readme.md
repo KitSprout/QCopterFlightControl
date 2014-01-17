@@ -1,7 +1,7 @@
 QCopterFC LED Example
 ========
 * Author  : [Hom](https://github.com/Hom19910422)
-* Update  : 2014/01/17
+* Update  : 2014/01/18
 
 Description
 ========

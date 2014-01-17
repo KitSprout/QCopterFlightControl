@@ -15,6 +15,7 @@ void LED_Config( void )
 {
   GPIO_InitTypeDef GPIO_InitStruct;
 
+  /* LED Clk Init *************************************************************/
   RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOC, ENABLE);
 
   /* LED_R PC13 */  /* LED_G PC14 */  /* LED_B PC15 */
@@ -25,9 +26,9 @@ void LED_Config( void )
   GPIO_InitStruct.GPIO_PuPd = GPIO_PuPd_NOPULL;
   GPIO_Init(GPIOC, &GPIO_InitStruct);
 
-  LED_G = 1;
-  LED_R = 1;
-  LED_B = 1;
+  LED_G = LED_OFF;
+  LED_R = LED_OFF;
+  LED_B = LED_OFF;
 }
 /*=====================================================================================================*/
 /*=====================================================================================================*
@@ -42,6 +43,7 @@ void KEY_Config( void )
 {
   GPIO_InitTypeDef GPIO_InitStruct;
 
+  /* KEY Clk Init *************************************************************/
   RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB, ENABLE);
 
   /* KEY PB2 */

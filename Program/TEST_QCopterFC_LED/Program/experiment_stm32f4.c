@@ -4,6 +4,9 @@
 #include "QCopterFC_board.h"
 /*=====================================================================================================*/
 /*=====================================================================================================*/
+#define LED_DELAY 5
+/*=====================================================================================================*/
+/*=====================================================================================================*/
 int main( void )
 {
   SystemInit();
@@ -11,28 +14,24 @@ int main( void )
   KEY_Config();
 
   while(1) {
-    LED_R = 0;
-    LED_G = 1;
-    LED_B = 1;
-    Delay_100ms(1);
-    LED_R = 1;
-    LED_G = 0;
-    LED_B = 1;
-    Delay_100ms(1);
-    LED_R = 1;
-    LED_G = 1;
-    LED_B = 0;
-    Delay_100ms(1);
+    LED_R = !LED_R;
+    Delay_10ms(LED_DELAY);
+    LED_R = !LED_R;
+    Delay_10ms(LED_DELAY);
+    LED_G = !LED_G;
+    Delay_10ms(LED_DELAY);
+    LED_G = !LED_G;
+    Delay_10ms(LED_DELAY);
+    LED_B = !LED_B;
+    Delay_10ms(LED_DELAY);
+    LED_B = !LED_B;
+    Delay_10ms(LED_DELAY);
 
-    while(KEY) {
-      LED_R = 1;
-      LED_G = 1;
-      LED_B = 1;
-      Delay_100ms(2);
-      LED_R = 0;
-      LED_G = 0;
-      LED_B = 0;
-      Delay_100ms(2);
+    while(KEY == KEY_ON) {
+      LED_R = !LED_R;
+      LED_G = !LED_G;
+      LED_B = !LED_B;
+      Delay_10ms(LED_DELAY);
     }
   }
 }
