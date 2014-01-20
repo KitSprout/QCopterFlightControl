@@ -32,7 +32,7 @@ QCopterFC v2.2 預計修改 ( MPU-9250 可以採購時實行 )：
 >2. IMU 改為 SPI 操作的 MPU-9250，來增加讀取速度。  
 >3. 將 PWM 部分的電源線連接起來，以增加擴展裝置的方便性。  
 >4. 體積將小幅度縮小。  
->5. 更改 CamSPI 為 FFCSPI，並修改腳位，使其可以連接 [QMV v2.0](https://github.com/Hom19910422/QCopterMachineVision)、[QRC](https://github.com/Hom19910422/QCopterRemoteControl)、[TFT_2.2](https://github.com/OpenPCB/TFT_2.2-inch) 等裝置。  
+>5. 更改 CamSPI 為 FFCSPI，並修改腳位，使其可以連接 [QMV v2.0](https://github.com/QCopter/QCopterMachineVision)、[QRC](https://github.com/QCopter/QCopterRemoteControl)、[TFT_2.2](https://github.com/OpenPCB/TFT_2.2-inch) 等裝置。  
 
 <img src="https://lh3.googleusercontent.com/-rm8MVLJdUs4/Uk_NJPWXKSI/AAAAAAAAD48/YXHRJBrHHRs/s800/QCopterFC_System.png" width="689" />
 
@@ -47,10 +47,10 @@ Program
 
 Test
 ========
-* [QCopterFC FLASH](https://github.com/Hom19910422/QCopterFlightControl/tree/master/Program/TEST_QCopterFC_FLASH)
-* [QCopterFC LED](https://github.com/Hom19910422/QCopterFlightControl/tree/master/Program/TEST_QCopterFC_LED)
-* [QCopterFC SDIO](https://github.com/Hom19910422/QCopterFlightControl/tree/master/Program/TEST_QCopterFC_SDIO) ( Use [Fatfs](http://elm-chan.org/fsw/ff/00index_e.html) 0.10 )
-* [QCopterFC UART](https://github.com/Hom19910422/QCopterFlightControl/tree/master/Program/TEST_QCopterFC_UART)
+* [QCopterFC FLASH](https://github.com/QCopter/QCopterFlightControl/tree/master/Program/TEST_QCopterFC_FLASH)
+* [QCopterFC LED](https://github.com/QCopter/QCopterFlightControl/tree/master/Program/TEST_QCopterFC_LED)
+* [QCopterFC SDIO](https://github.com/QCopter/QCopterFlightControl/tree/master/Program/TEST_QCopterFC_SDIO) ( Use [Fatfs](http://elm-chan.org/fsw/ff/00index_e.html) 0.10 )
+* [QCopterFC UART](https://github.com/QCopter/QCopterFlightControl/tree/master/Program/TEST_QCopterFC_UART)
 * QCopterFC PWM ( TIM8 目前無法輸出 PWM )
 * QCopterFC ADC
 * QCopterFC CamSPI-Master
