@@ -2,12 +2,21 @@
 ========
 * Author　: [Hom](https://github.com/Hom19910422)
 * Version : v2.0
-* Update　: 2014/01/18
+* Update　: 2014/01/20
 
 Description
 ========
 QCopterFC 是一個基於 STM32F4 的飛行控制器，可以應用於固定翼、旋翼飛行器上面，用來實現濾波、平衡、控制等演算法的平台。板子上有 9 個自由度的慣性測量元件 MPU-9150，可以讀取加速度、角速度、磁力資訊，計算出當下的姿態角度、氣壓計 MS5611，
 讀取環境氣壓，計算高度、工作於 2.4GHz 頻段的無線傳輸模組 nRF24L01，傳輸飛行器上相關資訊，同時也可以藉由該模組從外部接收飛行控制指令，另外還有 Micro USB 與 Micro SD，並且引出了 ADC、PWM、SPI、UART，使的 QCopterFC 可以有更多的應用、擴充。
+
+License
+========
+* 硬體(Hardware)採用 [CC BY-SA 3.0](http://creativecommons.org/licenses/by-sa/3.0/tw/deed.zh_TW) 方式授權 
+  
+　　<a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/tw/deed.zh_TW"><img alt="創用 CC 授權條款" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/3.0/tw/88x31.png" /></a><br />
+　　<span xmlns:dct="http://purl.org/dc/terms/" property="dct:title"> QCopterFlightControl </span>由<a xmlns:cc="http://creativecommons.org/ns#" href="https://plus.google.com/u/0/112822505513154783828/posts" property="cc:attributionName" rel="cc:attributionURL"> Hom </a>製作，以<a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/tw/deed.zh_TW"> 創用CC 姓名標示-相同方式分享 3.0 台灣 授權條款 </a>釋出。  
+
+* 軟體(Software)採用 [MIT License](http://opensource.org/licenses/MIT) 方式授權  
 
 Hardware
 ========
@@ -101,10 +110,3 @@ Schematic
 <img src="https://lh3.googleusercontent.com/-UodBF51RJiM/Uk_NIq6hAhI/AAAAAAAAD48/VXmWAwvCFYE/s800/QCopterFC_Sch_SDCARD.png" width="402" />
 <br>＊USB<br>
 <img src="https://lh3.googleusercontent.com/-tQM04js18v8/Uk_NI4r4GyI/AAAAAAAAD48/Ze4JTXnHF6Y/s800/QCopterFC_Sch_USB.png" width="315" />
-<br />
-<br />
-<a href="http://www.oshwa.org/">
-<img src="https://lh5.googleusercontent.com/-nIBTA3RL8Hk/Ug8wr_ly3-I/AAAAAAAADFY/hAfv5LAzHag/s144/oshw-logo-800-px.png">
-<br />
-<br />
-<a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/tw/deed.zh_TW"><img alt="創用 CC 授權條款" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/3.0/tw/88x31.png" /></a><br /><span xmlns:dct="http://purl.org/dc/terms/" property="dct:title"> QCopterFlightControl </span>由<a xmlns:cc="http://creativecommons.org/ns#" href="https://plus.google.com/u/0/112822505513154783828/posts" property="cc:attributionName" rel="cc:attributionURL"> Hom </a>製作，以<a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/tw/deed.zh_TW">創用CC 姓名標示-相同方式分享 3.0 台灣 授權條款</a>釋出。<br />此作品衍生自<a xmlns:dct="http://purl.org/dc/terms/" href="https://github.com/QCopter" rel="dct:source"> QCopterTech </a>
