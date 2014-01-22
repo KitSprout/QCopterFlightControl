@@ -2,7 +2,7 @@
 ========
 * Author　: [Hom](https://github.com/Hom19910422)
 * Version : v2.0 
-* Update　: 2014/01/20
+* Update　: 2014/01/23
 
 Description
 ========
@@ -28,7 +28,7 @@ Hardware
 * PCB 尺寸 : 52 * 35mm ( Screws M3: 30 * 30mm )
 * 設計軟體 [Altium Designer 13](http://www.altium.com/en/products/altium-designer) ( PcbLib use AD [PcbLib v?](https://github.com/OpenPCB/AltiumDesigner_PcbLibrary) )
 
-QCopterFC v2.2 預計修改 ( MPU-9250 可以採購時實行 )：  
+QCopterFC v2.2 預計修改 ( 改版中 )：  
 >1. 減少 2 個 PWM 通道，並新增 1 個 CAN BUS ( 該 PIN 還是可以使用 PWM )  
 >2. IMU 改為 SPI 操作的 MPU-9250，來增加讀取速度。  
 >3. 將 PWM 部分的電源線連接起來，以增加擴展裝置的方便性。  
