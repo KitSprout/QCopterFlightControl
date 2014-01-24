@@ -1,22 +1,20 @@
-/* #include "stm32f4_usart.h" */
+/* #include "stm32f4_adc.h" */
 
-#ifndef __STM32F4_USART_H
-#define __STM32F4_USART_H
+#ifndef __STM32F4_ADC_H
+#define __STM32F4_ADC_H
 
 #include "stm32f4xx.h"
 /*=====================================================================================================*/
 /*=====================================================================================================*/
-#define Type_B 2    // 無號數二進制
-#define Type_O 8    // 無號數八進制
-#define Type_D 10   // 無號數十進制
-#define Type_H 16   // 無號數十六進制
-#define Type_I 0    // 有號數
-#define Type_F 1    // 浮點數
+#define ADC1_DR_ADDRESS ((u32)0x4001204C)
+#define ADC2_DR_ADDRESS ((u32)0x4001214C)
+#define ADC3_DR_ADDRESS ((u32)0x4001224C)
+
+#define ADC_Sample  128
 /*=====================================================================================================*/
 /*=====================================================================================================*/
-void USART_SendByte( USART_TypeDef* USARTx, uc8 *SendData );
-u16 USART_RecvByte( USART_TypeDef* USARTx );
-void NumToChar( u8 Type, u8 NumLen, u8 *CharData, s32 NumData );
+void ADC_Config( void );
+void ADC_Average( u16 *pADC_AveTr, u8 AveSample );
 /*=====================================================================================================*/
 /*=====================================================================================================*/
-#endif	 
+#endif
