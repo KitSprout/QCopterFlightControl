@@ -2,7 +2,7 @@
 ========
 * Author　: [Hom](https://github.com/Hom19910422)
 * Version : v2.0 
-* Update　: 2014/01/24
+* Update　: 2014/01/25
 
 Description
 ========
@@ -54,7 +54,7 @@ Test
 * [QCopterFC FLASH](https://github.com/QCopter/QCopterFlightControl/tree/New-Version/Software/TEST_QCopterFC_FLASH)
 * [QCopterFC IMU](https://github.com/QCopter/QCopterFlightControl/tree/New-Version/Software/TEST_QCopterFC_IMU) ( Use MPU-9150 + MS5611 )
 * [QCopterFC LED](https://github.com/QCopter/QCopterFlightControl/tree/New-Version/Software/TEST_QCopterFC_LED)
-* * [QCopterFC PWM](https://github.com/QCopter/QCopterFlightControl/tree/New-Version/Software/TEST_QCopterFC_PWM) ( TIM8 目前無法輸出 PWM )
+* [QCopterFC PWM](https://github.com/QCopter/QCopterFlightControl/tree/New-Version/Software/TEST_QCopterFC_PWM) ( TIM8 目前無法輸出 PWM )
 * [QCopterFC SDIO](https://github.com/QCopter/QCopterFlightControl/tree/New-Version/Software/TEST_QCopterFC_SDIO) ( Use [Fatfs](http://elm-chan.org/fsw/ff/00index_e.html) 0.10 )
 * [QCopterFC UART](https://github.com/QCopter/QCopterFlightControl/tree/New-Version/Software/TEST_QCopterFC_UART)
 * QCopterFC NRF ( Use nRF24L01P )
