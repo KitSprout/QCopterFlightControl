@@ -16,7 +16,7 @@
           <Vendor>STMicroelectronics</Vendor>
           <Cpu>IRAM(0x20000000-0x2001FFFF) IRAM2(0x10000000-0x1000FFFF) IROM(0x8000000-0x80FFFFF) CLOCK(25000000) CPUTYPE("Cortex-M4") FPU2</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
-          <StartupFile>"Startup\ST\STM32F4xx\startup_stm32f40xx.s" ("STM32F40xx Startup Code")</StartupFile>
+          <StartupFile>"Startup\ST\STM32F4xx\startup_stm32f4xx.s" ("STM32F4xx Startup Code")</StartupFile>
           <FlashDriverDll>UL2CM3(-O207 -S0 -C0 -FO7 -FD20000000 -FC800 -FN1 -FF0STM32F4xx_1024 -FS08000000 -FL0100000)</FlashDriverDll>
           <DeviceId>6100</DeviceId>
           <RegisterFile>stm32f4xx.h</RegisterFile>
@@ -26,10 +26,10 @@
           <Linker></Linker>
           <OHString></OHString>
           <InfinionOptionDll></InfinionOptionDll>
-          <SLE66CMisc>-DSTM32F40XX</SLE66CMisc>
+          <SLE66CMisc></SLE66CMisc>
           <SLE66AMisc></SLE66AMisc>
           <SLE66LinkerMisc></SLE66LinkerMisc>
-          <SFDFile>SFD\ST\STM32F4xx\STM32F40x.sfr</SFDFile>
+          <SFDFile>SFD\ST\STM32F4xx\STM32F4xx.sfr</SFDFile>
           <bCustSvd>0</bCustSvd>
           <UseEnv>0</UseEnv>
           <BinPath></BinPath>
@@ -357,7 +357,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F40XX, USE_STDPERIPH_DRIVER, __FPU_PRESENT=1, __FPU_USED =1, ARM_MATH_CM4, __CC_ARM</Define>
               <Undefine></Undefine>
-              <IncludePath>..\;..\Libraries\CMSIS;..\Libraries\CMSIS\startup;..\Libraries\STM32F4xx_StdPeriph_Driver\inc;..\Libraries\STM32F4xx_StdPeriph_Driver\src;..\Program_Dirver;..\Program_Algorithm;..\Program_Slave;..\Program</IncludePath>
+              <IncludePath>..\;..\Libraries\CMSIS;..\Libraries\STM32F4xx_StdPeriph_Driver\inc;..\Libraries\STM32F4xx_StdPeriph_Driver\src;..\Program;..\Program\Algorithms;..\Program\Dirvers;..\Program\Modules</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -419,14 +419,14 @@
               <FilePath>..\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_rcc.c</FilePath>
             </File>
             <File>
-              <FileName>stm32f4xx_gpio.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_gpio.c</FilePath>
-            </File>
-            <File>
               <FileName>stm32f4xx_tim.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_gpio.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_gpio.c</FilePath>
             </File>
             <File>
               <FileName>stm32f4xx_conf.h</FileName>
@@ -436,17 +436,12 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>Driver</GroupName>
+          <GroupName>Drivers</GroupName>
           <Files>
-            <File>
-              <FileName>stm32f4_system.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Program\stm32f4_system.c</FilePath>
-            </File>
             <File>
               <FileName>stm32f4_delay.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Program\stm32f4_delay.c</FilePath>
+              <FilePath>..\Program\Dirvers\stm32f4_delay.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -458,16 +453,28 @@
               <FileType>1</FileType>
               <FilePath>..\Program\experiment_stm32f4.c</FilePath>
             </File>
+            <File>
+              <FileName>QCopterFC_board.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Program\QCopterFC_board.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
-          <GroupName>Module</GroupName>
+          <GroupName>Modules</GroupName>
         </Group>
         <Group>
-          <GroupName>Algorithm</GroupName>
+          <GroupName>Algorithms</GroupName>
         </Group>
         <Group>
-          <GroupName>Dou</GroupName>
+          <GroupName>Document</GroupName>
+          <Files>
+            <File>
+              <FileName>Readme.md</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Readme.md</FilePath>
+            </File>
+          </Files>
         </Group>
       </Groups>
     </Target>
