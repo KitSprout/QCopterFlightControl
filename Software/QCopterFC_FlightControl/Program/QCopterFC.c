@@ -13,9 +13,17 @@
 FSM_MODE FSM_STATE = FSM_TXRX;
 SEN_MODE SEN_STATE = SEN_CORR;
 
+// **************************** 測試變數 START
+
 #define SampleRateFreg  ((u16)500)         // 500Hz
 #define SampleRate      ((float)0.002f)    // 2.0ms
 #define SampleRateHelf  ((float)0.001f)    // 1.0ms
+  
+extern vu8 Time_mSec;
+extern vu8 Time_Sec;
+extern vu8 Time_Min;
+
+// **************************** 測試變數 END
 /*=====================================================================================================*/
 /*=====================================================================================================*/
 void QCopterFC_Init( void )
@@ -72,14 +80,30 @@ void QCopterFC_Corr( u16 SystickFreq )
 /*=====================================================================================================*/
 void QCopterFC_Lock( void )
 {
+  u8 tempCnt = 0;
+  u8 UART_BUF[8] = {0};
+
   LED_R = LED_OFF;
   LED_G = LED_OFF;
   LED_B = LED_OFF;
   while(KEY != KEY_ON) {
-    LED_B = !LED_B;
-    // UART
+    if((tempCnt!=Time_Sec)) {
+      tempCnt = Time_Sec;
+      LED_B = !LED_B;
+    }
+
+    UART_BUF[0] = Byte8L(Acc.TrueX*1000);
+    UART_BUF[1] = Byte8H(Acc.TrueX*1000);
+    UART_BUF[2] = Byte8L(Acc.TrueY*1000);
+    UART_BUF[3] = Byte8H(Acc.TrueY*1000);
+    UART_BUF[4] = Byte8L(Acc.TrueZ*1000);
+    UART_BUF[5] = Byte8H(Acc.TrueZ*1000);
+    UART_BUF[6] = 0;
+    UART_BUF[7] = 0;
+    RS232_VisualScope(UART_BUF);
+
     // NRF TX ONLY
-    Delay_100ms(4);
+
   }
   LED_R = LED_OFF;
   LED_G = LED_OFF;
