@@ -2,8 +2,8 @@
   ******************************************************************************
   * @file    stm32f4xx.h
   * @author  MCD Application Team
-  * @version V1.2.1
-  * @date    19-September-2013
+  * @version V1.3.0
+  * @date    08-November-2013
   * @brief   CMSIS Cortex-M4 Device Peripheral Access Layer Header File. 
   *          This file contains all the peripheral register's definitions, bits 
   *          definitions and memory mapping for STM32F4xx devices.            
@@ -78,7 +78,8 @@
                                        STM32F439ZG, STM32F439ZI, STM32F439BG, STM32F439BI, STM32F439NG, STM32F439NI,
                                        STM32F439IG and STM32F439II Devices */
                                     
-  /* #define STM32F401xx */     /*!< STM32F401CB, STM32F401CC,  STM32F401RB,  STM32F401RC, STM32F401VB and STM32F401VC Devices */  
+  /* #define STM32F401xx */     /*!< STM32F401CB, STM32F401CC,  STM32F401RB, STM32F401RC, STM32F401VB, STM32F401VC  
+                                     STM32F401CD, STM32F401RD, STM32F401VD, STM32F401CExx, STM32F401RE, STM32F401VE Devices */  
   
 #endif
 
@@ -135,10 +136,10 @@
 #endif /* HSI_VALUE */   
 
 /**
- * @brief STM32F4XX Standard Peripherals Library version number V1.2.0
+ * @brief STM32F4XX Standard Peripherals Library version number V1.3.0
    */
 #define __STM32F4XX_STDPERIPH_VERSION_MAIN   (0x01) /*!< [31:24] main version */                                  
-#define __STM32F4XX_STDPERIPH_VERSION_SUB1   (0x02) /*!< [23:16] sub1 version */
+#define __STM32F4XX_STDPERIPH_VERSION_SUB1   (0x03) /*!< [23:16] sub1 version */
 #define __STM32F4XX_STDPERIPH_VERSION_SUB2   (0x00) /*!< [15:8]  sub2 version */
 #define __STM32F4XX_STDPERIPH_VERSION_RC     (0x00) /*!< [7:0]  release candidate */ 
 #define __STM32F4XX_STDPERIPH_VERSION        ((__STM32F4XX_STDPERIPH_VERSION_MAIN << 24)\
@@ -467,37 +468,59 @@ typedef enum IRQn
   * @{
   */  
 /*!< STM32F10x Standard Peripheral Library old types (maintained for legacy purpose) */
-typedef int32_t  s32;
+typedef int64_t s64;
+typedef int32_t s32;
 typedef int16_t s16;
 typedef int8_t  s8;
 
+typedef const int64_t sc64;  /*!< Read Only */
 typedef const int32_t sc32;  /*!< Read Only */
 typedef const int16_t sc16;  /*!< Read Only */
-typedef const int8_t sc8;   /*!< Read Only */
+typedef const int8_t  sc8;   /*!< Read Only */
 
-typedef __IO int32_t  vs32;
-typedef __IO int16_t  vs16;
-typedef __IO int8_t   vs8;
+typedef __IO int64_t vs64;
+typedef __IO int32_t vs32;
+typedef __IO int16_t vs16;
+typedef __IO int8_t  vs8;
 
+typedef __I int64_t vsc64;  /*!< Read Only */
 typedef __I int32_t vsc32;  /*!< Read Only */
 typedef __I int16_t vsc16;  /*!< Read Only */
-typedef __I int8_t vsc8;   /*!< Read Only */
+typedef __I int8_t  vsc8;   /*!< Read Only */
 
-typedef uint32_t  u32;
+typedef uint64_t u64;
+typedef uint32_t u32;
 typedef uint16_t u16;
 typedef uint8_t  u8;
 
+typedef const uint64_t uc64;  /*!< Read Only */
 typedef const uint32_t uc32;  /*!< Read Only */
 typedef const uint16_t uc16;  /*!< Read Only */
-typedef const uint8_t uc8;   /*!< Read Only */
+typedef const uint8_t  uc8;   /*!< Read Only */
 
-typedef __IO uint32_t  vu32;
+typedef __IO uint64_t vu64;
+typedef __IO uint32_t vu32;
 typedef __IO uint16_t vu16;
 typedef __IO uint8_t  vu8;
 
+typedef __I uint64_t vuc64;  /*!< Read Only */
 typedef __I uint32_t vuc32;  /*!< Read Only */
 typedef __I uint16_t vuc16;  /*!< Read Only */
-typedef __I uint8_t vuc8;   /*!< Read Only */
+typedef __I uint8_t  vuc8;   /*!< Read Only */
+
+typedef float  fp32;
+typedef double fp64;
+
+typedef const float  fpc32;
+typedef const double fpc64;
+
+typedef __IO float  vfp32;
+typedef __IO double vfp64;
+
+typedef __I float  vfpc32;
+typedef __I double vfpc64;
+
+typedef enum {FALSE = 0, TRUE = !FALSE} bool;
 
 typedef enum {RESET = 0, SET = !RESET} FlagStatus, ITStatus;
 

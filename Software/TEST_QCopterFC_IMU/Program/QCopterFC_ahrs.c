@@ -26,7 +26,7 @@ void AHRS_Init( Quaternion *pNumQ, EulerAngle *pAngE )
 /*=====================================================================================================*/
 void AHRS_Update( void )
 {
-  float tempX = 0, tempY = 0;
+//  float tempX = 0, tempY = 0;
   float Normalize;
   float gx, gy, gz;
 // float hx, hy, hz;
@@ -96,9 +96,9 @@ void AHRS_Update( void )
   Quaternion_Normalize(&NumQ);
   Quaternion_ToAngE(&NumQ, &AngE);
 
-  tempX    = ( Mag.X*arm_cos_f32(Mag.EllipseSita)+Mag.Y*arm_sin_f32(Mag.EllipseSita))/Mag.EllipseB;
-  tempY    = (-Mag.X*arm_sin_f32(Mag.EllipseSita)+Mag.Y*arm_cos_f32(Mag.EllipseSita))/Mag.EllipseA;
-  AngE.Yaw = atan2f(tempX, tempY);
+//  tempX    = ( Mag.X*arm_cos_f32(Mag.EllipseSita)+Mag.Y*arm_sin_f32(Mag.EllipseSita))/Mag.EllipseB;
+//  tempY    = (-Mag.X*arm_sin_f32(Mag.EllipseSita)+Mag.Y*arm_cos_f32(Mag.EllipseSita))/Mag.EllipseA;
+//  AngE.Yaw = atan2f(tempX, tempY);
 
   AngE.Pitch = toDeg(AngE.Pitch);
   AngE.Roll  = toDeg(AngE.Roll);
