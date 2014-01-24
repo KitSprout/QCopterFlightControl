@@ -22,11 +22,11 @@ PA15 - CamSPI_CS
 PB3  - CamSPI_SCK  
 PB4  - CamSPI_MISO  
 PB5  - CamSPI_MOSI  
-> SPIx　　 = SPI3  
-> Dir　　　= 2Lines_FullDuplex  
-> Mode　　 = Master  
-> CPOL　　 = Low  
-> CPHA　　 = 1Edge  
+> SPIx = SPI3  
+> Dir = 2Lines_FullDuplex  
+> Mode = Master  
+> CPOL = Low  
+> CPHA = 1Edge  
 > FirstBit = MSB  
 > DataSize = 8 bits  
 > BaudRate = Prescaler_256  
