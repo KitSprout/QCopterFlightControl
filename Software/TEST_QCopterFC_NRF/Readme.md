@@ -1,7 +1,7 @@
 QCopterFC NRF Example
 ========
-* Author  : [Hom](https://github.com/Hom19910422)
-* Update  : 2014/01/26
+* Author : [Hom](https://github.com/Hom19910422)
+* Update : 2014/01/26
 
 Description
 ========
@@ -37,11 +37,11 @@ PB14 - MISO
 PB15 - MOSI  
 PC4  - CE  
 PC5  - IRQ  
-> SPIx　　 = SPI2  
-> Dir　　　= 2Lines_FullDuplex  
-> Mode　　 = Master  
-> CPOL　　 = Low  
-> CPHA　　 = 1Edge  
+> SPIx     = SPI2  
+> Dir      = 2Lines_FullDuplex  
+> Mode     = Master  
+> CPOL     = Low  
+> CPHA     = 1Edge  
 > FirstBit = MSB  
 > DataSize = 8 bits  
 > BaudRate = Prescaler_4  
