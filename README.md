@@ -2,7 +2,7 @@
 ========
 * Author　: [Hom](https://github.com/Hom-Wang)
 * Version : v2.0 
-* Update　: 2014/01/25
+* Update　: 2014/01/26
 
 Description
 ========
@@ -35,7 +35,7 @@ QCopterFC v2.2 預計修改 ( 改版中 )：
 >4. 體積將小幅度縮小。  
 >5. 更改 CamSPI 為 FFCSPI，並修改腳位，使其可以連接 [QMV v2.0](https://github.com/QCopter/QCopterMachineVision)、[QRC](https://github.com/QCopter/QCopterRemoteControl)、[TFT_2.2](https://github.com/OpenPCB/TFT_2.2-inch) 等裝置。  
 
-<img src="https://lh3.googleusercontent.com/-rm8MVLJdUs4/Uk_NJPWXKSI/AAAAAAAAD48/YXHRJBrHHRs/s800/QCopterFC_System.png" width="689" />
+<img src="https://lh3.googleusercontent.com/-rm8MVLJdUs4/Uk_NJPWXKSI/AAAAAAAAD48/YXHRJBrHHRs/s1200/QCopterFC_System.png" />
 
 Related Documents
 ========
@@ -54,60 +54,60 @@ Test
 * [QCopterFC FLASH](https://github.com/QCopter/QCopterFlightControl/tree/New-Version/Software/TEST_QCopterFC_FLASH)
 * [QCopterFC IMU](https://github.com/QCopter/QCopterFlightControl/tree/New-Version/Software/TEST_QCopterFC_IMU) ( Use MPU-9150 + MS5611 )
 * [QCopterFC LED](https://github.com/QCopter/QCopterFlightControl/tree/New-Version/Software/TEST_QCopterFC_LED)
+* [QCopterFC NRF](https://github.com/QCopter/QCopterFlightControl/tree/New-Version/Software/TEST_QCopterFC_NRF) ( Use nRF24L01P )
 * [QCopterFC PWM](https://github.com/QCopter/QCopterFlightControl/tree/New-Version/Software/TEST_QCopterFC_PWM) ( TIM8 目前無法輸出 PWM )
 * [QCopterFC SDIO](https://github.com/QCopter/QCopterFlightControl/tree/New-Version/Software/TEST_QCopterFC_SDIO) ( Use [Fatfs](http://elm-chan.org/fsw/ff/00index_e.html) 0.10 )
 * [QCopterFC UART](https://github.com/QCopter/QCopterFlightControl/tree/New-Version/Software/TEST_QCopterFC_UART)
-* QCopterFC NRF ( Use nRF24L01P )
 
 View
 ========
-<img src="https://lh5.googleusercontent.com/-ky_2nBrI-qg/UlgWweh37MI/AAAAAAAAEUE/ECMFVCJQzjY/s800/DSC_1526.jpg" width="800" />
-<img src="https://lh5.googleusercontent.com/-luXgDBU_c3I/UlgWwbvD0XI/AAAAAAAAEUM/ZG6JbNtpGjU/s800/DSC_1528.jpg" width="800" />
-<img src="https://lh6.googleusercontent.com/-HOtHMLHlSEc/UlgWwTOwRCI/AAAAAAAAEUI/Z66a-la6Xlg/s800/DSC_1530.jpg" width="800" />
-<img src="https://lh4.googleusercontent.com/-HIt9nbvZP4w/UlgWxkethiI/AAAAAAAAEUQ/X9v4cRj-Pu8/s800/DSC_1532.jpg" width="800" />
-<img src="https://lh3.googleusercontent.com/-kgoXTxh7n2g/UlT08JoieZI/AAAAAAAAESo/rKA-xOCO1C0/s800/DSC_1467.jpg" width="800" />
-<img src="https://lh3.googleusercontent.com/-EY2oXRwO3RQ/UlT08GJyyrI/AAAAAAAAERg/uN4Pzw9CRdk/s800/DSC_1471.jpg" width="800" />
+<img src="https://lh5.googleusercontent.com/-ky_2nBrI-qg/UlgWweh37MI/AAAAAAAAEUE/ECMFVCJQzjY/s1200/DSC_1526.jpg" />
+<img src="https://lh5.googleusercontent.com/-luXgDBU_c3I/UlgWwbvD0XI/AAAAAAAAEUM/ZG6JbNtpGjU/s1200/DSC_1528.jpg" />
+<img src="https://lh6.googleusercontent.com/-HOtHMLHlSEc/UlgWwTOwRCI/AAAAAAAAEUI/Z66a-la6Xlg/s1200/DSC_1530.jpg" />
+<img src="https://lh4.googleusercontent.com/-HIt9nbvZP4w/UlgWxkethiI/AAAAAAAAEUQ/X9v4cRj-Pu8/s1200/DSC_1532.jpg" />
+<img src="https://lh3.googleusercontent.com/-kgoXTxh7n2g/UlT08JoieZI/AAAAAAAAESo/rKA-xOCO1C0/s1200/DSC_1467.jpg" />
+<img src="https://lh3.googleusercontent.com/-EY2oXRwO3RQ/UlT08GJyyrI/AAAAAAAAERg/uN4Pzw9CRdk/s1200/DSC_1471.jpg" />
 <br />
 更多圖片 [Google+ albums](https://plus.google.com/u/0/photos/+文宏王Hom/albums/5899377395636747681)
 
 Config
 ========
 ．Vin 建議輸入 5v ~ 6v
-<img src="https://lh5.googleusercontent.com/-o_g3fwO7YZk/Ul_-vnKPpFI/AAAAAAAAEaM/UOzqKk6ZdxY/s1600/FC_CONF.png" width="800" />
-<img src="https://lh5.googleusercontent.com/-eOYB9qvfXkA/Uk_NEUlk4UI/AAAAAAAAD48/66StQySN_O0/s1600/QCopterFC_Config_PIN.png" width="800" />
-<img src="https://lh3.googleusercontent.com/-htom-WouTZM/Uk_NERTK6dI/AAAAAAAAD48/9TcFCyOX_2s/s1600/QCopterFC_Config_AF.png" width="800" />
-<img src="https://lh6.googleusercontent.com/-wvzaurZbA1s/Uk_NEceZAVI/AAAAAAAAD48/Id1RUrmwaUI/s1600/QCopterFC_Config_DMA.png" width="800" />
+<img src="https://lh5.googleusercontent.com/-o_g3fwO7YZk/Ul_-vnKPpFI/AAAAAAAAEaM/UOzqKk6ZdxY/s1600/FC_CONF.png" />
+<img src="https://lh5.googleusercontent.com/-eOYB9qvfXkA/Uk_NEUlk4UI/AAAAAAAAD48/66StQySN_O0/s1600/QCopterFC_Config_PIN.png" />
+<img src="https://lh3.googleusercontent.com/-htom-WouTZM/Uk_NERTK6dI/AAAAAAAAD48/9TcFCyOX_2s/s1600/QCopterFC_Config_AF.png" />
+<img src="https://lh6.googleusercontent.com/-wvzaurZbA1s/Uk_NEceZAVI/AAAAAAAAD48/Id1RUrmwaUI/s1600/QCopterFC_Config_DMA.png" />
 
 *** 傳輸資料格式  
 QRC_TO_QFC  
-<img src="https://lh4.googleusercontent.com/-U3WhNPhTxHo/UsgUPnOV6bI/AAAAAAAAGJE/AayjWFXOgPI/s1600/QRC_TO_QFC.png" width="800" />
+<img src="https://lh4.googleusercontent.com/-U3WhNPhTxHo/UsgUPnOV6bI/AAAAAAAAGJE/AayjWFXOgPI/s1600/QRC_TO_QFC.png" />
 QFC_TO_QRC  
-<img src="https://lh3.googleusercontent.com/-eIh5NvuE0aw/UrsPnzmAcZI/AAAAAAAAGDc/mu5YwwC-S1s/s1600/QFC_TO_QRC.png" width="800" />
+<img src="https://lh3.googleusercontent.com/-eIh5NvuE0aw/UrsPnzmAcZI/AAAAAAAAGDc/mu5YwwC-S1s/s1600/QFC_TO_QRC.png" />
 
 Schematic
 ========
-<img src="https://lh3.googleusercontent.com/-HaCAqU9mz2Q/Uk_NG7cQjBI/AAAAAAAAD48/lMp5zNsjtgA/s1600/QCopterFC_Sch_MAIN.png" width="1200" />
+<img src="https://lh3.googleusercontent.com/-HaCAqU9mz2Q/Uk_NG7cQjBI/AAAAAAAAD48/lMp5zNsjtgA/s1600/QCopterFC_Sch_MAIN.png" />
 <br>＊STM32F405R<br>
-<img src="https://lh4.googleusercontent.com/-iKskK9Hvdrc/Uk_NHHoIHHI/AAAAAAAAD48/cQ8JTI_H-sA/s1600/QCopterFC_Sch_MCU.png" width="635" />
+<img src="https://lh4.googleusercontent.com/-iKskK9Hvdrc/Uk_NHHoIHHI/AAAAAAAAD48/cQ8JTI_H-sA/s1600/QCopterFC_Sch_MCU.png" />
 <br>＊SW<br>
-<img src="https://lh3.googleusercontent.com/-LuZMXexBvv8/Uk_NINTnZ7I/AAAAAAAAD48/LlrjNmVkYVM/s800/QCopterFC_Sch_SW.png" width="175" />
+<img src="https://lh3.googleusercontent.com/-LuZMXexBvv8/Uk_NINTnZ7I/AAAAAAAAD48/LlrjNmVkYVM/s800/QCopterFC_Sch_SW.png" />
 <br>＊Power<br>
-<img src="https://lh4.googleusercontent.com/-_lBw8ulvE7A/Uk_NHVvj9_I/AAAAAAAAD48/Rt2CdnJvy7E/s800/QCopterFC_Sch_POWER.png" width="355" />
+<img src="https://lh4.googleusercontent.com/-_lBw8ulvE7A/Uk_NHVvj9_I/AAAAAAAAD48/Rt2CdnJvy7E/s800/QCopterFC_Sch_POWER.png" />
 <br>＊LED<br>
-<img src="https://lh4.googleusercontent.com/-1kbU71qJiWg/Uk_NGlOS8OI/AAAAAAAAD48/sgGvr6iinOQ/s800/QCopterFC_Sch_LED.png" width="290" />
+<img src="https://lh4.googleusercontent.com/-1kbU71qJiWg/Uk_NGlOS8OI/AAAAAAAAD48/sgGvr6iinOQ/s800/QCopterFC_Sch_LED.png" />
 <br>＊KEY<br>
-<img src="https://lh6.googleusercontent.com/-SaXrFsHTKJU/Uk_NGLQuMII/AAAAAAAAD48/RxLkFVjraIo/s800/QCopterFC_Sch_KEY.png" width="138" />
+<img src="https://lh6.googleusercontent.com/-SaXrFsHTKJU/Uk_NGLQuMII/AAAAAAAAD48/RxLkFVjraIo/s800/QCopterFC_Sch_KEY.png" />
 <br>＊PWM<br>
-<img src="https://lh4.googleusercontent.com/-OGFtXtI_moQ/Uk_NINec1BI/AAAAAAAAD48/TTDNDTRmroE/s800/QCopterFC_Sch_PWM.png" width="299" />
+<img src="https://lh4.googleusercontent.com/-OGFtXtI_moQ/Uk_NINec1BI/AAAAAAAAD48/TTDNDTRmroE/s800/QCopterFC_Sch_PWM.png"  />
 <br>＊EXTERN<br>
-<img src="https://lh3.googleusercontent.com/-bPhWfg_ZFwA/Uk_NGOQnjBI/AAAAAAAAD48/20R0B_-lDKU/s800/QCopterFC_Sch_EXTERN.png" width="276" />
+<img src="https://lh3.googleusercontent.com/-bPhWfg_ZFwA/Uk_NGOQnjBI/AAAAAAAAD48/20R0B_-lDKU/s800/QCopterFC_Sch_EXTERN.png" />
 <br>＊CamSPI<br>
-<img src="https://lh6.googleusercontent.com/-6A3St5WT2GY/Uk_NFFWOkhI/AAAAAAAAD48/XzsYK34p6tA/s800/QCopterFC_Sch_CAMERA.png" width="200" />
+<img src="https://lh6.googleusercontent.com/-6A3St5WT2GY/Uk_NFFWOkhI/AAAAAAAAD48/XzsYK34p6tA/s800/QCopterFC_Sch_CAMERA.png" />
 <br>＊nRF24L01P<br>
-<img src="https://lh3.googleusercontent.com/-SXGxVOg5zlI/Uk_NHU-uC4I/AAAAAAAAD48/NbXYao3fqyY/s800/QCopterFC_Sch_NRF.png" width="200" />
+<img src="https://lh3.googleusercontent.com/-SXGxVOg5zlI/Uk_NHU-uC4I/AAAAAAAAD48/NbXYao3fqyY/s800/QCopterFC_Sch_NRF.png" />
 <br>＊IMU<br>
-<img src="https://lh3.googleusercontent.com/-EadurHkURZg/Uk_NGJWfqXI/AAAAAAAAD48/c9lLoBgVZK4/s800/QCopterFC_Sch_IMU.png" width="192" />
+<img src="https://lh3.googleusercontent.com/-EadurHkURZg/Uk_NGJWfqXI/AAAAAAAAD48/c9lLoBgVZK4/s800/QCopterFC_Sch_IMU.png" />
 <br>＊SD<br>
-<img src="https://lh3.googleusercontent.com/-UodBF51RJiM/Uk_NIq6hAhI/AAAAAAAAD48/VXmWAwvCFYE/s800/QCopterFC_Sch_SDCARD.png" width="402" />
+<img src="https://lh3.googleusercontent.com/-UodBF51RJiM/Uk_NIq6hAhI/AAAAAAAAD48/VXmWAwvCFYE/s800/QCopterFC_Sch_SDCARD.png" />
 <br>＊USB<br>
-<img src="https://lh3.googleusercontent.com/-tQM04js18v8/Uk_NI4r4GyI/AAAAAAAAD48/Ze4JTXnHF6Y/s800/QCopterFC_Sch_USB.png" width="315" />
+<img src="https://lh3.googleusercontent.com/-tQM04js18v8/Uk_NI4r4GyI/AAAAAAAAD48/Ze4JTXnHF6Y/s800/QCopterFC_Sch_USB.png" />
