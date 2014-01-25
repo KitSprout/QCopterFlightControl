@@ -1,7 +1,7 @@
-/* #include "stm32f4_usart.h" */
+/* #include "algorithm_string.h" */
 
-#ifndef __STM32F4_USART_H
-#define __STM32F4_USART_H
+#ifndef __ALGORITHM_STRING_H
+#define __ALGORITHM_STRING_H
 
 #include "stm32f4xx.h"
 /*=====================================================================================================*/
@@ -14,9 +14,8 @@
 #define Type_F 1    // 浮點數
 /*=====================================================================================================*/
 /*=====================================================================================================*/
-void USART_SendByte( USART_TypeDef* USARTx, uc8 *SendData );
-u16 USART_RecvByte( USART_TypeDef* USARTx );
-void NumToChar( u8 Type, u8 NumLen, u8 *CharData, s32 NumData );
+void Str_NumToChar( u8 Type, u8 NumLen, u8 *CharData, s32 NumData );
+u16  Str_LenOfStr( u8 *inputStr );
 /*=====================================================================================================*/
 /*=====================================================================================================*/
-#endif	 
+#endif

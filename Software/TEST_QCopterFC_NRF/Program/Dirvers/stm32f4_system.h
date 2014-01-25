@@ -42,48 +42,22 @@
 #define PGI(Pin)  Bit_Addr(GPIOG_IDR_Addr, Pin)
 /*=====================================================================================================*/
 /*=====================================================================================================*/
-#define U8_MAX    ((u8)255)
-#define S8_MAX    ((s8)127)
-#define S8_MIN    ((s8)-128)
-#define U16_MAX   ((u16)65535u)
-#define S16_MAX   ((s16)32767)
-#define S16_MIN   ((s16)-32768)
-#define U32_MAX   ((u32)4294967295uL)
-#define S32_MAX   ((s32)2147483647)
-#define S32_MIN   ((s32)-2147483648)
+#define U8_MAX     ((u8)255)
+#define S8_MAX     ((s8)127)
+#define S8_MIN     ((s8)-128)
+#define U16_MAX    ((u16)65535u)
+#define S16_MAX    ((s16)32767)
+#define S16_MIN    ((s16)-32768)
+#define U32_MAX    ((u32)4294967295uL)
+#define S32_MAX    ((s32)2147483647)
+#define S32_MIN    ((s32)-2147483648)
 
-#define Byte16(ByteH, ByteL) ((u16)(((ByteH)<<8) | (ByteL)))
-#define Byte8H(ByteH)        ((u8)((ByteH)>>8))
-#define Byte8L(ByteL)        ((u8)(ByteL))
+#define Byte32(Byte4, Byte3, Byte2, Byte1)  ((u32)((((u8)(Byte4))<<24) | (((u8)(Byte3))<<16) | (((u8)(Byte2))<<8) | ((u8)(Byte1))))
+#define Byte16(ByteH, ByteL)  ((u16)((((u16)(ByteH))<<8) | ((u16)(ByteL))))
+#define Byte8H(ByteH)         ((u8)(((u16)(ByteH))>>8))
+#define Byte8L(ByteL)         ((u8)(ByteL))
 
 #define NULL 0
-
-typedef float  fp32;
-typedef double fp64;
-
-typedef volatile float  vfp32;
-typedef volatile double vfp64;
-
-typedef float  const fpc32;
-typedef double const fpc64;
-
-typedef enum {FALSE = 0, TRUE = !FALSE} bool;
-/*=====================================================================================================*/
-/*=====================================================================================================*/
-typedef struct {
-  u8 Bit0:1;
-  u8 Bit1:1;
-  u8 Bit2:1;
-  u8 Bit3:1;
-  u8 Bit4:1;
-  u8 Bit5:1;
-  u8 Bit6:1;
-  u8 Bit7:1;
-} BitField;
-typedef struct {
-  u16 L:8;
-  u16 H:8;
-}	HL_Struct;
 /*=====================================================================================================*/
 /*=====================================================================================================*/
 #endif
