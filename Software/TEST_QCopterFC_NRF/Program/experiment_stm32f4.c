@@ -1,115 +1,153 @@
 /*=====================================================================================================*/
 /*=====================================================================================================*/
 #include "stm32f4_system.h"
-#include "stm32f4_usart.h"
-#include "module_rs232.h"
+#include "QCopterFC_board.h"
 #include "module_nrf24l01.h"
+#include "module_rs232.h"
+#include "algorithm_string.h"
 /*=====================================================================================================*/
 /*=====================================================================================================*/
-#define KEY   PBI(2)
-#define LED_R PCO(15)
-#define LED_G PCO(14)
-#define LED_B PCO(13)
+#define NRF_MODE  NRF_MODE_FTLR
+//#define NRF_MODE  NRF_MODE_FRLT
 /*=====================================================================================================*/
 /*=====================================================================================================*/
-void GPIO_Config( void );
+#if (NRF_MODE == NRF_MODE_FTLR)
+void NRF_FTLR( void ) // First Tx Last Rx
+{
+  u8 i = 0;
+  u8 Sta = ERROR;
 
-u8 TxBuf[SendTimes][TxBufSize] = {0};
-u8 RxBuf[ReadTimes][RxBufSize] = {0};
+  static u8 FSM_STA = 0;
+
+  switch(FSM_STA) {
+
+    /************************** FSM Tx **************************************/
+    case 0:
+      // FSM_Tx
+      for(i=0; i<32; i++) {
+        TxBuf[i] = RxBuf[i] + i;
+        if(TxBuf[i]>220)
+          TxBuf[i] = 0;
+      }
+      do {
+        Sta = NRF_TxPacket(TxBuf);
+      } while(Sta == NRF_STA_MAX_RT);
+      // FSM_Tx End
+      FSM_STA = 1;
+      break;
+
+    /************************** FSM Rx **************************************/
+    case 1:
+      // FSM_Rx
+      NRF_RX_Mode();
+      Sta = NRF_RxPacket(RxBuf);
+      if(Sta == NRF_STA_RX_DR) {
+        LED_B = !LED_B;
+      }
+      // FSM_Rx End
+      FSM_STA = 2;
+      break;
+
+    /************************** FSM USART **************************************/
+    case 2:
+      // FSM_USART
+//      Delay_10ms(18);
+//      RS232_SendStr((u8*)"\f");
+      for(i=0; i<1; i++) {
+        RS232_SendStr((u8*)"RxBuf[");
+        RS232_SendNum(Type_D, 2, i);
+        RS232_SendStr((u8*)"] = ");
+        RS232_SendNum(Type_D, 3, RxBuf[i]);
+        RS232_SendStr((u8*)"\r\n");
+      }
+      RS232_SendStr((u8*)"\r\n");
+      // FSM_USART End
+      FSM_STA = 0;
+      break;
+  }
+}
+#endif
+/*=====================================================================================================*/
+/*=====================================================================================================*/
+#if (NRF_MODE == NRF_MODE_FRLT)
+void NRF_FRLT( void )   // First Rx Last Tx
+{
+  u8 i = 0;
+  u8 Sta = ERROR;
+
+  static u8 FSM_STA = 1;
+
+  switch(FSM_STA) {
+
+    /************************** FSM Tx **************************************/
+    case 0:
+      // FSM_Tx
+      for(i=0; i<32; i++)
+        TxBuf[i] = RxBuf[i];
+      do {
+        Sta = NRF_TxPacket(TxBuf);
+      } while(Sta == NRF_STA_MAX_RT);
+      // FSM_Tx End
+      FSM_STA = 1;
+      break;
+
+    /************************** FSM Rx **************************************/
+    case 1:
+      // FSM_Rx
+      NRF_RX_Mode();
+      Sta = NRF_RxPacket(RxBuf);
+      if(Sta == NRF_STA_RX_DR) {
+        LED_B = !LED_B;
+      }
+      // FSM_Rx End
+      FSM_STA = 2;
+      break;
+
+    /************************** FSM USART **************************************/
+    case 2:
+      // FSM_USART
+//      RS232_SendStr((u8*)"\f");
+      for(i=0; i<32; i++) {
+        RS232_SendStr((u8*)"RxBuf[");
+        RS232_SendNum(Type_D, 2, i);
+        RS232_SendStr((u8*)"] = ");
+        RS232_SendNum(Type_D, 3, RxBuf[i]);
+        RS232_SendStr((u8*)"\r\n");
+      }
+      RS232_SendStr((u8*)"\r\n");
+      // FSM_USART End
+      FSM_STA = 0;
+      break;
+  }
+}
+#endif
 /*=====================================================================================================*/
 /*=====================================================================================================*/
 int main( void )
 {
-  u16 i = 0;
-	u8 Sta = ERROR;
-  u8 FSM_Sta = 1;
+  SystemInit();
+  LED_Config();
+  KEY_Config();
+  RS232_Config();
+  NRF24L01_Config();
 
-	SystemInit();
-	GPIO_Config();
-	RS232_Config();
-	nRF24L01_Config();
+#if (NRF_MODE == NRF_MODE_FTLR)
+  NRF24L01_Init(NRF_MODE_FTLR);
 
-	while(Sta == ERROR) {
-		RS232_SendStr(USART3, (u8*)"nRF24L01P CHECK ... ");
-		Sta = nRF_Check();
-		if(Sta == ERROR)
-			RS232_SendStr(USART3, (u8*)"ERROR\r\n");
-		else
-			RS232_SendStr(USART3, (u8*)"SUCCESS\r\n");
-	}
+  while(1) {
+    LED_G = !LED_G;
+    NRF_FTLR();
+  }
+#endif
 
-  RS232_SendStr(USART3, (u8*)"\r\n");
+#if (NRF_MODE == NRF_MODE_FRLT)
+  NRF24L01_Init(NRF_MODE_FRLT);
 
-	while(1) {
-		LED_G = ~LED_G;
-		switch(FSM_Sta) {
-
-/************************** FSM Tx **************************************/
-			case 0:
-				// FSM_Tx
-        i++;
-        if(i==65535)  i = 0;
-        TxBuf[0][2] = Byte8L(i);
-        TxBuf[0][3] = Byte8H(i);
-				nRF_TX_Mode();
-				do {
-					Sta = nRF_Tx_Data(TxBuf[0]);
-				} while(Sta == MAX_RT);
-				// FSM_Tx End
-				FSM_Sta = 1;
-				break;
-
-/************************** FSM Rx **************************************/
-			case 1:
-				// FSM_Rx
-				nRF_RX_Mode();
-				Sta = nRF_Rx_Data(RxBuf[0]);
-				if(Sta == RX_DR) {
-          
-				}
-				// FSM_Rx End
-				FSM_Sta = 2;
-				break;
-/************************** FSM USART **************************************/
-			case 2:
-				// FSM_USART
-        RS232_SendStr(USART3, (u8*)"RxDara[14] = ");
-        RS232_SendNum(USART3, Type_D, 5, Byte16(RxBuf[0][15], RxBuf[0][14]));
-        RS232_SendStr(USART3, (u8*)"\r\n");
-        RS232_SendStr(USART3, (u8*)"RxDara[16] = ");
-        RS232_SendNum(USART3, Type_D, 5, Byte16(RxBuf[0][17], RxBuf[0][16]));
-        RS232_SendStr(USART3, (u8*)"\r\n\r\n");
-				// FSM_USART End
-				FSM_Sta = 0;
-				break;
- 		}
-	}
-}
-/*=====================================================================================================*/
-/*=====================================================================================================*/
-void GPIO_Config( void )
-{
-	GPIO_InitTypeDef GPIO_InitStruct;
-
-  RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB | RCC_AHB1Periph_GPIOC, ENABLE);
-
-  /* LED_R PC13 */  /* LED_G PC14 */  /* LED_B PC15 */
-	GPIO_InitStruct.GPIO_Pin = GPIO_Pin_13 | GPIO_Pin_14 | GPIO_Pin_15;
-  GPIO_InitStruct.GPIO_Mode = GPIO_Mode_OUT;
-  GPIO_InitStruct.GPIO_OType = GPIO_OType_PP;
-  GPIO_InitStruct.GPIO_Speed = GPIO_Speed_50MHz;
-  GPIO_InitStruct.GPIO_PuPd = GPIO_PuPd_NOPULL;
-  GPIO_Init(GPIOC, &GPIO_InitStruct);
-
-  /* KEY PB2 */
-	GPIO_InitStruct.GPIO_Pin = GPIO_Pin_2;
-  GPIO_InitStruct.GPIO_Mode = GPIO_Mode_IN;
-  GPIO_InitStruct.GPIO_PuPd = GPIO_PuPd_NOPULL;
-  GPIO_Init(GPIOB, &GPIO_InitStruct);
-
-  LED_G = 1;
-  LED_R = 1;
-  LED_B = 1;
+  while(1) {
+    LED_R = !LED_R;
+    NRF_FRLT();
+  }
+#endif
 }
 /*=====================================================================================================*/
 /*=====================================================================================================*/

@@ -1,6 +1,6 @@
 ﻿[QCopterFC](https://github.com/QCopter/QCopterFlightControl)
 ========
-* Author　: [Hom](https://github.com/Hom19910422)
+* Author　: [Hom](https://github.com/Hom-Wang)
 * Version : v2.0 
 * Update　: 2014/01/25
 
