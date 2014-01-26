@@ -26,8 +26,8 @@ void LED_Config( void )
   GPIO_InitStruct.GPIO_PuPd = GPIO_PuPd_NOPULL;
   GPIO_Init(GPIOC, &GPIO_InitStruct);
 
-  LED_G = LED_OFF;
   LED_R = LED_OFF;
+  LED_G = LED_OFF;
   LED_B = LED_OFF;
 }
 /*=====================================================================================================*/

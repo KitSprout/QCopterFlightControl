@@ -1,13 +1,14 @@
-/* #include "algorithm_moveAve.h" */
+/* #include "stm32f4_spi.h" */
 
-#ifndef __ALGORITHM_MOVEAVE_H
-#define __ALGORITHM_MOVEAVE_H
+#ifndef __STM32F4_SPI_H
+#define __STM32F4_SPI_H
 
 #include "stm32f4xx.h"
 /*=====================================================================================================*/
 /*=====================================================================================================*/
-s16 MoveAve_SMA( s16 NewData, s16 *MoveAve_FIFO, u8 SampleNum );
-s16 MoveAve_WMA( s16 NewData, s16 *MoveAve_FIFO, u8 SampleNum );
+u8 SPI_RW( SPI_TypeDef*, u8 );
+void SPI_WriteByte( SPI_TypeDef*, u8 );
+u8 SPI_ReadByte( SPI_TypeDef* );
 /*=====================================================================================================*/
 /*=====================================================================================================*/
-#endif	 
+#endif

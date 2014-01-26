@@ -21,7 +21,7 @@
 #define USARTx_RX_SOURCE      GPIO_PinSource11
 #define USARTx_RX_AF          GPIO_AF_USART3
 
-#define USARTx_BAUDRATE       115200
+#define USARTx_BAUDRATE       9600
 #define USARTx_BYTESIZE       USART_WordLength_8b
 #define USARTx_STOPBITS       USART_StopBits_1
 #define USARTx_PARITY         USART_Parity_No

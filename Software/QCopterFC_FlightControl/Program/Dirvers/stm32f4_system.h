@@ -53,8 +53,8 @@
 #define S32_MIN    ((s32)-2147483648)
 
 #define Byte32(Byte4, Byte3, Byte2, Byte1)  ((u32)((((u8)(Byte4))<<24) | (((u8)(Byte3))<<16) | (((u8)(Byte2))<<8) | ((u8)(Byte1))))
-#define Byte16(ByteH, ByteL)  ((u16)((((u8)(ByteH))<<8) | ((u8)(ByteL))))
-#define Byte8H(ByteH)         ((u8)(((u8)(ByteH))>>8))
+#define Byte16(ByteH, ByteL)  ((u16)((((u16)(ByteH))<<8) | ((u16)(ByteL))))
+#define Byte8H(ByteH)         ((u8)(((u16)(ByteH))>>8))
 #define Byte8L(ByteL)         ((u8)(ByteL))
 
 #define NULL 0

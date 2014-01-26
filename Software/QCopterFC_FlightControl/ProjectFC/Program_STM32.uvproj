@@ -357,7 +357,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F40XX, USE_STDPERIPH_DRIVER, __FPU_PRESENT=1, __FPU_USED =1, ARM_MATH_CM4, __CC_ARM</Define>
               <Undefine></Undefine>
-              <IncludePath>..\;..\Libraries\CMSIS;..\Libraries\STM32F4xx_StdPeriph_Driver\inc;..\Libraries\STM32F4xx_StdPeriph_Driver\src;..\Program;..\Program\Algorithms;..\Program\Dirvers;..\Program\Modules</IncludePath>
+              <IncludePath>..\;..\Libraries\CMSIS;..\Libraries\CMSIS\MathARM;..\Libraries\STM32F4xx_StdPeriph_Driver\inc;..\Libraries\STM32F4xx_StdPeriph_Driver\src;..\Program;..\Program\Algorithms;..\Program\Dirvers;..\Program\Modules</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -459,9 +459,29 @@
               <FilePath>..\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_i2c.c</FilePath>
             </File>
             <File>
+              <FileName>stm32f4xx_spi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_spi.c</FilePath>
+            </File>
+            <File>
               <FileName>stm32f4xx_conf.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\Program\stm32f4xx_conf.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>MathARM</GroupName>
+          <Files>
+            <File>
+              <FileName>arm_sin_f32.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Libraries\CMSIS\MathARM\arm_sin_f32.c</FilePath>
+            </File>
+            <File>
+              <FileName>arm_cos_f32.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Libraries\CMSIS\MathARM\arm_cos_f32.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -487,6 +507,11 @@
               <FileName>stm32f4_flash.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Program\Dirvers\stm32f4_flash.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4_spi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Program\Dirvers\stm32f4_spi.c</FilePath>
             </File>
             <File>
               <FileName>stm32f4_i2c.c</FileName>
@@ -519,6 +544,11 @@
               <FilePath>..\Program\QCopterFC_param.c</FilePath>
             </File>
             <File>
+              <FileName>QCopterFC_ahrs.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Program\QCopterFC_ahrs.c</FilePath>
+            </File>
+            <File>
               <FileName>QCopterFC_ctrl.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Program\QCopterFC_ctrl.c</FilePath>
@@ -548,6 +578,11 @@
               <FileType>1</FileType>
               <FilePath>..\Program\Modules\module_ms5611.c</FilePath>
             </File>
+            <File>
+              <FileName>module_nrf24l01.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Program\Modules\module_nrf24l01.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -564,6 +599,11 @@
               <FilePath>..\Program\Algorithms\algorithm_moveAve.c</FilePath>
             </File>
             <File>
+              <FileName>algorithm_quaternion.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Program\Algorithms\algorithm_quaternion.c</FilePath>
+            </File>
+            <File>
               <FileName>algorithm_ellipseFitting.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Program\Algorithms\algorithm_ellipseFitting.c</FilePath>
@@ -572,6 +612,13 @@
         </Group>
         <Group>
           <GroupName>Document</GroupName>
+          <Files>
+            <File>
+              <FileName>Readme.md</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Readme.md</FilePath>
+            </File>
+          </Files>
         </Group>
       </Groups>
     </Target>
