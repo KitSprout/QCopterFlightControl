@@ -1,8 +1,8 @@
 ﻿[QCopterFC](https://github.com/QCopter/QCopterFlightControl)
 ========
-* Author　: [Hom](https://github.com/Hom-Wang)
+* Author  : [Hom](https://github.com/Hom-Wang)
 * Version : v2.0 
-* Update　: 2014/01/26
+* Update  : 2014/01/27
 
 Description
 ========
@@ -30,7 +30,7 @@ Hardware
 
 QCopterFC v2.2 預計修改 ( 改版中 )：  
 >1. 減少 2 個 PWM 通道，並新增 1 個 CAN BUS ( 該 PIN 還是可以使用 PWM )  
->2. IMU 改為 SPI 操作的 MPU-9250，來增加讀取速度。  
+>2. [IMU_10-DOF](https://github.com/OpenPCB/IMU_10-DOF) 改為 [SmartIMU](https://github.com/Hom-Wang/SmartIMU)，使用 SPI 操作的 MPU-9250，來增加讀取速度。  
 >3. 將 PWM 部分的電源線連接起來，以增加擴展裝置的方便性。  
 >4. 體積將小幅度縮小。  
 >5. 更改 CamSPI 為 FFCSPI，並修改腳位，使其可以連接 [QMV v2.0](https://github.com/QCopter/QCopterMachineVision)、[QRC](https://github.com/QCopter/QCopterRemoteControl)、[TFT_2.2](https://github.com/OpenPCB/TFT_2.2-inch) 等裝置。  
