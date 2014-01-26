@@ -40,6 +40,6 @@ SysTick_Handler()
 > SEN_CORR -> 選擇是否要校正 Sensor  
 > SEN_GYR -> 校正陀螺儀  
 > SEN_ACC -> 校正加速度計  
-> SEN_MAG -> 較正電子羅盤  
+> SEN_MAG -> 挍正電子羅盤  
 > SEN_NUMQ -> 初始化四元數和姿態系統  
 > SEN_ALG -> 計算姿態角度和平衡控制  
