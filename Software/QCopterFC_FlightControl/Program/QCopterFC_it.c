@@ -20,19 +20,15 @@ vu8 Time_mSec = 0;
 vu8 Time_Sec = 0;
 vu8 Time_Min = 0;
 // **************************** 測試變數 END
-
 /*=====================================================================================================*/
 /*=====================================================================================================*/
 void SysTick_Handler( void )
 {
-  s16 IMU_Buf[10] = {0};
-
   static s16 *FIFO_X, *FIFO_Y, *FIFO_Z;
   static s16 FIFO_ACC[3][16] = {0}, FIFO_GYR[3][16] = {0}, FIFO_MAG[3][16] = {0};
   static u32 Correction_Time = 0;
 
 // **************************** 需要再修正調整 START
-
   /* Time Count */
   SysTick_Cnt++;
   if(SysTick_Cnt == SampleRateFreg/10) {
@@ -49,27 +45,23 @@ void SysTick_Handler( void )
       }
     }
   }
-
-  /* 500Hz, Read Accelerometer, Gyroscope, Magnetometer */
-  MPU9150_Read(IMU_Buf);
-
-  /* 100Hz, Read Barometer */
-  if((SysTick_Cnt%(SampleRateFreg/100)) == 0)
-    MS5611_Read(&Baro, MS5611_D1_OSR_4096);
-
 // **************************** 需要再修正調整 END
 
+  /* 100Hz, Read Barometer */
+  /* 500Hz, Read Accelerometer, Gyroscope, Magnetometer */
+  Sensor_Read(SampleRateFreg);
+
   /* Offset */
-  Acc.X = IMU_Buf[0] - Acc.OffsetX;
-  Acc.Y = IMU_Buf[1] - Acc.OffsetY;
-  Acc.Z = IMU_Buf[2] - Acc.OffsetZ;
-  Gyr.X = IMU_Buf[3] - Gyr.OffsetX;
-  Gyr.Y = IMU_Buf[4] - Gyr.OffsetY;
-  Gyr.Z = IMU_Buf[5] - Gyr.OffsetZ;
-  Mag.X = IMU_Buf[6] * Mag.AdjustX;
-  Mag.Y = IMU_Buf[7] * Mag.AdjustY;
-  Mag.Z = IMU_Buf[8] * Mag.AdjustZ;
-  Temp.T = (s16)IMU_Buf[9];
+  Acc.X += Acc.OffsetX;
+  Acc.Y += Acc.OffsetY;
+  Acc.Z += Acc.OffsetZ;
+  Gyr.X += Gyr.OffsetX;
+  Gyr.Y += Gyr.OffsetY;
+  Gyr.Z += Gyr.OffsetZ;
+  Mag.X *= Mag.AdjustX;
+  Mag.Y *= Mag.AdjustY;
+  Mag.Z *= Mag.AdjustZ;
+  Temp.T -= Temp.OffsetT;
 
   #define MAFIFO_SIZE 250
   switch(SEN_STATE) {

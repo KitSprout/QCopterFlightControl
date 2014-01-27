@@ -32,12 +32,18 @@
 #define MS5611_ADC_D1         ((u8)0x01)
 #define MS5611_ADC_D2         ((u8)0x02)
 
-#define POW_2_7   (128)
-#define POW_2_8   (256)
-#define POW_2_15  (32768)
-#define POW_2_16  (65536)
-#define POW_2_21  (2097152)
-#define POW_2_23  (8388608)
+#define MS5611_RespFreq_256   ((u16)1650) // 0.48 - 0.54 - 0.60 - 1650Hz
+#define MS5611_RespFreq_512   ((u16)850)  // 0.95 - 1.06 - 1.17 - 850Hz
+#define MS5611_RespFreq_1024  ((u16)430)  // 1.88 - 2.08 - 2.28 - 430Hz
+#define MS5611_RespFreq_2048  ((u16)220)  // 3.72 - 4.13 - 4.54 - 220Hz
+#define MS5611_RespFreq_4096  ((u16)110)  // 7.40 - 8.22 - 9.04 - 110Hz
+
+#define POW_2_7   (128.0f)
+#define POW_2_8   (256.0f)
+#define POW_2_15  (32768.0f)
+#define POW_2_16  (65536.0f)
+#define POW_2_21  (2097152.0f)
+#define POW_2_23  (8388608.0f)
 
 // 1010~1000  上升100m 下降10.5mbar
 // 1000~900   上升100m 下降11.2mbar
@@ -46,20 +52,16 @@
 // 700~600    上升100m 下降15mbar
 /*=====================================================================================================*/
 /*=====================================================================================================*/
-typedef struct {
+typedef __IO struct {
   u16 C[7];
   u32 D[3];
 
   s32 dT;
   s32 rTemp;
 
-  uint64_t OFF;
-  uint64_t SENS;
+  s64 OFF;
+  s64 SENS;
   s32 rPress;
-
-  float Temp;   // -40.00~85.00, 0.01'C/LSB
-  float Press;  // 10.00~1200.00, 0.01mbar/LSB
-  float Height; // 0.01mbar ~ 9.5238cm(10.5mbar/100m) or 8.92857(11.2mbar/100m)
 } MS5611_ST;
 
 typedef __IO enum {
@@ -69,15 +71,12 @@ typedef __IO enum {
 } MS5611_STATUS;
 /*=====================================================================================================*/
 /*=====================================================================================================*/
-void MS5611_Init( MS5611_ST *COEFF );
-static void MS5611_ReadPROM( MS5611_ST *COEFF );
+void MS5611_Init( void );
+static void MS5611_ReadPROM( void );
 static void MS5611_ConvADC( u8 ADC_ConvMode );
-static void MS5611_ReadADC( MS5611_ST *COEFF, u8 ADC_Sel );
-static void MS5611_Calculate( MS5611_ST* COEFF );
-void MS5611_Read( MS5611_ST *COEFF, u8 ADC_ConvMode );
-/*=====================================================================================================*/
-/*=====================================================================================================*/
-extern MS5611_ST Baro;
+static void MS5611_ReadADC( u8 ADC_Sel );
+static void MS5611_Calculate( void );
+void MS5611_Read( s32 *Baro_Buf, u8 ADC_ConvMode );
 /*=====================================================================================================*/
 /*=====================================================================================================*/
 #endif

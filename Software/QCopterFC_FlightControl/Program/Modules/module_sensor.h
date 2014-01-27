@@ -20,62 +20,70 @@
 #define TEMP_OFFSET  ((s16)(-12421))  // (340*35)+521
 /*=====================================================================================================*/
 /*=====================================================================================================*/
-typedef struct {
+typedef __IO struct {
   s16 X;
   s16 Y;
   s16 Z;
   s16 OffsetX;
   s16 OffsetY;
   s16 OffsetZ;
-  float TrueX;
-  float TrueY;
-  float TrueZ;
+  fp32 TrueX;
+  fp32 TrueY;
+  fp32 TrueZ;
 } SensorAcc;
 
-typedef struct {
+typedef __IO struct {
   s16 X;
   s16 Y;
   s16 Z;
   s16 OffsetX;
   s16 OffsetY;
   s16 OffsetZ;
-  float TrueX;
-  float TrueY;
-  float TrueZ;
+  fp32 TrueX;
+  fp32 TrueY;
+  fp32 TrueZ;
 } SensorGyr;
 
-typedef struct {
+typedef __IO struct {
   s16 X;
   s16 Y;
   s16 Z;
   u16 AdjustX;
   u16 AdjustY;
   u16 AdjustZ;
-  float TrueX;
-  float TrueY;
-  float TrueZ;
-  float EllipseSita;
-  float EllipseX0;
-  float EllipseY0;
-  float EllipseA;
-  float EllipseB;
+  fp32 TrueX;
+  fp32 TrueY;
+  fp32 TrueZ;
+  fp32 EllipseSita;
+  fp32 EllipseX0;
+  fp32 EllipseY0;
+  fp32 EllipseA;
+  fp32 EllipseB;
 } SensorMag;
 
-typedef struct {
+typedef __IO struct {
   s16 T;
   s16 OffsetT;
-  float TrueT;
+  fp32 TrueT;
 } SensorTemp;
+
+typedef __IO struct {
+  fp32 Temp;
+  fp32 Press;
+  fp32 Height;
+} SensorBaro;
 /*=====================================================================================================*/
 /*=====================================================================================================*/
 extern SensorAcc Acc;
 extern SensorGyr Gyr;
 extern SensorMag Mag;
 extern SensorTemp Temp;
+extern SensorBaro Baro;
 /*=====================================================================================================*/
 /*=====================================================================================================*/
 void Sensor_Config( void );
 void Sensor_Init( void );
+void Sensor_Read( u16 ReadFreg );
 /*=====================================================================================================*/
 /*=====================================================================================================*/
 #endif

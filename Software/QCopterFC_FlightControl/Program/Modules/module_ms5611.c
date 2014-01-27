@@ -5,40 +5,39 @@
 #include "module_ms5611.h"
 /*=====================================================================================================*/
 /*=====================================================================================================*/
-MS5611_ST Baro;
+static MS5611_ST COEFF;
 /*=====================================================================================================*/
 /*=====================================================================================================*
 **函數 : MS5611_Init
 **功能 : 初始化MS5611
 **輸入 : COEFF
 **輸出 : None
-**使用 : MS5611_Init(&Baro);
+**使用 : MS5611_Init();
 **=====================================================================================================*/
 /*=====================================================================================================*/
-void MS5611_Init( MS5611_ST *COEFF )
+void MS5611_Init( void )
 {
   u8 WriteCMD = MS5611_RESET;
 
   /* Reset */
   I2C_WriteByte(MS5611_I2C_ADDR, &WriteCMD, 1);
-//  I2C_MS5611_WriteByte(MS5611_I2C_ADDR, MS5611_RESET);
   Delay_1ms(10);
 
   /* Read PROM */
-  MS5611_ReadPROM(COEFF);
+  MS5611_ReadPROM();
   Delay_1ms(10);
 
   /* D1, D2 Conversion */
   MS5611_ConvADC(MS5611_D1_OSR_4096);
   Delay_1ms(10);
-  MS5611_ReadADC(COEFF, MS5611_ADC_D1);
+  MS5611_ReadADC(MS5611_ADC_D1);
 
   MS5611_ConvADC(MS5611_D2_OSR_4096);
   Delay_1ms(10);
-  MS5611_ReadADC(COEFF, MS5611_ADC_D2);
+  MS5611_ReadADC(MS5611_ADC_D2);
 
   /* Calculate */
-  MS5611_Calculate(COEFF);
+  MS5611_Calculate();
 }
 /*=====================================================================================================*/
 /*=====================================================================================================*
@@ -46,10 +45,10 @@ void MS5611_Init( MS5611_ST *COEFF )
 **功能 : Read PROM
 **輸入 : COEFF
 **輸出 : None
-**使用 : MS5611_ReadPROM(&Baro);
+**使用 : MS5611_ReadPROM();
 **=====================================================================================================*/
 /*=====================================================================================================*/
-static void MS5611_ReadPROM( MS5611_ST *COEFF )
+static void MS5611_ReadPROM( void )
 {
   u8 i = 0;
   u8 WriteCMD = 0;
@@ -58,10 +57,8 @@ static void MS5611_ReadPROM( MS5611_ST *COEFF )
   for(i=0; i<6; i++) {
     WriteCMD = MS5611_PROM_COEFF_1+i;
     I2C_WriteByte(MS5611_I2C_ADDR, &WriteCMD, 1);
-//    I2C_MS5611_WriteByte(MS5611_I2C_ADDR, MS5611_PROM_COEFF_1+i);
     I2C_ReadByte(MS5611_I2C_ADDR, ReadC[i], 2);
-//    I2C_MS5611_ReadData(ReadC[i], MS5611_I2C_ADDR, 2);
-    COEFF->C[i+1] = (u16)((ReadC[i][0] << 8) | ReadC[i][1]);
+    COEFF.C[i+1] = (u16)((ReadC[i][0] << 8) | ReadC[i][1]);
   }
 }
 /*=====================================================================================================*/
@@ -78,7 +75,6 @@ static void MS5611_ConvADC( u8 ADC_ConvMode )
   u8 WriteCMD = ADC_ConvMode;
 
   I2C_WriteByte(MS5611_I2C_ADDR, &WriteCMD, 1);
-//  I2C_MS5611_WriteByte(MS5611_I2C_ADDR, ADC_ConvMode);
 }
 /*=====================================================================================================*/
 /*=====================================================================================================*
@@ -86,20 +82,18 @@ static void MS5611_ConvADC( u8 ADC_ConvMode )
 **功能 : Read ADC
 **輸入 : COEFF, ADC_Sel
 **輸出 : None
-**使用 : MS5611_ReadADC(&Baro, ADC_Sel);
+**使用 : MS5611_ReadADC(ADC_Sel);
 **=====================================================================================================*/
 /*=====================================================================================================*/
-static void MS5611_ReadADC( MS5611_ST *COEFF, u8 ADC_Sel )
+static void MS5611_ReadADC( u8 ADC_Sel )
 {
   u8 ReadADC[3] = {0};
   u8 WriteCMD = MS5611_ADC;
 
   I2C_WriteByte(MS5611_I2C_ADDR, &WriteCMD, 1);
-//  I2C_MS5611_WriteByte(MS5611_I2C_ADDR, MS5611_ADC);
   I2C_ReadByte(MS5611_I2C_ADDR, ReadADC, 3);
-//  I2C_MS5611_ReadData(ReadADC, MS5611_I2C_ADDR, 3);
-  
-  COEFF->D[ADC_Sel] = (u16)(ReadADC[0]<<16 | ReadADC[1]<<8 | ReadADC[2]);
+
+  COEFF.D[ADC_Sel] = (u32)(ReadADC[0]<<16 | ReadADC[1]<<8 | ReadADC[2]);
 }
 /*=====================================================================================================*/
 /*=====================================================================================================*
@@ -107,21 +101,17 @@ static void MS5611_ReadADC( MS5611_ST *COEFF, u8 ADC_Sel )
 **功能 : MS5611 Calculate
 **輸入 : COEFF
 **輸出 : None
-**使用 : MS5611_Calculate(&Baro);
+**使用 : MS5611_Calculate();
 **=====================================================================================================*/
 /*=====================================================================================================*/
-static void MS5611_Calculate( MS5611_ST* COEFF )
+static void MS5611_Calculate( void )
 {
-  COEFF->dT = (s32)(COEFF->D[2] - (COEFF->C[5]*POW_2_8));          // dT = D2 - C5*2^8
-  COEFF->rTemp = (s32)(2000 + (COEFF->dT*COEFF->C[5])/POW_2_23);   // Temp = 2000 + dT*C5/2^23
+  COEFF.dT = (s32)(COEFF.D[2] - (s32)(COEFF.C[5]*POW_2_8));   // dT = D2 - C5*2^8
+  COEFF.rTemp = (s32)(2000 + (s32)((COEFF.dT*COEFF.C[5])/POW_2_23));   // Temp = 2000 + dT*C5/2^23
 
-  COEFF->OFF = (int64_t)(COEFF->C[2]*POW_2_16 + (COEFF->C[4]*COEFF->dT)/POW_2_7);   // OFF = C2*2^16 + (C4*dT)/2^7
-  COEFF->SENS = (int64_t)(COEFF->C[1]*POW_2_15 + (COEFF->C[3]*COEFF->dT)/POW_2_8);  // SENS = C1*2^15 + (C3*dT)/2^8
-  COEFF->rPress = (s32)((COEFF->D[1]*COEFF->SENS)/POW_2_21 - COEFF->OFF)/POW_2_15;  // Press = (D1*SENS/2^21 - OFF)/2^15
-
-  COEFF->Temp   = (float)(COEFF->rTemp/100.0f);
-  COEFF->Press  = (float)(COEFF->rPress/100.0f);
-  COEFF->Height = (float)((COEFF->rPress-101333)*9.5238f);
+  COEFF.OFF = (s64)(COEFF.C[2]*POW_2_16 + (COEFF.C[4]*COEFF.dT)/POW_2_7);   // OFF = C2*2^16 + (C4*dT)/2^7
+  COEFF.SENS = (s64)(COEFF.C[1]*POW_2_15 + (COEFF.C[3]*COEFF.dT)/POW_2_8);  // SENS = C1*2^15 + (C3*dT)/2^8
+  COEFF.rPress = (s32)(((COEFF.D[1]*COEFF.SENS)/POW_2_21 - COEFF.OFF)/POW_2_15);  // Press = (D1*SENS/2^21 - OFF)/2^15
 }
 /*=====================================================================================================*/
 /*=====================================================================================================*
@@ -129,12 +119,11 @@ static void MS5611_Calculate( MS5611_ST* COEFF )
 **功能 : MS5611 Read
 **輸入 : Baro, ADC_ConvMode
 **輸出 : None
-**使用 : MS5611_Read(&Baro, MS5611_D1_OSR_4096);
+**使用 : MS5611_Read(Baro_Buf, MS5611_D1_OSR_4096);
 **=====================================================================================================*/
 /*=====================================================================================================*/
-void MS5611_Read( MS5611_ST *COEFF, u8 ADC_ConvMode )
+void MS5611_Read( s32 *Baro_Buf, u8 ADC_ConvMode )
 {
-  u8 ReadFlag = ERROR;
   static MS5611_STATUS ReadSta = MS5611_ConvInit;
 
   switch(ReadSta) {
@@ -143,20 +132,19 @@ void MS5611_Read( MS5611_ST *COEFF, u8 ADC_ConvMode )
       ReadSta = MS5611_ConvD1;
       break;
     case MS5611_ConvD1:
-      MS5611_ReadADC(COEFF, MS5611_ADC_D1);
+      MS5611_ReadADC(MS5611_ADC_D1);
       MS5611_ConvADC(ADC_ConvMode | 0x10);
       ReadSta = MS5611_ConvD2;
       break;
     case MS5611_ConvD2:
-      MS5611_ReadADC(COEFF, MS5611_ADC_D2);
+      MS5611_ReadADC(MS5611_ADC_D2);
       MS5611_ConvADC(ADC_ConvMode);
-      ReadFlag = SUCCESS;
+      MS5611_Calculate();
+      Baro_Buf[0] = COEFF.rTemp;
+      Baro_Buf[1] = COEFF.rPress;
       ReadSta = MS5611_ConvD1;
       break;
   }
-
-  if(ReadFlag == SUCCESS)
-    MS5611_Calculate(COEFF);
 }
 /*=====================================================================================================*/
 /*=====================================================================================================*/

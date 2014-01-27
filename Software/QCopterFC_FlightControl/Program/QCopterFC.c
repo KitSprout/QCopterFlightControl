@@ -79,22 +79,24 @@ void QCopterFC_Corr( u16 SystickFreq )
 /*=====================================================================================================*/
 void QCopterFC_Lock( void )
 {
+  u8 UART_BUF[8] = {0};
+
   LED_R = LED_OFF;
   LED_G = LED_OFF;
   LED_B = LED_OFF;
   while(KEY != KEY_ON) {
     LED_B = !LED_B;
-//    UART_BUF[0] = Byte8L(Acc.TrueX*1000);
-//    UART_BUF[1] = Byte8H(Acc.TrueX*1000);
-//    UART_BUF[2] = Byte8L(Acc.TrueY*1000);
-//    UART_BUF[3] = Byte8H(Acc.TrueY*1000);
-//    UART_BUF[4] = Byte8L(Acc.TrueZ*1000);
-//    UART_BUF[5] = Byte8H(Acc.TrueZ*1000);
-//    UART_BUF[6] = 0;
-//    UART_BUF[7] = 0;
-//    RS232_VisualScope(UART_BUF);
+    UART_BUF[0] = Byte8L((s16)(AngE.Pitch*100));
+    UART_BUF[1] = Byte8H((s16)(AngE.Pitch*100));
+    UART_BUF[2] = Byte8L((s16)(AngE.Roll*100));
+    UART_BUF[3] = Byte8H((s16)(AngE.Roll*100));
+    UART_BUF[4] = Byte8L((s16)(AngE.Yaw*10));
+    UART_BUF[5] = Byte8H((s16)(AngE.Yaw*10));
+    UART_BUF[6] = Byte8L((s16)(Temp.TrueT*100));
+    UART_BUF[7] = Byte8H((s16)(Temp.TrueT*100));
+    RS232_VisualScope(UART_BUF);
     // NRF TX ONLY
-    Delay_100ms(4);
+//    Delay_100ms(4);
   }
   LED_R = LED_OFF;
   LED_G = LED_OFF;

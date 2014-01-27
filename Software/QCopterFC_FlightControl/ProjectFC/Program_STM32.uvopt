@@ -474,7 +474,7 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>34</ColumnNumber>
+      <ColumnNumber>1</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
       <TopLine>0</TopLine>
       <CurrentLine>0</CurrentLine>
@@ -546,10 +546,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>8</ColumnNumber>
+      <ColumnNumber>19</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>132</TopLine>
-      <CurrentLine>140</CurrentLine>
+      <TopLine>78</TopLine>
+      <CurrentLine>88</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\Program\QCopterFC.c</PathWithFileName>
       <FilenameWithoutPath>QCopterFC.c</FilenameWithoutPath>
@@ -562,10 +562,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>20</ColumnNumber>
+      <ColumnNumber>40</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>2</TopLine>
-      <CurrentLine>26</CurrentLine>
+      <TopLine>1</TopLine>
+      <CurrentLine>22</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\Program\QCopterFC_it.c</PathWithFileName>
       <FilenameWithoutPath>QCopterFC_it.c</FilenameWithoutPath>
@@ -580,8 +580,8 @@
       <Focus>0</Focus>
       <ColumnNumber>20</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>1</TopLine>
-      <CurrentLine>11</CurrentLine>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\Program\QCopterFC_board.c</PathWithFileName>
       <FilenameWithoutPath>QCopterFC_board.c</FilenameWithoutPath>
@@ -596,8 +596,8 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>13</TopLine>
-      <CurrentLine>66</CurrentLine>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\Program\QCopterFC_param.c</PathWithFileName>
       <FilenameWithoutPath>QCopterFC_param.c</FilenameWithoutPath>
@@ -612,8 +612,8 @@
       <Focus>0</Focus>
       <ColumnNumber>16</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>1</TopLine>
-      <CurrentLine>10</CurrentLine>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\Program\QCopterFC_ahrs.c</PathWithFileName>
       <FilenameWithoutPath>QCopterFC_ahrs.c</FilenameWithoutPath>
@@ -650,10 +650,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>34</ColumnNumber>
+      <ColumnNumber>11</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>1</TopLine>
-      <CurrentLine>24</CurrentLine>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\Program\Modules\module_rs232.c</PathWithFileName>
       <FilenameWithoutPath>module_rs232.c</FilenameWithoutPath>
@@ -666,10 +666,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>36</ColumnNumber>
+      <ColumnNumber>1</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>0</TopLine>
-      <CurrentLine>0</CurrentLine>
+      <TopLine>86</TopLine>
+      <CurrentLine>100</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\Program\Modules\module_sensor.c</PathWithFileName>
       <FilenameWithoutPath>module_sensor.c</FilenameWithoutPath>
@@ -682,7 +682,7 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>21</ColumnNumber>
+      <ColumnNumber>68</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
       <TopLine>0</TopLine>
       <CurrentLine>0</CurrentLine>
@@ -698,10 +698,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>23</ColumnNumber>
+      <ColumnNumber>16</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>0</TopLine>
-      <CurrentLine>0</CurrentLine>
+      <TopLine>1</TopLine>
+      <CurrentLine>12</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\Program\Modules\module_ms5611.c</PathWithFileName>
       <FilenameWithoutPath>module_ms5611.c</FilenameWithoutPath>
@@ -716,8 +716,8 @@
       <Focus>0</Focus>
       <ColumnNumber>7</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>339</TopLine>
-      <CurrentLine>348</CurrentLine>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\Program\Modules\module_nrf24l01.c</PathWithFileName>
       <FilenameWithoutPath>module_nrf24l01.c</FilenameWithoutPath>
@@ -756,8 +756,8 @@
       <Focus>0</Focus>
       <ColumnNumber>49</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>1</TopLine>
-      <CurrentLine>23</CurrentLine>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\Program\Algorithms\algorithm_moveAve.c</PathWithFileName>
       <FilenameWithoutPath>algorithm_moveAve.c</FilenameWithoutPath>
@@ -772,8 +772,8 @@
       <Focus>0</Focus>
       <ColumnNumber>39</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>1</TopLine>
-      <CurrentLine>10</CurrentLine>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\Program\Algorithms\algorithm_quaternion.c</PathWithFileName>
       <FilenameWithoutPath>algorithm_quaternion.c</FilenameWithoutPath>
@@ -788,8 +788,8 @@
       <Focus>0</Focus>
       <ColumnNumber>22</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>1</TopLine>
-      <CurrentLine>12</CurrentLine>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\Program\Algorithms\algorithm_ellipseFitting.c</PathWithFileName>
       <FilenameWithoutPath>algorithm_ellipseFitting.c</FilenameWithoutPath>

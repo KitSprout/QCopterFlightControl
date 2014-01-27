@@ -71,33 +71,21 @@ u8 MPU9150_Init( void )
 **功能 : 讀取感測器資料
 **輸入 : *ReadBuf
 **輸出 : None
-**使用 : MPU9150_Read(IMU_Buf);
+**使用 : MPU9150_Read(ReadBuf);
 **==============================================================================================*/
 /*==============================================================================================*/
-void MPU9150_Read( s16 *IMU_Buf )
+void MPU9150_Read( u8 *ReadBuf )
 {
-  u8 ReadBuf[20] = {0};
   u8 ReadData = 0x00;
   u8 WriteData = 0x01;
 
   I2C_DMA_ReadReg(MPU6050_I2C_ADDR, MPU6050_ACCEL_XOUT_H, ReadBuf, 14);
 
-  I2C_DMA_ReadReg(AK8975_I2C_ADDR, AK8975_ST1, &ReadData, 1);       // Wait Prapare Data
+  I2C_DMA_ReadReg(AK8975_I2C_ADDR, AK8975_ST1, &ReadData, 1);   // Wait Prapare Data
   if(ReadData == 1) {
     I2C_DMA_ReadReg(AK8975_I2C_ADDR, AK8975_HXL, ReadBuf+14, 6);
     I2C_DMA_WriteReg(AK8975_I2C_ADDR, AK8975_CNTL, &WriteData, 1);  // Set Single Measurement Mode
   }
-
-  IMU_Buf[0] = (s16)((ReadBuf[0]  << 8) | IMU_Buf[1]);    // Acc.X
-  IMU_Buf[1] = (s16)((ReadBuf[2]  << 8) | ReadBuf[3]);    // Acc.Y
-  IMU_Buf[2] = (s16)((ReadBuf[4]  << 8) | ReadBuf[5]);    // Acc.Z
-  IMU_Buf[3] = (s16)((ReadBuf[8]  << 8) | ReadBuf[9]);    // Gyr.X
-  IMU_Buf[4] = (s16)((ReadBuf[10] << 8) | ReadBuf[11]);   // Gyr.Y
-  IMU_Buf[5] = (s16)((ReadBuf[12] << 8) | ReadBuf[13]);   // Gyr.Z
-  IMU_Buf[6] = (s16)((ReadBuf[15] << 8) | ReadBuf[14]);   // Mag.X
-  IMU_Buf[7] = (s16)((ReadBuf[17] << 8) | ReadBuf[16]);   // Mag.Y
-  IMU_Buf[8] = (s16)((ReadBuf[19] << 8) | ReadBuf[18]);   // Mag.Z
-  IMU_Buf[9] = (s16)((ReadBuf[6]  << 8) | ReadBuf[7]);    // Temp
 }
 /*==============================================================================================*/
 /*==============================================================================================*/

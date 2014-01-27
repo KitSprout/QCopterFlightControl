@@ -1,7 +1,7 @@
-QCopterFC FlightControl Example
+QCopterFC FlightControl
 ========
-* Author  : [Hom](https://github.com/Hom-Wang)
-* Update  : 2014/01/27
+* Author : [Hom](https://github.com/Hom-Wang)
+* Update : 2014/01/28
 
 Description
 ========
