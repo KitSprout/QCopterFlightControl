@@ -39,7 +39,8 @@ QCopterFC v2.2 預計修改 ( 改版中 )：
 
 Related Documents
 ========
-* [Google Drive](https://drive.google.com/folderview?id=0BzL2wwAot6oPS0thRUVrb0VadTQ&usp=sharing)
+* [Update Records - Hackpad](https://hom.hackpad.com/QCopterFC-EvK2EHj4bqH)
+* [Datasheet & BOM - Google Drive](https://drive.google.com/folderview?id=0BzL2wwAot6oPS0thRUVrb0VadTQ&usp=sharing)
 
 Program
 ========
