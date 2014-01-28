@@ -2,7 +2,7 @@
 ========
 * Author  : [Hom](https://github.com/Hom-Wang)
 * Version : v2.0 
-* Update  : 2014/01/27
+* Update  : 2014/01/28
 
 Description
 ========
@@ -42,13 +42,10 @@ Related Documents
 * [Update Records - Hackpad](https://hom.hackpad.com/QCopterFC-EvK2EHj4bqH)
 * [Datasheet & BOM - Google Drive](https://drive.google.com/folderview?id=0BzL2wwAot6oPS0thRUVrb0VadTQ&usp=sharing)
 
-Program
+Software
 ========
-* QcopterFC FlightControl
-* QcopterFC FlightRecorder
-
-Test
-========
+* QCopterFC FlightControl
+* QCopterFC FlightRecorder
 * [QCopterFC ADC](https://github.com/QCopter/QCopterFlightControl/tree/master/Software/TEST_QCopterFC_ADC)
 * [QCopterFC CamSPI-Master](https://github.com/QCopter/QCopterFlightControl/tree/master/Software/TEST_QCopterFC_CAMSPI_M)
 * [QCopterFC CamSPI-Slave](https://github.com/QCopter/QCopterFlightControl/tree/master/Software/TEST_QCopterFC_CAMSPI_S)
