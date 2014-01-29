@@ -6,6 +6,7 @@
 #include "stm32f4_i2c.h"
 #include "QCopterFC.h"
 #include "QCopterFC_board.h"
+#include "QCopterFC_param.h"
 #include "QCopterFC_ahrs.h"
 #include "module_sensor.h"
 #include "algorithm_moveAve.h"
@@ -13,13 +14,9 @@
 #include "algorithm_quaternion.h"
 /*=====================================================================================================*/
 /*=====================================================================================================*/
-vu32 SysTick_Cnt = 0;
-
-// **************************** 測試變數 START
-vu8 Time_mSec = 0;
-vu8 Time_Sec = 0;
-vu8 Time_Min = 0;
-// **************************** 測試變數 END
+u8 Time_Min = 0;
+u8 Time_Sec = 0;
+u16 SysTick_Cnt = 0;
 /*=====================================================================================================*/
 /*=====================================================================================================*/
 void SysTick_Handler( void )
@@ -28,24 +25,18 @@ void SysTick_Handler( void )
   static s16 FIFO_ACC[3][16] = {0}, FIFO_GYR[3][16] = {0}, FIFO_MAG[3][16] = {0};
   static u32 Correction_Time = 0;
 
-// **************************** 需要再修正調整 START
   /* Time Count */
-  SysTick_Cnt++;
-  if(SysTick_Cnt == SampleRateFreg/10) {
+  if(SysTick_Cnt == SampleRateFreg) {
     SysTick_Cnt = 0;
-    Time_mSec++;
-    if(Time_mSec == 10) {
-      Time_mSec = 0;
-      Time_Sec++;
-      if(Time_Sec == 60) {	// 0~59
-        Time_Sec = 0;
-        Time_Min++;
-        if(Time_Sec == 60)
-          Time_Min = 0;
-      }
+    Time_Sec++;
+    if(Time_Sec == 60) {	// 0~59
+      Time_Sec = 0;
+      Time_Min++;
+      if(Time_Sec == 60)
+        Time_Min = 0;
     }
   }
-// **************************** 需要再修正調整 END
+  SysTick_Cnt++;
 
   /* 100Hz, Read Barometer */
   /* 500Hz, Read Accelerometer, Gyroscope, Magnetometer */

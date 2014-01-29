@@ -45,6 +45,10 @@ void QCopterFC_Init( void )
 
   Delay_10ms(5);
 
+  /* Parameter Init */
+  Param_Init(PARAM);
+  // Read Flash
+
   /* Device Init */
   Sensor_Init();
   NRF24L01_Init(NRF_MODE_FTLR); // First TX Last RX
@@ -53,9 +57,6 @@ void QCopterFC_Init( void )
   do {
     Status = NRF_Check();
   } while(Status != SUCCESS);
-
-  /* Parameter Init */
-  // Read Flash
 
   LED_R = LED_OFF;
 }
@@ -115,25 +116,9 @@ int main( void )
   /* QCopterFC Lock */
   QCopterFC_Lock();
 
-#define LED_DELAY 5
-while(1) {
-  LED_R = !LED_R;
-  Delay_10ms(LED_DELAY);
-  LED_R = !LED_R;
-  Delay_10ms(LED_DELAY);
-  LED_G = !LED_G;
-  Delay_10ms(LED_DELAY);
-  LED_G = !LED_G;
-  Delay_10ms(LED_DELAY);
-  LED_B = !LED_B;
-  Delay_10ms(LED_DELAY);
-  LED_B = !LED_B;
-  Delay_10ms(LED_DELAY);
-}
-
   /* QCopterFC FSM */
   while(1) {
-    LED_G = !LED_G;
+//    LED_G = !LED_G;
     switch(FSM_STATE) {
 
       /************************** FSM TXRX ****************************************/
@@ -147,7 +132,20 @@ while(1) {
       /************************** FSM CTRL ****************************************/
       case FSM_CTRL:
         // FSM_CTRL
-        
+
+#define LED_DELAY 5
+LED_R = !LED_R;
+Delay_10ms(LED_DELAY);
+LED_R = !LED_R;
+Delay_10ms(LED_DELAY);
+LED_G = !LED_G;
+Delay_10ms(LED_DELAY);
+LED_G = !LED_G;
+Delay_10ms(LED_DELAY);
+LED_B = !LED_B;
+Delay_10ms(LED_DELAY);
+LED_B = !LED_B;
+Delay_10ms(LED_DELAY);
         // FSM_CTRL End
         FSM_STATE = FSM_UART;
         break;

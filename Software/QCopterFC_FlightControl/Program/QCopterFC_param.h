@@ -18,15 +18,15 @@
 #define PARAM_SIGNED      (0x00<<3)
 #define PARAM_UNSIGNED    (0x01<<3)
 
-#define TYPE_S8   ((u8)(PARAM_SIZE_1BYTE | PARAM_TYPE_INT   | PARAM_SIGNED))
-#define TYPE_U8   ((u8)(PARAM_SIZE_1BYTE | PARAM_TYPE_INT   | PARAM_UNSIGNED))
-#define TYPE_S16  ((u8)(PARAM_SIZE_2BYTE | PARAM_TYPE_INT   | PARAM_SIGNED))
-#define TYPE_U16  ((u8)(PARAM_SIZE_2BYTE | PARAM_TYPE_INT   | PARAM_UNSIGNED))
-#define TYPE_S32  ((u8)(PARAM_SIZE_4BYTE | PARAM_TYPE_INT   | PARAM_SIGNED))
-#define TYPE_U32  ((u8)(PARAM_SIZE_4BYTE | PARAM_TYPE_INT   | PARAM_UNSIGNED))
-#define TYPE_S64  ((u8)(PARAM_SIZE_8BYTE | PARAM_TYPE_INT   | PARAM_SIGNED))
-#define TYPE_U64  ((u8)(PARAM_SIZE_8BYTE | PARAM_TYPE_INT   | PARAM_UNSIGNED))
-#define TYPE_FP32 ((u8)(PARAM_SIZE_4BYTE | PARAM_TYPE_FLOAT | PARAM_SIGNED))
+#define TYPE_S8     ((u8)(PARAM_SIZE_1BYTE | PARAM_TYPE_INT   | PARAM_SIGNED))
+#define TYPE_U8     ((u8)(PARAM_SIZE_1BYTE | PARAM_TYPE_INT   | PARAM_UNSIGNED))
+#define TYPE_S16    ((u8)(PARAM_SIZE_2BYTE | PARAM_TYPE_INT   | PARAM_SIGNED))
+#define TYPE_U16    ((u8)(PARAM_SIZE_2BYTE | PARAM_TYPE_INT   | PARAM_UNSIGNED))
+#define TYPE_S32    ((u8)(PARAM_SIZE_4BYTE | PARAM_TYPE_INT   | PARAM_SIGNED))
+#define TYPE_U32    ((u8)(PARAM_SIZE_4BYTE | PARAM_TYPE_INT   | PARAM_UNSIGNED))
+#define TYPE_S64    ((u8)(PARAM_SIZE_8BYTE | PARAM_TYPE_INT   | PARAM_SIGNED))
+#define TYPE_U64    ((u8)(PARAM_SIZE_8BYTE | PARAM_TYPE_INT   | PARAM_UNSIGNED))
+#define TYPE_FP32   ((u8)(PARAM_SIZE_4BYTE | PARAM_TYPE_FLOAT | PARAM_SIGNED))
 /*=====================================================================================================*/
 /*=====================================================================================================*/
 typedef struct {
@@ -76,8 +76,12 @@ enum {
   GPS_LAT,
   PARAM_SIZE
 };
-
-extern PARAM_ST PARAMS[];
+/*====================================================================================================*/
+/*====================================================================================================*/
+void Param_Init( PARAM_ST *PARAM_INIT );
+/*====================================================================================================*/
+/*====================================================================================================*/
+extern PARAM_ST PARAM[PARAM_SIZE];
 /*====================================================================================================*/
 /*====================================================================================================*/
 #endif
