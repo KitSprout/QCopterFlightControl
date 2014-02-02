@@ -83,6 +83,8 @@ void NRF_TxData( u8 *TxBuf );
 void NRF_RxData( u8 *RxBuf );
 u8 NRF_TxPacket( u8 *TxBuf );
 u8 NRF_RxPacket( u8 *RxBuf );
+
+static u32 NRF_TimeOut( void );
 /*====================================================================================================*/
 /*====================================================================================================*/
 extern u8 TxBuf[NRF_TX_PL_WIDTH];

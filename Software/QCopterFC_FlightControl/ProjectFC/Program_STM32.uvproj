@@ -553,6 +553,11 @@
               <FileType>1</FileType>
               <FilePath>..\Program\QCopterFC_ctrl.c</FilePath>
             </File>
+            <File>
+              <FileName>QCopterFC_transport.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Program\QCopterFC_transport.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

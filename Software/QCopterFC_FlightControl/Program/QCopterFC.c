@@ -7,6 +7,7 @@
 #include "QCopterFC_param.h"
 #include "QCopterFC_ahrs.h"
 #include "QCopterFC_ctrl.h"
+#include "QCopterFC_transport.h"
 #include "module_rs232.h"
 #include "module_sensor.h"
 #include "module_nrf24l01.h"
@@ -58,6 +59,8 @@ void QCopterFC_Init( void )
     Status = NRF_Check();
   } while(Status != SUCCESS);
 
+  RF_SendData.Packet = 0x03;
+
   LED_R = LED_OFF;
 }
 /*=====================================================================================================*/
@@ -107,6 +110,9 @@ void QCopterFC_Lock( void )
 /*=====================================================================================================*/
 int main( void )
 {
+  u8 i = 0;
+  u8 Status = 0;
+
   /* QCopterFC Init */
   QCopterFC_Init();
 
@@ -118,13 +124,24 @@ int main( void )
 
   /* QCopterFC FSM */
   while(1) {
-//    LED_G = !LED_G;
+    LED_G = !LED_G;
     switch(FSM_STATE) {
 
       /************************** FSM TXRX ****************************************/
       case FSM_TXRX:
         // FSM_TXRX
-        
+        while(RF_SendData.Packet) {
+          Transport_Send(TxBuf);
+          do {
+            Status = NRF_TxPacket(TxBuf);
+          } while(Status != NRF_STA_TX_DS);
+          RF_SendData.Packet--;
+        }
+        RF_SendData.Packet = 0x03;
+        NRF_RX_Mode();
+        Status = NRF_RxPacket(RxBuf);
+        if(Status == NRF_STA_RX_DR)
+          Transport_Recv(RxBuf);
         // FSM_TXRX End
         FSM_STATE = FSM_CTRL;
         break;
@@ -132,20 +149,7 @@ int main( void )
       /************************** FSM CTRL ****************************************/
       case FSM_CTRL:
         // FSM_CTRL
-
-#define LED_DELAY 5
-LED_R = !LED_R;
-Delay_10ms(LED_DELAY);
-LED_R = !LED_R;
-Delay_10ms(LED_DELAY);
-LED_G = !LED_G;
-Delay_10ms(LED_DELAY);
-LED_G = !LED_G;
-Delay_10ms(LED_DELAY);
-LED_B = !LED_B;
-Delay_10ms(LED_DELAY);
-LED_B = !LED_B;
-Delay_10ms(LED_DELAY);
+        Delay_1ms(10);
         // FSM_CTRL End
         FSM_STATE = FSM_UART;
         break;

@@ -16,10 +16,14 @@
 #define CMD_W_ACK_PLOAD(P)    ((u8)(0xA8|(P&0x07)))
 #define CMD_W_TX_PLOAD_NOACK  ((u8)0xB0)
 #define CMD_NOP               ((u8)0xFF)
+
+//#define NRF_TIMEOUT U32_MAX
 /*=====================================================================================================*/
 /*=====================================================================================================*/
 u8 TxBuf[NRF_TX_PL_WIDTH] = {0};
 u8 RxBuf[NRF_RX_PL_WIDTH] = {0};
+
+//static vu32 NRF_TimeCnt = NRF_TIMEOUT;
 
 static u8 TX_ADDRESS[NRF_PIPE_WIDTH] = { 0x34,0x43,0x10,0x10,0x01 };   // 定義一個靜態發送地址
 static u8 RX_ADDRESS[NRF_PIPE_WIDTH] = { 0x34,0x43,0x10,0x10,0x01 };
@@ -110,7 +114,7 @@ void NRF24L01_Init( u8 NRF_INIT_MODE )
   NRF_WriteReg(CMD_W_REG | NRF_EN_RXADDR, 0x01);    // 致能 data Pipe 0 的接收地址
   NRF_WriteReg(CMD_W_REG | NRF_SETUP_RETR, 0x1A);   // 設定自動重發間隔時間:500us + 86us;最大自動重發次數:10次
   NRF_SetChannel(NRF_CHANAL);                       // 設定傳輸通道(頻率)
-  NRF_SetDataRate(NRF_RATE_2Mbps);                  // 設定傳輸速率 2Mbps
+  NRF_SetDataRate(NRF_RATE_250Kbps);                // 設定傳輸速率 2Mbps
 //  NRF_WriteReg(CMD_W_REG | NRF_RX_PW_P0, NRF_TX_PL_WIDTH);  // 設定通道0的有效數據寬度
 
   switch(NRF_INIT_MODE) {
@@ -424,7 +428,7 @@ void NRF_TxData( u8 *TxBuf )
 void NRF_RxData( u8 *RxBuf )
 {
   NRF_ReadBuf(CMD_R_RX_PLOAD, RxBuf, NRF_RX_PL_WIDTH);
-//  NRF_FlushRxFIFO();
+  NRF_FlushRxFIFO();
 }
 /*=====================================================================================================*/
 /*=====================================================================================================*
@@ -442,6 +446,7 @@ u8 NRF_TxPacket( u8 *TxBuf )
   NRF_TxData(TxBuf);
 
   while(NRF_IRQ!=0);
+
   Status = NRF_ReadReg(CMD_R_REG | NRF_STATUS);
   NRF_WriteReg(CMD_W_REG | NRF_STATUS, Status);
   NRF_FlushTxFIFO();
@@ -464,21 +469,35 @@ u8 NRF_TxPacket( u8 *TxBuf )
 /*=====================================================================================================*/
 u8 NRF_RxPacket( u8 *RxBuf )
 {
-  u8 Status;
+  u8 Status = ERROR;
 
   NRF_CE = 1;
   while(NRF_IRQ!=0);
-  NRF_CE = 0;
 
   Status = NRF_ReadReg(CMD_R_REG | NRF_STATUS);
-  NRF_WriteReg(CMD_W_REG | NRF_STATUS, Status);
-
   if(Status&NRF_STA_RX_DR) {
+    NRF_CE = 0;
     NRF_RxData(RxBuf);
+    NRF_WriteReg(CMD_W_REG | NRF_STATUS, Status);
     return NRF_STA_RX_DR;
   }
-  else
+  else {
+    NRF_WriteReg(CMD_W_REG | NRF_STATUS, Status);
     return ERROR;
+  }
 }
+/*=====================================================================================================*/
+/*=====================================================================================================*
+**函數 : NRF_TimeOut
+**功能 : NRF TimeOut
+**輸入 : None
+**輸出 : 
+**使用 : NRF_TimeOut();
+**=====================================================================================================*/
+/*=====================================================================================================*/
+//static u32 NRF_TimeOut( void )
+//{
+//  return ERROR;
+//}
 /*=====================================================================================================*/
 /*=====================================================================================================*/
