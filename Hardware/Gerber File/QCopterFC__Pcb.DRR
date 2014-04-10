@@ -1,0 +1,25 @@
+---------------------------------------------------------------------------
+NCDrill File Report For: QCopterFC__Pcb.PcbDoc   2014/4/11  ¤W¤È 05:13:43
+---------------------------------------------------------------------------
+
+Layer Pair : Top Layer to Bottom Layer
+ASCII RoundHoles File : QCopterFC__Pcb-RoundHoles.TXT
+ASCII SlotHoles File : QCopterFC__Pcb-SlotHoles.TXT
+
+Tool         Hole Size           Hole Type     Hole Count Plated       Tool Travel
+---------------------------------------------------------------------------
+T1        12mil (0.3048mm)         Round          128              14.94 Inch (379.41 mm)
+T2        21.65mil (0.54991mm)     Slot           1                284.31 Inch (7221.45 mm)
+T3        22mil (0.5588mm)         Slot           3                284.65 Inch (7230.23 mm)
+T4        27.56mil (0.70002mm)     Round          3                0.10 Inch (2.54 mm)
+T5        31.5mil (0.8001mm)       Round          52               9.40 Inch (238.87 mm)
+T6        39.37mil (1mm)           Round          2                0.31 Inch (8.00 mm)
+T7        118.11mil (2.99999mm)    Round          4                3.54 Inch (90.00 mm)
+---------------------------------------------------------------------------
+Totals                                            193              597.26 Inch (15170.49 mm)
+
+Two holes at same point : 1
+-----------------------
+1349,24
+
+Total Processing Time (hh:mm:ss) : 00:00:00

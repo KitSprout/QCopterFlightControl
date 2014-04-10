@@ -1,8 +1,8 @@
 ﻿[QCopterFC](https://github.com/QCopter/QCopterFlightControl)
 ========
 * Author  : [Hom](https://github.com/Hom-Wang)
-* Version : v2.2 設計製作中...
-* Update  : 2014/03/27
+* Version : v2.2 等待製作驗證...
+* Update  : 2014/04/11
 
 Description
 ========
@@ -25,7 +25,7 @@ Hardware
 * 儲存紀錄 : Micro SD，使用 SDIO 操作
 * 外接介面 : 1*UART、1*SPI ( FFCSPI )、2*ADC、1*USB ( Micro )、1*CAN、8*PWM
 * PCB 尺寸 : 51.5 * 35mm ( Screws M3: 30 * 30mm )
-* 設計軟體 [Altium Designer 14](http://www.altium.com/en/products/altium-designer) ( PcbLib use AD [PcbLib v?](https://github.com/OpenPCB/AltiumDesigner_PcbLibrary) )
+* 設計軟體 [Altium Designer 14](http://www.altium.com/en/products/altium-designer) ( PcbLib use AD [PcbLib v0.10](https://github.com/OpenPCB/AltiumDesigner_PcbLibrary/releases/tag/v0.10) )
 
 <img src="https://lh6.googleusercontent.com/-Fm7KUnImwko/UwPmkmbceOI/AAAAAAAAGj4/vCjmHYtTi_Q/s1200/QCopterFC_System%2520v2.2.png" />
 
