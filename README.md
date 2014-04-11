@@ -71,5 +71,5 @@ QFC_TO_QRC
 
 Schematic
 ========
-<img src="https://lh6.googleusercontent.com/-686quoG4z6o/UzPwez8LSYI/AAAAAAAAHJY/vH8HjWWeQTA/s1600/QCopterFC_v2.2_Sch_1.png" />
-<img src="https://lh3.googleusercontent.com/-bzGx58dYMIU/UzPwe6wERyI/AAAAAAAAHJc/3nQDrpXTv_c/s1600/QCopterFC_v2.2_Sch_2.png" />
+<img src="https://lh5.googleusercontent.com/-SEkE0ncr_9A/U0dqTPctvwI/AAAAAAAAHVI/mKdAyBnOoso/s1600/QCopterFC_v2.2_Sch_1.png" />
+<img src="https://lh6.googleusercontent.com/-xdyTQ1MjYLE/U0dlT0cHfpI/AAAAAAAAHUk/pOKYWnrND6U/s1600/QCopterFC_v2.2_Sch_2.png" />
