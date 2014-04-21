@@ -1,8 +1,8 @@
 ﻿[QCopterFC](https://github.com/QCopter/QCopterFlightControl)
 ========
 * Author  : [Hom](https://github.com/Hom-Wang)
-* Version : v2.2 等待製作驗證...
-* Update  : 2014/04/11
+* Version : v2.2 已送廠製作 ... 
+* Update  : 2014/04/21
 
 Description
 ========
@@ -25,9 +25,9 @@ Hardware
 * 儲存紀錄 : Micro SD，使用 SDIO 操作
 * 外接介面 : 1*UART、1*SPI ( FFCSPI )、2*ADC、1*USB ( Micro )、1*CAN、8*PWM
 * PCB 尺寸 : 51.5 * 35mm ( Screws M3: 30 * 30mm )
-* 設計軟體 [Altium Designer 14](http://www.altium.com/en/products/altium-designer) ( PcbLib use AD [PcbLib v0.10](https://github.com/OpenPCB/AltiumDesigner_PcbLibrary/releases/tag/v0.10) )
+* 設計軟體 [Altium Designer 14](http://www.altium.com/en/products/altium-designer) ( PcbLib use AD [PcbLib v0.11](https://github.com/OpenPCB/AltiumDesigner_PcbLibrary/releases/tag/v0.11) )
 
-<img src="https://lh6.googleusercontent.com/-Fm7KUnImwko/UwPmkmbceOI/AAAAAAAAGj4/vCjmHYtTi_Q/s1200/QCopterFC_System%2520v2.2.png" />
+<<img src="https://lh6.googleusercontent.com/-DM7NHDq6rQs/U1UsC_ElBbI/AAAAAAAAHq0/5NbuoV3Cs6A/s1600/QCopterFC_System_v2.2.png" />
 
 Related Documents
 ========
@@ -46,7 +46,7 @@ Software
 * [QCopterFC LED](https://github.com/QCopter/QCopterFlightControl/tree/master/Software/TEST_QCopterFC_LED)
 * [QCopterFC NRF](https://github.com/QCopter/QCopterFlightControl/tree/master/Software/TEST_QCopterFC_NRF) ( Use nRF24L01P )
 * [QCopterFC PWM](https://github.com/QCopter/QCopterFlightControl/tree/master/Software/TEST_QCopterFC_PWM)
-* [QCopterFC SDIO](https://github.com/QCopter/QCopterFlightControl/tree/master/Software/TEST_QCopterFC_SDIO) ( Use [Fatfs](http://elm-chan.org/fsw/ff/00index_e.html) 0.10 )
+* [QCopterFC SDIO](https://github.com/QCopter/QCopterFlightControl/tree/master/Software/TEST_QCopterFC_SDIO) ( Use [Fatfs](http://elm-chan.org/fsw/ff/00index_e.html) 0.10a )
 * [QCopterFC UART](https://github.com/QCopter/QCopterFlightControl/tree/master/Software/TEST_QCopterFC_UART)
 
 View
@@ -58,18 +58,12 @@ View
 Config
 ========
 ．Vin 建議輸入 5v ~ 6v
-<img src="https://lh6.googleusercontent.com/-Mm5N3Km3Rr8/UzPvcocAHnI/AAAAAAAAHIk/gn9Bi4dtfhk/s1600/QCopterFC_v2.2_Config_CHIP.png"/>
-<img src="https://lh3.googleusercontent.com/-13L0NlzLRiA/UzPvdF87olI/AAAAAAAAHIo/WJWBeXCP40M/s1600/QCopterFC_v2.2_Config_PIN.png" />
-<img src="https://lh3.googleusercontent.com/-oBVkDxgoOis/UzPvcoGxudI/AAAAAAAAHIc/Ho1CscRiN-k/s1600/QCopterFC_v2.2_Config_AF.png" />
-<img src="https://lh6.googleusercontent.com/-J4Hzd_Yo5ms/UzPvcajRi3I/AAAAAAAAHIY/3TuR2PT7YGY/s1600/QCopterFC_v2.2_Config_DMA.png" />
-
-*** 傳輸資料格式  
-QRC_TO_QFC  
-<img src="https://lh4.googleusercontent.com/-U3WhNPhTxHo/UsgUPnOV6bI/AAAAAAAAGJE/AayjWFXOgPI/s1600/QRC_TO_QFC.png" />
-QFC_TO_QRC  
-<img src="https://lh3.googleusercontent.com/-eIh5NvuE0aw/UrsPnzmAcZI/AAAAAAAAGDc/mu5YwwC-S1s/s1600/QFC_TO_QRC.png" />
+<img src="https://lh5.googleusercontent.com/-hZdWrHA9xuc/U1UsC3mE86I/AAAAAAAAHq8/VBPyaE1JFVM/s1600/QCopterFC_v2.2_Config_CHIP.png" />
+<img src="https://lh5.googleusercontent.com/-IYxslU3fndQ/U1UsEFp_M4I/AAAAAAAAHrk/Oj5IDpvgMnE/s1600/QCopterFC_v2.2_Config_PIN.png" />
+<img src="https://lh4.googleusercontent.com/-TUX7zqrGlnc/U1UsECm6vDI/AAAAAAAAHrc/m8pyp1VHqac/s1600/QCopterFC_v2.2_Config_AF.png" />
+<img src="https://lh4.googleusercontent.com/-9zhkMTi7T2g/U1UsDnXcc5I/AAAAAAAAHrA/tZGkgKc5Ans/s1600/QCopterFC_v2.2_Config_DMA.png" />
 
 Schematic
 ========
-<img src="https://lh5.googleusercontent.com/-SEkE0ncr_9A/U0dqTPctvwI/AAAAAAAAHVI/mKdAyBnOoso/s1600/QCopterFC_v2.2_Sch_1.png" />
-<img src="https://lh6.googleusercontent.com/-xdyTQ1MjYLE/U0dlT0cHfpI/AAAAAAAAHUk/pOKYWnrND6U/s1600/QCopterFC_v2.2_Sch_2.png" />
+<img src="https://lh6.googleusercontent.com/-H14qpF6-0r0/U1UsEegXJiI/AAAAAAAAHrQ/8hxHSZB0SXY/s1600/QCopterFC_v2.2_Sch_1.png" />
+<img src="https://lh4.googleusercontent.com/-e7WyY739wD4/U1UsFOjysDI/AAAAAAAAHrw/TC9kQGoledM/s1600/QCopterFC_v2.2_Sch_2.png" />

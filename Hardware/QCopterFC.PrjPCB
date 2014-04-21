@@ -454,7 +454,7 @@ OutputDefault3=0
 Name=Documentation Outputs
 Description=
 TargetPrinter=Adobe PDF
-PrinterOptions=Record=PrinterOptions|Copies=1|Duplex=1|TrueTypeOptions=3|Collate=1|PrintWhat=1
+PrinterOptions=Record=PrinterOptions|Copies=1|Duplex=1|TrueTypeOptions=3|Collate=1|PrintWhat=0
 OutputType1=Assembler Source Print
 OutputName1=Assembler Source Prints
 OutputDocumentPath1=
