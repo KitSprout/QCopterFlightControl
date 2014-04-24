@@ -58,10 +58,8 @@ View
 Config
 ========
 ．Vin 建議輸入 5v ~ 6v
-<img src="https://lh5.googleusercontent.com/-hZdWrHA9xuc/U1UsC3mE86I/AAAAAAAAHq8/VBPyaE1JFVM/s1600/QCopterFC_v2.2_Config_CHIP.png" />
-<img src="https://lh5.googleusercontent.com/-IYxslU3fndQ/U1UsEFp_M4I/AAAAAAAAHrk/Oj5IDpvgMnE/s1600/QCopterFC_v2.2_Config_PIN.png" />
-<img src="https://lh4.googleusercontent.com/-TUX7zqrGlnc/U1UsECm6vDI/AAAAAAAAHrc/m8pyp1VHqac/s1600/QCopterFC_v2.2_Config_AF.png" />
-<img src="https://lh4.googleusercontent.com/-9zhkMTi7T2g/U1UsDnXcc5I/AAAAAAAAHrA/tZGkgKc5Ans/s1600/QCopterFC_v2.2_Config_DMA.png" />
+<img src="https://lh6.googleusercontent.com/-ZEJKZqf8wEE/U1jRDgzjwTI/AAAAAAAAH0U/0mYnEfZzASw/s1600/MechanicalTop.png" />
+<img src="https://lh4.googleusercontent.com/-wildBlzBQzE/U1jRDlCFzII/AAAAAAAAH0Q/yALjZVzak90/s1600/MechanicalBottom.png" />
 
 Schematic
 ========
