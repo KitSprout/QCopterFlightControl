@@ -58,8 +58,8 @@ View
 Config
 ========
 ．Vin 建議輸入 5v ~ 6v
-<img src="https://lh6.googleusercontent.com/-ZEJKZqf8wEE/U1jRDgzjwTI/AAAAAAAAH0U/0mYnEfZzASw/s1600/MechanicalTop.png" />
-<img src="https://lh4.googleusercontent.com/-wildBlzBQzE/U1jRDlCFzII/AAAAAAAAH0Q/yALjZVzak90/s1600/MechanicalBottom.png" />
+<img src="https://lh3.googleusercontent.com/-i1jYrr84_Tc/U1lOvLOxa9I/AAAAAAAAH1I/iJ3X6pUUzP4/s1600/MechanicalTop.png" />
+<img src="https://lh6.googleusercontent.com/-ccBIlU9MAfQ/U1lOvAvklgI/AAAAAAAAH1E/YsOaFJj8hXk/s1600/MechanicalBottom.png" />
 
 Schematic
 ========
