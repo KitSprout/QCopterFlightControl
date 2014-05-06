@@ -1,7 +1,7 @@
 QCopterFC ADC Example
 ========
-* Author  : [Hom](https://github.com/Hom19910422)
-* Update  : 2014/01/24
+* Author  : [Hom](about.me/Hom)
+* Update  : 2014/05/06
 
 Description
 ========
@@ -18,13 +18,13 @@ PC15 - LED_R
 PB2  - KEY  
 
 * ADC  
-PA4  - ADC_I  
-PA5  - ADC_V  
+PC4  - ADC_I  
+PC5  - ADC_V  
 
 * UART  
-PB10 - UART Tx  
-PB11 - UART Rx  
-> UARTx = USART3  
+PB6 - UART Tx  
+PB7 - UART Rx  
+> UARTx = USART1  
 > BaudRate = 115200  
 > ByteSize = 8  
 > StopBits = 1  
