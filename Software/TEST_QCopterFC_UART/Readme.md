@@ -1,7 +1,7 @@
 QCopterFC UART Example
 ========
-* Author  : [Hom](https://github.com/Hom19910422)
-* Update  : 2014/01/24
+* Author  : [Hom](about.me/Hom)
+* Update  : 2014/05/06
 
 Description
 ========
@@ -15,9 +15,9 @@ PC14 - LED_G
 PC15 - LED_R  
 
 * UART  
-PB10 - UART Tx  
-PB11 - UART Rx  
-> UARTx = USART3  
+PB6 - UART Tx  
+PB7 - UART Rx  
+> UARTx = USART1  
 > BaudRate = 115200  
 > ByteSize = 8  
 > StopBits = 1  
