@@ -1,7 +1,7 @@
 QCopterFC FLASH Example
 ========
-* Author  : [Hom](https://github.com/Hom19910422)
-* Update  : 2014/01/18
+* Author  : [Hom](about.me/Hom)
+* Update  : 2014/05/06
 
 Description
 ========
