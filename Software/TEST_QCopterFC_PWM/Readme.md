@@ -1,7 +1,7 @@
 QCopterFC PWM Example
 ========
-* Author  : [Hom](https://github.com/Hom19910422)
-* Update  : 2014/02/25
+* Author  : [Hom](about.me/Hom)
+* Update  : 2014/05/06
 
 Description
 ========
@@ -18,15 +18,13 @@ PC15 - LED_R
 PB2  - KEY  
 
 * PWM  
-PA0  - TIM2 CH1 - PWM3  
-PA1  - TIM2 CH2 - PWM4  
-PA2  - TIM2 CH3 - PWM5  
-PA3  - TIM2 CH4 - PWM8  
-PA6  - TIM3 CH1 - PWM9  
-PA7  - TIM3 CH2 - PWM10  
-PB0  - TIM3 CH3 - PWM11  
-PB1  - TIM3 CH4 - PWM12  
-PB6  - TIM4 CH1 - PWM1  
-PB7  - TIM4 CH2 - PWM2  
-PC6  - TIM8 CH2 - PWM7  
-PC7  - TIM8 CH1 - PWM6  
+PA0  - TIM2 CH1 - PWM1  
+PA1  - TIM2 CH2 - PWM2  
+PA2  - TIM2 CH3 - PWM3  
+PA3  - TIM2 CH4 - PWM6  
+PB0  - TIM3 CH3 - PWM5 
+PB1  - TIM3 CH4 - PWM4  
+PB8  - TIM4 CH3 - PWM10  
+PB9  - TIM4 CH4 - PWM11  
+PC6  - TIM3 CH1 - PWM8  
+PC7  - TIM3 CH2 - PWM7  
