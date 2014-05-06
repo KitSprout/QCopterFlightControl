@@ -1,8 +1,8 @@
 ﻿[QCopterFC](https://github.com/QCopter/QCopterFlightControl)
 ========
-* Author  : [Hom](https://github.com/Hom-Wang)
-* Version : v2.2 已送廠製作 ... 
-* Update  : 2014/04/22
+* Author  : [Hom](https://about.me/Hom)
+* Version : v2.2 測試中 ... 
+* Update  : 2014/05/06
 
 Description
 ========
