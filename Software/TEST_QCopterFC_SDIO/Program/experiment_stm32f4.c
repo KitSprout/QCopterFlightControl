@@ -1,22 +1,14 @@
-/*=====================================================================================================*/
-/*=====================================================================================================*/
+/*====================================================================================================*/
+/*====================================================================================================*/
 #include "stm32f4_system.h"
 #include "stm32f4_usart.h"
 #include "stm32f4_sdio.h"
+#include "experiment_stm32f4.h"
 #include "module_rs232.h"
 #include "algorithm_string.h"
 
 #include "ff.h"
 #include "diskio.h"
-/*=====================================================================================================*/
-/*=====================================================================================================*/
-#define KEY   PBI(2)
-#define LED_R PCO(15)
-#define LED_G PCO(14)
-#define LED_B PCO(13)
-/*=====================================================================================================*/
-/*=====================================================================================================*/
-void GPIO_Config( void );
 /*=====================================================================================================*/
 /*=====================================================================================================*/
 FATFS FatFs;
@@ -36,36 +28,36 @@ int main( void )
   RS232_Config();
 
   // SD Card and FatFs Init
-  RS232_SendStr(USART3, (u8*)"\r\n");
-  RS232_SendStr(USART3, (u8*)"-----------------------\r\n");
-  RS232_SendStr(USART3, (u8*)" SDIO SD FatFs demo\r\n");
-  RS232_SendStr(USART3, (u8*)"-----------------------\r\n");
-  RS232_SendStr(USART3, (u8*)" SD Init ... ");
+  RS232_SendStr((u8*)"\r\n");
+  RS232_SendStr((u8*)"-----------------------\r\n");
+  RS232_SendStr((u8*)" SDIO SD FatFs demo\r\n");
+  RS232_SendStr((u8*)"-----------------------\r\n");
+  RS232_SendStr((u8*)" SD Init ... ");
   while(SD_Init() != SD_OK) {
-    RS232_SendStr(USART3, (u8*)"Failed!!\r\n");
+    RS232_SendStr((u8*)"Failed!!\r\n");
     while(1) {
       LED_R = ~LED_R;
       Delay_100ms(2);
     }
   }
-  RS232_SendStr(USART3, (u8*)"OK!!\r\n\r\n");
+  RS232_SendStr((u8*)"OK!!\r\n\r\n");
 
   // SD Card Info
-  RS232_SendStr(USART3, (u8*)"---- SD Init Info -----\r\n");
-  RS232_SendStr(USART3, (u8*)" Capacity : ");
-  RS232_SendNum(USART3, Type_D, 5, SDCardInfo.CardCapacity>>20);
-  RS232_SendStr(USART3, (u8*)" MB\r\n");
-  RS232_SendStr(USART3, (u8*)" CardBlockSize : ");
-  RS232_SendNum(USART3, Type_D, 5, SDCardInfo.CardBlockSize);
-  RS232_SendStr(USART3, (u8*)"\r\n");
-  RS232_SendStr(USART3, (u8*)" CardType : ");
-  RS232_SendNum(USART3, Type_D, 5, SDCardInfo.CardType);
-  RS232_SendStr(USART3, (u8*)"\r\n");
-  RS232_SendStr(USART3, (u8*)" RCA : ");
-  RS232_SendNum(USART3, Type_D, 5, SDCardInfo.RCA);
-  RS232_SendStr(USART3, (u8*)"\r\n");
-  RS232_SendStr(USART3, (u8*)"-----------------------\r\n");
-  RS232_SendStr(USART3, (u8*)"\r\n");
+  RS232_SendStr((u8*)"---- SD Init Info -----\r\n");
+  RS232_SendStr((u8*)" Capacity : ");
+  RS232_SendNum(Type_D, 5, SDCardInfo.CardCapacity>>20);
+  RS232_SendStr((u8*)" MB\r\n");
+  RS232_SendStr((u8*)" CardBlockSize : ");
+  RS232_SendNum(Type_D, 5, SDCardInfo.CardBlockSize);
+  RS232_SendStr((u8*)"\r\n");
+  RS232_SendStr((u8*)" CardType : ");
+  RS232_SendNum(Type_D, 5, SDCardInfo.CardType);
+  RS232_SendStr((u8*)"\r\n");
+  RS232_SendStr((u8*)" RCA : ");
+  RS232_SendNum(Type_D, 5, SDCardInfo.RCA);
+  RS232_SendStr((u8*)"\r\n");
+  RS232_SendStr((u8*)"-----------------------\r\n");
+  RS232_SendStr((u8*)"\r\n");
 
   LED_R = 0;
   // Wait
@@ -76,31 +68,31 @@ int main( void )
   LED_G = 1;
 
   // Read Directory File
-  RS232_SendStr(USART3, (u8*)"-----------------------\r\n");
-  RS232_SendStr(USART3, (u8*)" SD_Card Read Directory\r\n");
-  RS232_SendStr(USART3, (u8*)"-----------------------\r\n\r\n");
+  RS232_SendStr((u8*)"-----------------------\r\n");
+  RS232_SendStr((u8*)" SD_Card Read Directory\r\n");
+  RS232_SendStr((u8*)"-----------------------\r\n\r\n");
 
   res = f_mount(&FatFs, "", 1);
   res = f_opendir(&dirs, "0:/");
   res = f_readdir(&dirs, &finfo);
   while(res!= FR_OK) {
-    RS232_SendStr(USART3, (u8*)" FatFs failed!!\r\n");
+    RS232_SendStr((u8*)" FatFs failed!!\r\n");
     while(1) {
       LED_R = ~LED_R;
       Delay_100ms(2);
     }
   }
-  RS232_SendStr(USART3, (u8*)" File Name : \r\n");
+  RS232_SendStr((u8*)" File Name : \r\n");
 
   while(finfo.fname[0]) {
     f_readdir(&dirs, &finfo);
     if(!finfo.fname[0])
       break;
-    RS232_SendStr(USART3, (u8*)" ... ");
-    RS232_SendStr(USART3, (u8*)finfo.fname);
-    RS232_SendStr(USART3, (u8*)"\r\n");
+    RS232_SendStr((u8*)" ... ");
+    RS232_SendStr((u8*)finfo.fname);
+    RS232_SendStr((u8*)"\r\n");
   }
-  RS232_SendStr(USART3, (u8*)"\r\n");
+  RS232_SendStr((u8*)"\r\n");
 
   LED_G = 0;
   // Wait
@@ -111,39 +103,39 @@ int main( void )
   LED_B = 1;
 
   // Write File
-  RS232_SendStr(USART3, (u8*)"-----------------------\r\n");
-  RS232_SendStr(USART3, (u8*)" SD_Card Write Data\r\n");
-  RS232_SendStr(USART3, (u8*)"-----------------------\r\n\r\n");
+  RS232_SendStr((u8*)"-----------------------\r\n");
+  RS232_SendStr((u8*)" SD_Card Write Data\r\n");
+  RS232_SendStr((u8*)"-----------------------\r\n\r\n");
 
-  RS232_SendStr(USART3, (u8*)" f_open ... ");
+  RS232_SendStr((u8*)" f_open ... ");
   res = f_open(&file,"SDCard_K.txt", FA_OPEN_ALWAYS | FA_READ | FA_WRITE);
   if(res==FR_OK)
-    RS232_SendStr(USART3, (u8*)"OK!!\r\n");
+    RS232_SendStr((u8*)"OK!!\r\n");
   else
-    RS232_SendStr(USART3, (u8*)"failed!!\r\n");
+    RS232_SendStr((u8*)"failed!!\r\n");
 
-  RS232_SendStr(USART3, (u8*)" f_write ... ");
+  RS232_SendStr((u8*)" f_write ... ");
   res = f_write(&file, WriteData, 20, &i); 
   if(res==FR_OK)
-    RS232_SendStr(USART3, (u8*)"OK!!\r\n");
+    RS232_SendStr((u8*)"OK!!\r\n");
   else
-    RS232_SendStr(USART3, (u8*)"failed!!\r\n");
+    RS232_SendStr((u8*)"failed!!\r\n");
 
   file.fptr = 0;
 
-  RS232_SendStr(USART3, (u8*)" f_read ... ");
+  RS232_SendStr((u8*)" f_read ... ");
   res = f_read(&file, ReadBuf, 100, &i);
   if(res==FR_OK)
-    RS232_SendStr(USART3, (u8*)"OK!!\r\n");
+    RS232_SendStr((u8*)"OK!!\r\n");
   else
-    RS232_SendStr(USART3, (u8*)"failed!!\r\n");
-  RS232_SendStr(USART3, (u8*)"\r\n");
+    RS232_SendStr((u8*)"failed!!\r\n");
+  RS232_SendStr((u8*)"\r\n");
   f_close(&file);
 
   // Read File
-  RS232_SendStr(USART3, (u8*)" Read String : \r\n");
-  RS232_SendStr(USART3, (u8*)" ... ");
-  RS232_SendStr(USART3, ReadBuf);
+  RS232_SendStr((u8*)" Read String : \r\n");
+  RS232_SendStr((u8*)" ... ");
+  RS232_SendStr(ReadBuf);
 
   LED_B = 0;
   while(1) {
@@ -179,5 +171,5 @@ void GPIO_Config( void )
   LED_G = 1;
   LED_B = 1;
 }
-/*=====================================================================================================*/
-/*=====================================================================================================*/
+/*====================================================================================================*/
+/*====================================================================================================*/

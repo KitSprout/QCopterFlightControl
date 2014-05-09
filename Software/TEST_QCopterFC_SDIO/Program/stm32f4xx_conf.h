@@ -44,7 +44,6 @@
 //#include "stm32f4xx_exti.h"
 //#include "stm32f4xx_flash.h"
 //#include "stm32f4xx_fmc.h"
-//#include "stm32f4xx_fsmc.h"
 #include "stm32f4xx_gpio.h"
 //#include "stm32f4xx_hash.h"
 //#include "stm32f4xx_i2c.h"
@@ -61,19 +60,6 @@
 //#include "stm32f4xx_tim.h"
 #include "stm32f4xx_usart.h"
 //#include "stm32f4xx_wwdg.h"
-
-/* Exported types ------------------------------------------------------------*/
-/* Exported constants --------------------------------------------------------*/
-
-/* If an external clock source is used, then the value of the following define 
-   should be set to the value of the external clock source, else, if no external 
-   clock is used, keep this define commented */
-/*#define I2S_EXTERNAL_CLOCK_VAL   12288000 */ /* Value of the external clock in Hz */
-
-
-/* Uncomment the line below to expanse the "assert_param" macro in the 
-   Standard Peripheral Library drivers code */
-/* #define USE_FULL_ASSERT    1 */
 
 /* Exported macro ------------------------------------------------------------*/
 #ifdef  USE_FULL_ASSERT
