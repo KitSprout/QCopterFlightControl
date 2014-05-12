@@ -1,10 +1,47 @@
-/*=====================================================================================================*/
-/*=====================================================================================================*/
+/*====================================================================================================*/
+/*====================================================================================================*/
 #include "stm32f4_system.h"
 #include "stm32f4_spi.h"
 #include "module_nrf24l01.h"
-/*=====================================================================================================*/
-/*=====================================================================================================*/
+/*====================================================================================================*/
+/*====================================================================================================*/
+#define NRF_SPIx            SPI3
+#define NRF_SPIx_CLK        RCC_APB1Periph_SPI3
+
+#define NRF_CE_PIN          GPIO_Pin_8
+#define NRF_CE_GPIO_PORT    GPIOA
+#define NRF_CE_GPIO_CLK     RCC_AHB1Periph_GPIOA
+#define NRF_CE              PAO(8)
+
+#define NRF_IRQ_PIN         GPIO_Pin_12
+#define NRF_IRQ_GPIO_PORT   GPIOB
+#define NRF_IRQ_GPIO_CLK    RCC_AHB1Periph_GPIOB
+#define NRF_IRQ             PBI(12)
+
+#define NRF_CSN_PIN         GPIO_Pin_15
+#define NRF_CSN_GPIO_PORT   GPIOA
+#define NRF_CSN_GPIO_CLK    RCC_AHB1Periph_GPIOA
+#define NRF_CSN             PAO(15)
+
+#define NRF_SCK_PIN         GPIO_Pin_3
+#define NRF_SCK_GPIO_PORT   GPIOB
+#define NRF_SCK_GPIO_CLK    RCC_AHB1Periph_GPIOB
+#define NRF_SCK_SOURCE      GPIO_PinSource3
+#define NRF_SCK_AF          GPIO_AF_SPI3
+
+#define NRF_SDO_PIN         GPIO_Pin_4
+#define NRF_SDO_GPIO_PORT   GPIOB
+#define NRF_SDO_GPIO_CLK    RCC_AHB1Periph_GPIOB
+#define NRF_SDO_SOURCE      GPIO_PinSource4
+#define NRF_SDO_AF          GPIO_AF_SPI3
+
+#define NRF_SDI_PIN         GPIO_Pin_5
+#define NRF_SDI_GPIO_PORT   GPIOB
+#define NRF_SDI_GPIO_CLK    RCC_AHB1Periph_GPIOB
+#define NRF_SDI_SOURCE      GPIO_PinSource5
+#define NRF_SDI_AF          GPIO_AF_SPI3
+
+// CMD
 #define CMD_R_REG             ((u8)0x00)
 #define CMD_W_REG             ((u8)0x20)
 #define CMD_R_RX_PLOAD        ((u8)0x61)
@@ -16,81 +53,111 @@
 #define CMD_W_ACK_PLOAD(P)    ((u8)(0xA8|(P&0x07)))
 #define CMD_W_TX_PLOAD_NOACK  ((u8)0xB0)
 #define CMD_NOP               ((u8)0xFF)
-/*=====================================================================================================*/
-/*=====================================================================================================*/
+/*====================================================================================================*/
+/*====================================================================================================*/
 u8 TxBuf[NRF_TX_PL_WIDTH] = {0};
 u8 RxBuf[NRF_RX_PL_WIDTH] = {0};
 
 static u8 TX_ADDRESS[NRF_PIPE_WIDTH] = { 0x34,0x43,0x10,0x10,0x01 };   // 定義一個靜態發送地址
 static u8 RX_ADDRESS[NRF_PIPE_WIDTH] = { 0x34,0x43,0x10,0x10,0x01 };
-/*=====================================================================================================*/
-/*=====================================================================================================*
+
+static u8   NRF_ReadReg( u8 ReadAddr );
+static void NRF_WriteReg( u8 WriteAddr, u8 WriteData );
+static void NRF_ReadBuf( u8 ReadAddr, u8 *ReadBuf, u8 Bytes );
+static void NRF_WriteBuf( u8 WriteAddr, u8 *WriteBuf, u8 Bytes );
+
+//static u8   NRF_NOP( void );
+//static u8   NRF_GetStatus( void );
+static void NRF_SetChannel( u8 Channel );
+static void NRF_SetDataRate( u8 DataRate );
+static void NRF_SetAddr( u8 RegAddr, u8 *Address );
+static void NRF_FlushTxFIFO( void );
+static void NRF_FlushRxFIFO( void );
+/*====================================================================================================*/
+/*====================================================================================================*
 **函數 : NRF24L01_Config
 **功能 : nRF24L01 配置 & 設定
 **輸入 : None
 **輸出 : None
 **使用 : NRF24L01_Config();
-**=====================================================================================================*/
-/*=====================================================================================================*/
+**====================================================================================================*/
+/*====================================================================================================*/
 void NRF24L01_Config( void )
 {
   GPIO_InitTypeDef GPIO_InitStruct;
   SPI_InitTypeDef SPI_InitStruct;
 
-  RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB | RCC_AHB1Periph_GPIOC, ENABLE);
-  RCC_APB1PeriphClockCmd(RCC_APB1Periph_SPI2, ENABLE);
+  /* Clk Init *************************************************************/
+  RCC_AHB1PeriphClockCmd(NRF_CE_GPIO_CLK  | NRF_IRQ_GPIO_CLK | NRF_CSN_GPIO_CLK |
+                         NRF_SCK_GPIO_CLK | NRF_SDO_GPIO_CLK | NRF_SDI_GPIO_CLK, ENABLE);
+  RCC_APB1PeriphClockCmd(NRF_SPIx_CLK, ENABLE);
 
-  GPIO_PinAFConfig(GPIOB, GPIO_PinSource13, GPIO_AF_SPI2);
-  GPIO_PinAFConfig(GPIOB, GPIO_PinSource14, GPIO_AF_SPI2);
-  GPIO_PinAFConfig(GPIOB, GPIO_PinSource15, GPIO_AF_SPI2);
+  GPIO_PinAFConfig(NRF_SCK_GPIO_PORT, NRF_SCK_SOURCE, NRF_SCK_AF);
+  GPIO_PinAFConfig(NRF_SDO_GPIO_PORT, NRF_SDO_SOURCE, NRF_SDO_AF);
+  GPIO_PinAFConfig(NRF_SDI_GPIO_PORT, NRF_SDI_SOURCE, NRF_SDI_AF);
 
-  /* CSN PB12 */
-  GPIO_InitStruct.GPIO_Pin = GPIO_Pin_12;
-  GPIO_InitStruct.GPIO_Mode = GPIO_Mode_OUT;
+  /* CE */
+  GPIO_InitStruct.GPIO_Pin   = NRF_CE_PIN;
+  GPIO_InitStruct.GPIO_Mode  = GPIO_Mode_OUT;
+  GPIO_InitStruct.GPIO_PuPd  = GPIO_PuPd_UP;
   GPIO_InitStruct.GPIO_OType = GPIO_OType_PP;
-  GPIO_InitStruct.GPIO_PuPd = GPIO_PuPd_UP;
   GPIO_InitStruct.GPIO_Speed = GPIO_Speed_50MHz;
-  GPIO_Init(GPIOB, &GPIO_InitStruct);
-
-  NRF_CSN = 1;
-
-  /* SCK PB13 */	/* MISO PB14 */	/* MOSI PB15 */
-  GPIO_InitStruct.GPIO_Pin = GPIO_Pin_13 | GPIO_Pin_14 | GPIO_Pin_15;
-  GPIO_InitStruct.GPIO_Mode = GPIO_Mode_AF;
-  GPIO_InitStruct.GPIO_OType = GPIO_OType_PP;
-  GPIO_InitStruct.GPIO_PuPd = GPIO_PuPd_UP;
-  GPIO_InitStruct.GPIO_Speed = GPIO_Speed_50MHz;
-  GPIO_Init(GPIOB, &GPIO_InitStruct);
-  /* CE PC4 */
-  GPIO_InitStruct.GPIO_Pin = GPIO_Pin_4;
-  GPIO_InitStruct.GPIO_Mode = GPIO_Mode_OUT;
-  GPIO_InitStruct.GPIO_OType = GPIO_OType_PP;
-  GPIO_InitStruct.GPIO_PuPd = GPIO_PuPd_UP;
-  GPIO_InitStruct.GPIO_Speed = GPIO_Speed_50MHz;
-  GPIO_Init(GPIOC, &GPIO_InitStruct);
+  GPIO_Init(NRF_CE_GPIO_PORT, &GPIO_InitStruct);
 
   NRF_CE = 0;
 
-  /* IRQ PC5 */
-  GPIO_InitStruct.GPIO_Pin = GPIO_Pin_5;
-  GPIO_InitStruct.GPIO_Mode = GPIO_Mode_IN;
+  /* IRQ */
+  GPIO_InitStruct.GPIO_Pin   = NRF_IRQ_PIN;
+  GPIO_InitStruct.GPIO_Mode  = GPIO_Mode_IN;
+  GPIO_InitStruct.GPIO_PuPd  = GPIO_PuPd_UP;
   GPIO_InitStruct.GPIO_OType = GPIO_OType_OD;
-  GPIO_InitStruct.GPIO_PuPd = GPIO_PuPd_UP;
   GPIO_InitStruct.GPIO_Speed = GPIO_Speed_50MHz;
-  GPIO_Init(GPIOC, &GPIO_InitStruct);
+  GPIO_Init(NRF_IRQ_GPIO_PORT, &GPIO_InitStruct);
+  /* CSN */
+  GPIO_InitStruct.GPIO_Pin   = NRF_CSN_PIN;
+  GPIO_InitStruct.GPIO_Mode  = GPIO_Mode_OUT;
+  GPIO_InitStruct.GPIO_PuPd  = GPIO_PuPd_UP;
+  GPIO_InitStruct.GPIO_OType = GPIO_OType_PP;
+  GPIO_InitStruct.GPIO_Speed = GPIO_Speed_50MHz;
+  GPIO_Init(NRF_CSN_GPIO_PORT, &GPIO_InitStruct);
 
-  SPI_InitStruct.SPI_Direction = SPI_Direction_2Lines_FullDuplex;   // 雙線全雙工
-  SPI_InitStruct.SPI_Mode = SPI_Mode_Master;                        // 主模式
-  SPI_InitStruct.SPI_DataSize = SPI_DataSize_8b;                    // 數據大小 8 位
-  SPI_InitStruct.SPI_CPOL = SPI_CPOL_Low;                           // 時鐘極性，空閒時為低
-  SPI_InitStruct.SPI_CPHA = SPI_CPHA_1Edge;                         // 第 1 個邊沿有效，上升沿為采樣時刻
-  SPI_InitStruct.SPI_NSS = SPI_NSS_Soft;                            // NSS 信號由軟體產生
-  SPI_InitStruct.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_4;   // 4 分頻，10.5 MHz
-  SPI_InitStruct.SPI_FirstBit = SPI_FirstBit_MSB;                   // 高位在前
-  SPI_InitStruct.SPI_CRCPolynomial = 7;
-  SPI_Init(NRF_SPI, &SPI_InitStruct);
+  NRF_CSN = 1;
 
-  SPI_Cmd(NRF_SPI, ENABLE);
+  /* SCK */
+  GPIO_InitStruct.GPIO_Pin   = NRF_SCK_PIN;
+  GPIO_InitStruct.GPIO_Mode  = GPIO_Mode_AF;
+  GPIO_InitStruct.GPIO_PuPd  = GPIO_PuPd_UP;
+  GPIO_InitStruct.GPIO_OType = GPIO_OType_PP;
+  GPIO_InitStruct.GPIO_Speed = GPIO_Speed_50MHz;
+  GPIO_Init(NRF_SCK_GPIO_PORT, &GPIO_InitStruct);
+  /* SDO */
+  GPIO_InitStruct.GPIO_Pin   = NRF_SDO_PIN;
+  GPIO_InitStruct.GPIO_Mode  = GPIO_Mode_AF;
+  GPIO_InitStruct.GPIO_PuPd  = GPIO_PuPd_UP;
+  GPIO_InitStruct.GPIO_OType = GPIO_OType_PP;
+  GPIO_InitStruct.GPIO_Speed = GPIO_Speed_50MHz;
+  GPIO_Init(NRF_SDO_GPIO_PORT, &GPIO_InitStruct);
+  /* SDI */
+  GPIO_InitStruct.GPIO_Pin   = NRF_SDI_PIN;
+  GPIO_InitStruct.GPIO_Mode  = GPIO_Mode_AF;
+  GPIO_InitStruct.GPIO_PuPd  = GPIO_PuPd_UP;
+  GPIO_InitStruct.GPIO_OType = GPIO_OType_PP;
+  GPIO_InitStruct.GPIO_Speed = GPIO_Speed_50MHz;
+  GPIO_Init(NRF_SDI_GPIO_PORT, &GPIO_InitStruct);
+
+  /* SPI Init ****************************************************************/
+  SPI_InitStruct.SPI_Direction         = SPI_Direction_2Lines_FullDuplex;    // Full Duplex
+  SPI_InitStruct.SPI_Mode              = SPI_Mode_Master;                    // Master Mode
+  SPI_InitStruct.SPI_DataSize          = SPI_DataSize_8b;                    // Data Size 8 bit
+  SPI_InitStruct.SPI_CPOL              = SPI_CPOL_Low;                       // Transitioned On The Rising Edge
+  SPI_InitStruct.SPI_CPHA              = SPI_CPHA_1Edge;                     // Latched On the Rising Edge
+  SPI_InitStruct.SPI_NSS               = SPI_NSS_Soft;                       // Software NSS Signal
+  SPI_InitStruct.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_4;            // fsck = APB1 36MHz / 2 = 18MHz
+  SPI_InitStruct.SPI_FirstBit          = SPI_FirstBit_MSB;                   // MSB First
+  SPI_InitStruct.SPI_CRCPolynomial     = 7;
+  SPI_Init(NRF_SPIx, &SPI_InitStruct);
+
+  SPI_Cmd(NRF_SPIx, ENABLE);
 }
 /*=====================================================================================================*/
 /*=====================================================================================================*
@@ -133,6 +200,8 @@ void NRF24L01_Init( u8 NRF_INIT_MODE )
   NRF_WriteReg(CMD_W_REG | NRF_FEATURE, 0x07);
 
   NRF_CE = 1;
+
+  while(NRF_Check()!=SUCCESS);
 }
 /*=====================================================================================================*/
 /*=====================================================================================================*
@@ -148,8 +217,8 @@ static u8 NRF_ReadReg( u8 ReadAddr )
   u8 ReadData;
 
   NRF_CSN = 0;
-  SPI_WriteByte(NRF_SPI, ReadAddr);
-  ReadData = SPI_ReadByte(NRF_SPI);
+  SPI_RW(NRF_SPIx, ReadAddr);
+  ReadData = SPI_RW(NRF_SPIx, 0xFF);
   NRF_CSN = 1;
 
   return ReadData;
@@ -166,8 +235,8 @@ static u8 NRF_ReadReg( u8 ReadAddr )
 static void NRF_WriteReg( u8 WriteAddr, u8 WriteData )
 {
   NRF_CSN = 0;
-  SPI_WriteByte(NRF_SPI, WriteAddr);
-  SPI_WriteByte(NRF_SPI, WriteData);
+  SPI_RW(NRF_SPIx, WriteAddr);
+  SPI_RW(NRF_SPIx, WriteData);
   NRF_CSN = 1;
 }
 /*=====================================================================================================*/
@@ -184,9 +253,9 @@ static void NRF_ReadBuf( u8 ReadAddr, u8 *ReadBuf, u8 Bytes )
   u8 i = 0;
 
   NRF_CSN = 0;
-  SPI_WriteByte(NRF_SPI, ReadAddr);
+  SPI_RW(NRF_SPIx, ReadAddr);
   for(i=0; i<Bytes; i++)
-    ReadBuf[i] = SPI_ReadByte(NRF_SPI);
+    ReadBuf[i] = SPI_RW(NRF_SPIx, 0xFF);
   NRF_CSN = 1;
 }
 /*=====================================================================================================*/
@@ -203,9 +272,9 @@ static void NRF_WriteBuf( u8 WriteAddr, u8 *WriteBuf, u8 Bytes )
   u8 i;
 
   NRF_CSN = 0;
-  SPI_WriteByte(NRF_SPI, WriteAddr);
+  SPI_RW(NRF_SPIx, WriteAddr);
   for(i=0; i<Bytes; i++)
-    SPI_WriteByte(NRF_SPI, WriteBuf[i]);
+    SPI_RW(NRF_SPIx, WriteBuf[i]);
   NRF_CSN = 1;
 }
 /*=====================================================================================================*/
@@ -321,7 +390,7 @@ static void NRF_SetAddr( u8 RegAddr, u8 *Address )
 static void NRF_FlushTxFIFO( void )
 {
   NRF_CSN = 0;
-  SPI_RW(NRF_SPI, CMD_FLUSH_TX);
+  SPI_RW(NRF_SPIx, CMD_FLUSH_TX);
   NRF_CSN = 1;
 }
 /*=====================================================================================================*/
@@ -336,7 +405,7 @@ static void NRF_FlushTxFIFO( void )
 static void NRF_FlushRxFIFO( void )
 {
   NRF_CSN = 0;
-  SPI_RW(NRF_SPI, CMD_FLUSH_RX);
+  SPI_RW(NRF_SPIx, CMD_FLUSH_RX);
   NRF_CSN = 1;
 }
 /*=====================================================================================================*/

@@ -7,7 +7,7 @@
 
   <Targets>
     <Target>
-      <TargetName>STM32F405RGT</TargetName>
+      <TargetName>STM32F405R</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
       <TargetOption>
@@ -45,7 +45,7 @@
             <InvalidFlash>1</InvalidFlash>
           </TargetStatus>
           <OutputDirectory>.\Obj\</OutputDirectory>
-          <OutputName>STM32F405RGT</OutputName>
+          <OutputName>STM32F405R</OutputName>
           <CreateExecutable>1</CreateExecutable>
           <CreateLib>0</CreateLib>
           <CreateHexFile>1</CreateHexFile>
@@ -139,6 +139,8 @@
             <RestoreFunctions>0</RestoreFunctions>
             <RestoreToolbox>1</RestoreToolbox>
             <RestoreTracepoints>0</RestoreTracepoints>
+            <RestoreTracepoints>1</RestoreTracepoints>
+            <RestoreTracepoints>1</RestoreTracepoints>
           </Target>
           <RunDebugAfterBuild>0</RunDebugAfterBuild>
           <TargetSelection>7</TargetSelection>
@@ -353,9 +355,11 @@
             <wLevel>2</wLevel>
             <uThumb>0</uThumb>
             <uSurpInc>0</uSurpInc>
+            <uC99>0</uC99>
+            <useXO>0</useXO>
             <VariousControls>
               <MiscControls></MiscControls>
-              <Define>STM32F40XX, USE_STDPERIPH_DRIVER, __FPU_PRESENT=1, __FPU_USED =1, ARM_MATH_CM4, __CC_ARM</Define>
+              <Define>USE_STDPERIPH_DRIVER, __FPU_PRESENT=1, __FPU_USED =1, ARM_MATH_CM4, __CC_ARM</Define>
               <Undefine></Undefine>
               <IncludePath>..\;..\Libraries\CMSIS;..\Libraries\STM32F4xx_StdPeriph_Driver\inc;..\Libraries\STM32F4xx_StdPeriph_Driver\src;..\Program;..\Program\Algorithms;..\Program\Dirvers;..\Program\Modules</IncludePath>
             </VariousControls>
@@ -369,6 +373,7 @@
             <SwStkChk>0</SwStkChk>
             <NoWarn>0</NoWarn>
             <uSurpInc>0</uSurpInc>
+            <useXO>0</useXO>
             <VariousControls>
               <MiscControls></MiscControls>
               <Define></Define>
@@ -385,6 +390,7 @@
             <useFile>0</useFile>
             <TextAddressRange>0x08000000</TextAddressRange>
             <DataAddressRange>0x20000000</DataAddressRange>
+            <pXoBase></pXoBase>
             <ScatterFile></ScatterFile>
             <IncludeLibs></IncludeLibs>
             <IncludeLibsPath></IncludeLibsPath>
@@ -468,15 +474,10 @@
               <FileType>1</FileType>
               <FilePath>..\Program\experiment_stm32f4.c</FilePath>
             </File>
-            <File>
-              <FileName>QCopterFC_board.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Program\QCopterFC_board.c</FilePath>
-            </File>
           </Files>
         </Group>
         <Group>
-          <GroupName>Modules</GroupName>
+          <GroupName>Module</GroupName>
           <Files>
             <File>
               <FileName>module_rs232.c</FileName>
@@ -491,7 +492,7 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>Algorithms</GroupName>
+          <GroupName>Algorithm</GroupName>
           <Files>
             <File>
               <FileName>algorithm_string.c</FileName>
