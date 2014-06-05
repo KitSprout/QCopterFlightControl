@@ -2,7 +2,7 @@
 ========
 * Author  : [Hom](https://about.me/Hom)
 * Version : v2.2 測試中 ... 
-* Update  : 2014/05/09
+* Update  : 2014/06/05
 
 Description
 ========
@@ -47,6 +47,8 @@ Software
 * [QCopterFC NRF](https://github.com/QCopter/QCopterFlightControl/tree/master/Software/TEST_QCopterFC_NRF) ( Use nRF24L01P )
 * [QCopterFC PWM](https://github.com/QCopter/QCopterFlightControl/tree/master/Software/TEST_QCopterFC_PWM)
 * [QCopterFC SDIO](https://github.com/QCopter/QCopterFlightControl/tree/master/Software/TEST_QCopterFC_SDIO) ( Use [Fatfs](http://elm-chan.org/fsw/ff/00index_e.html) 0.10a )
+* [QCopterFC FFCSPI-TFT2.2](https://github.com/QCopter/QCopterFlightControl/tree/master/Software/TEST_QCopterFC_TestFFCSPI-TFT2.2)
+* [QCopterFC TFT2.2_WaveForm](https://github.com/QCopter/QCopterFlightControl/tree/master/Software/TEST_QCopterFC_TFT2.2_WaveForm)
 * [QCopterFC UART](https://github.com/QCopter/QCopterFlightControl/tree/master/Software/TEST_QCopterFC_UART)
 
 View
