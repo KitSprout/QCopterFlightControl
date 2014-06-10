@@ -1,15 +1,12 @@
-/* #include "stm32f4_usart.h" */
+/* #include "stm32f4_spi.h" */
 
-#ifndef __STM32F4_USART_H
-#define __STM32F4_USART_H
+#ifndef __STM32F4_SPI_H
+#define __STM32F4_SPI_H
 
 #include "stm32f4xx.h"
 /*====================================================================================================*/
 /*====================================================================================================*/
-void UART_SendByte( USART_TypeDef *USARTx, u8 SendData );
-u8   UART_RecvByte( USART_TypeDef *USARTx );
-void UART_SendData( USART_TypeDef *USARTx, u8 *SendData, u16 DataLen );
-void UART_RecvData( USART_TypeDef *USARTx, u8 *RecvData, u16 DataLen );
+u8 SPI_RW( SPI_TypeDef* SPIx, u8 WriteByte );
 /*====================================================================================================*/
 /*====================================================================================================*/
-#endif	 
+#endif

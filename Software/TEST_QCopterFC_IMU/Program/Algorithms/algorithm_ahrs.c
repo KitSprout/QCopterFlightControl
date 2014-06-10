@@ -1,16 +1,19 @@
-/*=====================================================================================================*/
-/*=====================================================================================================*/
+/*====================================================================================================*/
+/*====================================================================================================*/
 #include "stm32f4_system.h"
-#include "QCopterFC_ahrs.h"
-#include "module_sensor.h"
+#include "algorithm_ahrs.h"
+#include "module_imu.h"
 #include "algorithm_mathUnit.h"
 #include "algorithm_quaternion.h"
-/*=====================================================================================================*/
-/*=====================================================================================================*/
-#define Kp 15.0f
-#define Ki 0.020f//0.02f
-/*=====================================================================================================*/
-/*=====================================================================================================*/
+/*====================================================================================================*/
+/*====================================================================================================*/
+#define KpDef 2500
+#define KiDef 1
+
+static fpc32 Kp = (2.0f * KpDef) * SampleRate;
+static fpc32 Ki = (2.0f * KiDef) * SampleRate;
+/*====================================================================================================*/
+/*====================================================================================================*/
 void AHRS_Init( Quaternion *pNumQ, EulerAngle *pAngE )
 {
   pNumQ->q0 = 1.0f;
@@ -22,24 +25,24 @@ void AHRS_Init( Quaternion *pNumQ, EulerAngle *pAngE )
   pAngE->Roll  = 0.0f;
   pAngE->Yaw   = 0.0f;
 }
-/*=====================================================================================================*/
-/*=====================================================================================================*/
+/*====================================================================================================*/
+/*====================================================================================================*/
 void AHRS_Update( void )
 {
-//  float tempX = 0, tempY = 0;
-  float Normalize;
-  float gx, gy, gz;
-// float hx, hy, hz;
-// float wx, wy, wz;
-// float bx, bz;
-  float ErrX, ErrY, ErrZ;
-  float AccX, AccY, AccZ;
-  float GyrX, GyrY, GyrZ;
-// float MegX, MegY, MegZ;
-  float /*Mq11, Mq12, */Mq13,/* Mq21, Mq22, */Mq23,/* Mq31, Mq32, */Mq33;
+//  fp32 tempX = 0, tempY = 0;
+  fp32 Normalize;
+  fp32 gx, gy, gz;
+// fp32 hx, hy, hz;
+// fp32 wx, wy, wz;
+// fp32 bx, bz;
+  fp32 ErrX, ErrY, ErrZ;
+  fp32 AccX, AccY, AccZ;
+  fp32 GyrX, GyrY, GyrZ;
+// fp32 MegX, MegY, MegZ;
+  fp32 /*Mq11, Mq12, */Mq13,/* Mq21, Mq22, */Mq23,/* Mq31, Mq32, */Mq33;
 
-  static float AngZ_Temp = 0.0f;
-  static float exInt = 0.0f, eyInt = 0.0f, ezInt = 0.0f;
+//  static fp32 AngZ_Temp = 0.0f;
+  static fp32 exInt = 0.0f, eyInt = 0.0f, ezInt = 0.0f;
 
 //   Mq11 = NumQ.q0*NumQ.q0 + NumQ.q1*NumQ.q1 - NumQ.q2*NumQ.q2 - NumQ.q3*NumQ.q3;
 //   Mq12 = 2.0f*(NumQ.q1*NumQ.q2 + NumQ.q0*NumQ.q3);
@@ -84,13 +87,9 @@ void AHRS_Update( void )
   eyInt = eyInt + ErrY*Ki;
   ezInt = ezInt + ErrZ*Ki;
 
-  GyrX = toRad(Gyr.TrueX);
-  GyrY = toRad(Gyr.TrueY);
-  GyrZ = toRad(Gyr.TrueZ);
-
-  GyrX = GyrX + Kp*ErrX + exInt;
-  GyrY = GyrY + Kp*ErrY + eyInt;
-  GyrZ = GyrZ + Kp*ErrZ + ezInt;
+  GyrX = toRad(Gyr.TrueX) + Kp*ErrX + exInt;
+  GyrY = toRad(Gyr.TrueY) + Kp*ErrY + eyInt;
+  GyrZ = toRad(Gyr.TrueZ) + Kp*ErrZ + ezInt;
 
   Quaternion_RungeKutta(&NumQ, GyrX, GyrY, GyrZ, SampleRateHelf);
   Quaternion_Normalize(&NumQ);
@@ -102,19 +101,19 @@ void AHRS_Update( void )
 
   AngE.Pitch = toDeg(AngE.Pitch);
   AngE.Roll  = toDeg(AngE.Roll);
-  AngE.Yaw   = toDeg(AngE.Yaw)+180.0f;
+//  AngE.Yaw   = toDeg(AngE.Yaw)+180.0f;
 
-  /* 互補濾波 Complementary Filter */
-  #define CF_A 0.9f
-  #define CF_B 0.1f
-  AngZ_Temp = AngZ_Temp + GyrZ*SampleRate;
-  AngZ_Temp = CF_A*AngZ_Temp + CF_B*AngE.Yaw;
-  if(AngZ_Temp>360.0f)
-    AngE.Yaw = AngZ_Temp - 360.0f;
-  else if(AngZ_Temp<0.0f)
-    AngE.Yaw = AngZ_Temp + 360.0f;
-  else
-    AngE.Yaw = AngZ_Temp;
+//  /* 互補濾波 Complementary Filter */
+//  #define CF_A 0.9f
+//  #define CF_B 0.1f
+//  AngZ_Temp = AngZ_Temp + GyrZ*SampleRate;
+//  AngZ_Temp = CF_A*AngZ_Temp + CF_B*AngE.Yaw;
+//  if(AngZ_Temp>360.0f)
+//    AngE.Yaw = AngZ_Temp - 360.0f;
+//  else if(AngZ_Temp<0.0f)
+//    AngE.Yaw = AngZ_Temp + 360.0f;
+//  else
+//    AngE.Yaw = AngZ_Temp;
 }
-/*=====================================================================================================*/
-/*=====================================================================================================*/
+/*====================================================================================================*/
+/*====================================================================================================*/

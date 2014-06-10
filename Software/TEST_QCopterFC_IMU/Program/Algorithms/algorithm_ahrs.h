@@ -1,24 +1,29 @@
-/* #include "QCopterFC_board.h" */
+/* #include "algorithm_ahrs.h" */
 
-#ifndef __COPTERFC_BOARD_H
-#define __COPTERFC_BOARD_H
+#ifndef __ALGORITHM_AHRS_H
+#define __ALGORITHM_AHRS_H
 
 #include "stm32f4xx.h"
+#include "algorithm_quaternion.h"
 /*====================================================================================================*/
 /*====================================================================================================*/
-#define KEY_ON  1
-#define KEY_OFF 0
-#define KEY     PBI(2)
+#define _SampleRateFreg_500Hz_
 
-#define LED_ON  0
-#define LED_OFF 1
-#define LED_R   PCO(15)
-#define LED_G   PCO(14)
-#define LED_B   PCO(13)
-/*====================================================================================================*/
-/*====================================================================================================*/
-void LED_Config( void );
-void KEY_Config( void );
-/*====================================================================================================*/
-/*====================================================================================================*/
+#ifdef _SampleRateFreg_400Hz_
+  #define SampleRateFreg  ((u16)400)        // 400Hz
+  #define SampleRate      ((fp32)0.0025f)   // 2.5ms
+  #define SampleRateHelf  ((fp32)0.00125f)  // 1.25ms
 #endif
+
+#ifdef _SampleRateFreg_500Hz_
+  #define SampleRateFreg  ((u16)500)        // 500Hz
+  #define SampleRate      ((fp32)0.002f)    // 2.0ms
+  #define SampleRateHelf  ((fp32)0.001f)    // 1.0ms
+#endif
+/*====================================================================================================*/
+/*====================================================================================================*/
+void AHRS_Init( Quaternion *pNumQ, EulerAngle *pAngE );
+void AHRS_Update( void );
+/*====================================================================================================*/
+/*====================================================================================================*/
+#endif	

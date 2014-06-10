@@ -1,15 +1,14 @@
-/* #include "stm32f4_usart.h" */
+/* #include "algorithm_crc.h" */
 
-#ifndef __STM32F4_USART_H
-#define __STM32F4_USART_H
+#ifndef __ALGORITHM_CRC_H
+#define __ALGORITHM_CRC_H
 
 #include "stm32f4xx.h"
 /*====================================================================================================*/
 /*====================================================================================================*/
-void UART_SendByte( USART_TypeDef *USARTx, u8 SendData );
-u8   UART_RecvByte( USART_TypeDef *USARTx );
-void UART_SendData( USART_TypeDef *USARTx, u8 *SendData, u16 DataLen );
-void UART_RecvData( USART_TypeDef *USARTx, u8 *RecvData, u16 DataLen );
+#define CRC_16_IBM
+
+u16 CRC_Check16( u8 *DataCRC, u16 DataLen );
 /*====================================================================================================*/
 /*====================================================================================================*/
-#endif	 
+#endif
