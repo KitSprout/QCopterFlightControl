@@ -1,8 +1,8 @@
 ﻿[QCopterFC](https://github.com/QCopter/QCopterFlightControl)
 ========
 * Author  : [Hom](https://about.me/Hom)
-* Version : v2.2 測試中 ... 
-* Update  : 2014/06/05
+* Version : v2.2
+* Update  : 2014/06/11
 
 Description
 ========
@@ -41,19 +41,21 @@ Software
 * [QCopterFC ADC](https://github.com/QCopter/QCopterFlightControl/tree/master/Software/TEST_QCopterFC_ADC)
 * [QCopterFC CamSPI-Master](https://github.com/QCopter/QCopterFlightControl/tree/master/Software/TEST_QCopterFC_CAMSPI_M)
 * [QCopterFC CamSPI-Slave](https://github.com/QCopter/QCopterFlightControl/tree/master/Software/TEST_QCopterFC_CAMSPI_S)
+* [QCopterFC FFCSPI_TFT22](https://github.com/QCopter/QCopterFlightControl/tree/master/Software/TEST_QCopterFC_FFCSPI_TFT22)
+* [QCopterFC FFCSPI_TFT22_WF](https://github.com/QCopter/QCopterFlightControl/tree/master/Software/TEST_QCopterFC_FFCSPI_TFT22_WF)
 * [QCopterFC FLASH](https://github.com/QCopter/QCopterFlightControl/tree/master/Software/TEST_QCopterFC_FLASH)
-* [QCopterFC IMU](https://github.com/QCopter/QCopterFlightControl/tree/master/Software/TEST_QCopterFC_IMU) ( Use MPU-9150 + MS5611 )
+* [QCopterFC IMU](https://github.com/QCopter/QCopterFlightControl/tree/master/Software/TEST_QCopterFC_IMU) ( Use MPU-9250 )
+* [QCopterFC_IMU_WaveFrom](https://github.com/QCopter/QCopterFlightControl/tree/master/Software/TEST_QCopterFC_IMU_WaveFrom)
 * [QCopterFC LED](https://github.com/QCopter/QCopterFlightControl/tree/master/Software/TEST_QCopterFC_LED)
 * [QCopterFC NRF](https://github.com/QCopter/QCopterFlightControl/tree/master/Software/TEST_QCopterFC_NRF) ( Use nRF24L01P )
 * [QCopterFC PWM](https://github.com/QCopter/QCopterFlightControl/tree/master/Software/TEST_QCopterFC_PWM)
 * [QCopterFC SDIO](https://github.com/QCopter/QCopterFlightControl/tree/master/Software/TEST_QCopterFC_SDIO) ( Use [Fatfs](http://elm-chan.org/fsw/ff/00index_e.html) 0.10a )
-* [QCopterFC FFCSPI-TFT2.2](https://github.com/QCopter/QCopterFlightControl/tree/master/Software/TEST_QCopterFC_TestFFCSPI-TFT2.2)
-* [QCopterFC TFT2.2_WaveForm](https://github.com/QCopter/QCopterFlightControl/tree/master/Software/TEST_QCopterFC_TFT2.2_WaveForm)
 * [QCopterFC UART](https://github.com/QCopter/QCopterFlightControl/tree/master/Software/TEST_QCopterFC_UART)
 
 View
 ========
-
+<img src="https://lh5.googleusercontent.com/-aCFF4G5FxdU/U5ctHNIhsVI/AAAAAAAAJEI/X5uot4Gjqeg/s1600/DSC_2243.jpg" />
+<img src="https://lh3.googleusercontent.com/-PsoV7JZEWkc/U5ctGThWgKI/AAAAAAAAJEE/fsjt34W0jXk/s1600/DSC_2242.jpg" />
 <br />
 更多圖片 [Google+ albums](https://plus.google.com/u/0/photos/+文宏王Hom/albums/5899377395636747681)
 
