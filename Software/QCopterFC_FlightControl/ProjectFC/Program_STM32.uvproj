@@ -7,7 +7,7 @@
 
   <Targets>
     <Target>
-      <TargetName>STM32F405RGT</TargetName>
+      <TargetName>STM32F405R</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
       <TargetOption>
@@ -45,7 +45,7 @@
             <InvalidFlash>1</InvalidFlash>
           </TargetStatus>
           <OutputDirectory>.\Obj\</OutputDirectory>
-          <OutputName>STM32F405RGT</OutputName>
+          <OutputName>STM32F405R</OutputName>
           <CreateExecutable>1</CreateExecutable>
           <CreateLib>0</CreateLib>
           <CreateHexFile>1</CreateHexFile>
@@ -139,6 +139,8 @@
             <RestoreFunctions>0</RestoreFunctions>
             <RestoreToolbox>1</RestoreToolbox>
             <RestoreTracepoints>0</RestoreTracepoints>
+            <RestoreTracepoints>1</RestoreTracepoints>
+            <RestoreTracepoints>1</RestoreTracepoints>
           </Target>
           <RunDebugAfterBuild>0</RunDebugAfterBuild>
           <TargetSelection>7</TargetSelection>
@@ -353,11 +355,13 @@
             <wLevel>2</wLevel>
             <uThumb>0</uThumb>
             <uSurpInc>0</uSurpInc>
+            <uC99>1</uC99>
+            <useXO>0</useXO>
             <VariousControls>
               <MiscControls></MiscControls>
-              <Define>STM32F40XX, USE_STDPERIPH_DRIVER, __FPU_PRESENT=1, __FPU_USED =1, ARM_MATH_CM4, __CC_ARM</Define>
+              <Define>USE_STDPERIPH_DRIVER, __FPU_PRESENT=1, __FPU_USED =1, ARM_MATH_CM4, __CC_ARM</Define>
               <Undefine></Undefine>
-              <IncludePath>..\;..\Libraries\CMSIS;..\Libraries\CMSIS\MathARM;..\Libraries\STM32F4xx_StdPeriph_Driver\inc;..\Libraries\STM32F4xx_StdPeriph_Driver\src;..\Program;..\Program\Algorithms;..\Program\Dirvers;..\Program\Modules</IncludePath>
+              <IncludePath>..\;..\Libraries\CMSIS;..\Libraries\STM32F4xx_StdPeriph_Driver\inc;..\Libraries\STM32F4xx_StdPeriph_Driver\src;..\Program;..\Program\Algorithms;..\Program\Dirvers;..\Program\Modules</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -369,6 +373,7 @@
             <SwStkChk>0</SwStkChk>
             <NoWarn>0</NoWarn>
             <uSurpInc>0</uSurpInc>
+            <useXO>0</useXO>
             <VariousControls>
               <MiscControls></MiscControls>
               <Define></Define>
@@ -385,6 +390,7 @@
             <useFile>0</useFile>
             <TextAddressRange>0x08000000</TextAddressRange>
             <DataAddressRange>0x20000000</DataAddressRange>
+            <pXoBase></pXoBase>
             <ScatterFile></ScatterFile>
             <IncludeLibs></IncludeLibs>
             <IncludeLibsPath></IncludeLibsPath>
@@ -414,11 +420,6 @@
               <FilePath>..\Libraries\CMSIS\system_stm32f4xx.c</FilePath>
             </File>
             <File>
-              <FileName>misc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Libraries\STM32F4xx_StdPeriph_Driver\src\misc.c</FilePath>
-            </File>
-            <File>
               <FileName>stm32f4xx_rcc.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_rcc.c</FilePath>
@@ -429,14 +430,9 @@
               <FilePath>..\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_dma.c</FilePath>
             </File>
             <File>
-              <FileName>stm32f4xx_flash.c</FileName>
+              <FileName>stm32f4xx_adc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_flash.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f4xx_tim.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c</FilePath>
+              <FilePath>..\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_adc.c</FilePath>
             </File>
             <File>
               <FileName>stm32f4xx_gpio.c</FileName>
@@ -444,19 +440,14 @@
               <FilePath>..\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_gpio.c</FilePath>
             </File>
             <File>
-              <FileName>stm32f4xx_adc.c</FileName>
+              <FileName>stm32f4xx_tim.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_adc.c</FilePath>
+              <FilePath>..\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c</FilePath>
             </File>
             <File>
               <FileName>stm32f4xx_usart.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_usart.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f4xx_i2c.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_i2c.c</FilePath>
             </File>
             <File>
               <FileName>stm32f4xx_spi.c</FileName>
@@ -494,29 +485,19 @@
               <FilePath>..\Program\Dirvers\stm32f4_delay.c</FilePath>
             </File>
             <File>
-              <FileName>stm32f4_usart.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Program\Dirvers\stm32f4_usart.c</FilePath>
-            </File>
-            <File>
               <FileName>stm32f4_adc.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Program\Dirvers\stm32f4_adc.c</FilePath>
             </File>
             <File>
-              <FileName>stm32f4_flash.c</FileName>
+              <FileName>stm32f4_usart.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Program\Dirvers\stm32f4_flash.c</FilePath>
+              <FilePath>..\Program\Dirvers\stm32f4_usart.c</FilePath>
             </File>
             <File>
               <FileName>stm32f4_spi.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Program\Dirvers\stm32f4_spi.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f4_i2c.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Program\Dirvers\stm32f4_i2c.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -544,11 +525,6 @@
               <FilePath>..\Program\QCopterFC_param.c</FilePath>
             </File>
             <File>
-              <FileName>QCopterFC_ahrs.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Program\QCopterFC_ahrs.c</FilePath>
-            </File>
-            <File>
               <FileName>QCopterFC_ctrl.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Program\QCopterFC_ctrl.c</FilePath>
@@ -569,30 +545,30 @@
               <FilePath>..\Program\Modules\module_rs232.c</FilePath>
             </File>
             <File>
-              <FileName>module_sensor.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Program\Modules\module_sensor.c</FilePath>
-            </File>
-            <File>
-              <FileName>module_mpu9150.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Program\Modules\module_mpu9150.c</FilePath>
-            </File>
-            <File>
-              <FileName>module_ms5611.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Program\Modules\module_ms5611.c</FilePath>
-            </File>
-            <File>
               <FileName>module_nrf24l01.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Program\Modules\module_nrf24l01.c</FilePath>
+            </File>
+            <File>
+              <FileName>module_imu.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Program\Modules\module_imu.c</FilePath>
+            </File>
+            <File>
+              <FileName>module_mpu9250.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Program\Modules\module_mpu9250.c</FilePath>
             </File>
           </Files>
         </Group>
         <Group>
           <GroupName>Algorithms</GroupName>
           <Files>
+            <File>
+              <FileName>algorithm_crc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Program\Algorithms\algorithm_crc.c</FilePath>
+            </File>
             <File>
               <FileName>algorithm_string.c</FileName>
               <FileType>1</FileType>
@@ -604,14 +580,19 @@
               <FilePath>..\Program\Algorithms\algorithm_moveAve.c</FilePath>
             </File>
             <File>
+              <FileName>algorithm_pid.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Program\Algorithms\algorithm_pid.c</FilePath>
+            </File>
+            <File>
+              <FileName>algorithm_ahrs.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Program\Algorithms\algorithm_ahrs.c</FilePath>
+            </File>
+            <File>
               <FileName>algorithm_quaternion.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Program\Algorithms\algorithm_quaternion.c</FilePath>
-            </File>
-            <File>
-              <FileName>algorithm_ellipseFitting.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Program\Algorithms\algorithm_ellipseFitting.c</FilePath>
             </File>
           </Files>
         </Group>

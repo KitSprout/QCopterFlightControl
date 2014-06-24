@@ -1,41 +1,31 @@
-/*=====================================================================================================*/
-/*=====================================================================================================*/
+/*====================================================================================================*/
+/*====================================================================================================*/
 #include "stm32f4_system.h"
-#include "stm32f4_adc.h"
 #include "QCopterFC.h"
 #include "QCopterFC_board.h"
-#include "QCopterFC_param.h"
-#include "QCopterFC_ahrs.h"
 #include "QCopterFC_ctrl.h"
 #include "QCopterFC_transport.h"
 #include "module_rs232.h"
-#include "module_sensor.h"
 #include "module_nrf24l01.h"
-/*=====================================================================================================*/
-/*=====================================================================================================*/
+#include "algorithm_pid.h"
+#include "algorithm_ahrs.h"
+/*====================================================================================================*/
+/*====================================================================================================*/
 FSM_MODE FSM_STATE = FSM_TXRX;
 SEN_MODE SEN_STATE = SEN_CORR;
-/*=====================================================================================================*/
-/*=====================================================================================================*/
+/*====================================================================================================*/
+/*====================================================================================================*/
 void QCopterFC_Init( void )
 {
-  u8 Status = ERROR;
-
   /* System Setup */
   SystemInit();
 
   /* Device Config */
-  LED_Config();
-  KEY_Config();
-  ADC_Config();
-  RS232_Config();
-  Sensor_Config();
-  NRF24L01_Config();
-  BLDC_Config();
+  Board_Config();
 
   LED_R = LED_ON;
 
-  /* Throttle Config */
+  /* ESC Setting */
   if(KEY == KEY_ON) {
     LED_B = LED_ON;
     BLDC_CtrlPWM(BLDC_PWM_MAX, BLDC_PWM_MAX, BLDC_PWM_MAX, BLDC_PWM_MAX);
@@ -44,27 +34,23 @@ void QCopterFC_Init( void )
   BLDC_CtrlPWM(BLDC_PWM_MIN, BLDC_PWM_MIN, BLDC_PWM_MIN, BLDC_PWM_MIN);
   LED_B = LED_OFF;
 
-  Delay_10ms(5);
+  Delay_100ms(1);
 
   /* Parameter Init */
-  Param_Init(PARAM);
-  // Read Flash
+  // ****Read Flash
+
+  PID_Init(&PID_Pitch, +1.500f, +0.000f, +1.000f);
+  PID_Init(&PID_Roll,  +1.500f, +0.000f, +1.000f);
+  PID_Init(&PID_Yaw,   +0.000f, +0.000f, +0.000f);
 
   /* Device Init */
-  Sensor_Init();
-  NRF24L01_Init(NRF_MODE_FTLR); // First TX Last RX
-
-  // nRF Check
-  do {
-    Status = NRF_Check();
-  } while(Status != SUCCESS);
-
-  RF_SendData.Packet = 0x03;
+  Board_Init();
+  Delay_100ms(5);
 
   LED_R = LED_OFF;
 }
-/*=====================================================================================================*/
-/*=====================================================================================================*/
+/*====================================================================================================*/
+/*====================================================================================================*/
 void QCopterFC_Corr( u16 SystickFreq )
 {
   /* Select Correct */
@@ -90,27 +76,22 @@ void QCopterFC_Lock( void )
   LED_B = LED_OFF;
   while(KEY != KEY_ON) {
     LED_B = !LED_B;
-    UART_BUF[0] = Byte8L((s16)(AngE.Pitch*100));
-    UART_BUF[1] = Byte8H((s16)(AngE.Pitch*100));
-    UART_BUF[2] = Byte8L((s16)(AngE.Roll*100));
-    UART_BUF[3] = Byte8H((s16)(AngE.Roll*100));
-    UART_BUF[4] = Byte8L((s16)(AngE.Yaw*10));
-    UART_BUF[5] = Byte8H((s16)(AngE.Yaw*10));
-    UART_BUF[6] = Byte8L((s16)(Temp.TrueT*100));
-    UART_BUF[7] = Byte8H((s16)(Temp.TrueT*100));
+    UART_BUF[0] = Byte8L((s16)(AngE.Pitch*100));  // 0.01 deg/LSB
+    UART_BUF[1] = Byte8H((s16)(AngE.Pitch*100));  // 0.01 deg/LSB
+    UART_BUF[2] = Byte8L((s16)(AngE.Roll*100));   // 0.01 deg/LSB
+    UART_BUF[3] = Byte8H((s16)(AngE.Roll*100));   // 0.01 deg/LSB
+    UART_BUF[4] = Byte8L((s16)(AngE.Yaw*10));     // 0.1  deg/LSB
+    UART_BUF[5] = Byte8H((s16)(AngE.Yaw*10));     // 0.1  deg/LSB
     RS232_VisualScope(UART_BUF);
-    // NRF TX ONLY
-//    Delay_100ms(4);
   }
   LED_R = LED_OFF;
   LED_G = LED_OFF;
   LED_B = LED_OFF;
 }
-/*=====================================================================================================*/
-/*=====================================================================================================*/
+/*====================================================================================================*/
+/*====================================================================================================*/
 int main( void )
 {
-  u8 i = 0;
   u8 Status = 0;
 
   /* QCopterFC Init */
@@ -130,18 +111,15 @@ int main( void )
       /************************** FSM TXRX ****************************************/
       case FSM_TXRX:
         // FSM_TXRX
-        while(RF_SendData.Packet) {
-          Transport_Send(TxBuf);
-          do {
-            Status = NRF_TxPacket(TxBuf);
-          } while(Status != NRF_STA_TX_DS);
-          RF_SendData.Packet--;
-        }
-        RF_SendData.Packet = 0x03;
+        Transport_Send(TxBuf);
+        do {
+          Status = NRF_TxPacket(TxBuf);
+        } while(Status == NRF_STA_MAX_RT);
         NRF_RX_Mode();
         Status = NRF_RxPacket(RxBuf);
-        if(Status == NRF_STA_RX_DR)
+        if(Status == NRF_STA_RX_DR) {
           Transport_Recv(RxBuf);
+        }
         // FSM_TXRX End
         FSM_STATE = FSM_CTRL;
         break;
@@ -149,7 +127,7 @@ int main( void )
       /************************** FSM CTRL ****************************************/
       case FSM_CTRL:
         // FSM_CTRL
-        Delay_1ms(10);
+        Ctrl_BasicThr();
         // FSM_CTRL End
         FSM_STATE = FSM_UART;
         break;
@@ -157,7 +135,7 @@ int main( void )
       /************************** FSM UART ****************************************/
       case FSM_UART:
         // FSM_UART
-        
+        Delay_1ms(10);
         // FSM_UART End
         FSM_STATE = FSM_DATA;
         break;
@@ -177,11 +155,10 @@ int main( void )
         LED_B = LED_OFF;
         while(1) {
           LED_R = !LED_R;
-          LED_B = !LED_B;
           Delay_100ms(10);
         }
     }
   }
 }
-/*=====================================================================================================*/
-/*=====================================================================================================*/
+/*====================================================================================================*/
+/*====================================================================================================*/

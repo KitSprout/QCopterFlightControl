@@ -1,34 +1,38 @@
-/* #include "algorithm_quaternion.h" */
+/* #include "algorithm_pid.h" */
 
-#ifndef __ALGORITHM_QUATERNION_H
-#define __ALGORITHM_QUATERNION_H
+#ifndef __ALGORITHM_PID_H
+#define __ALGORITHM_PID_H
 
 #include "stm32f4xx.h"
 /*====================================================================================================*/
 /*====================================================================================================*/
-typedef __IO struct {
-  fp32 Pitch;
-  fp32 Roll;
-  fp32 Yaw;
-} EulerAngle;
-
-typedef __IO struct {
-  fp32 q0;
-  fp32 q1;
-  fp32 q2;
-  fp32 q3;
-} Quaternion;
+typedef struct {
+  fp32 Kp;
+  fp32 Ki;
+  fp32 Kd;
+  fp32 Err0;
+  fp32 Err1;
+  fp32 Err2;
+  fp32 SumErr;
+  fp32 ZeroErr;
+  fp32 Output;
+  fp32 KiMax;
+  fp32 KiMin;
+  fp32 OutMax;
+  fp32 OutMin;
+} PID_ST;
 /*====================================================================================================*/
 /*====================================================================================================*/
-void Quaternion_ToNumQ( Quaternion *pNumQ, EulerAngle *pAngE );
-void Quaternion_ToAngE( Quaternion *pNumQ, EulerAngle *pAngE );
-Quaternion Quaternion_Multiply( Quaternion NowQ, Quaternion OldQ );
-void Quaternion_Normalize( Quaternion *pNumQ );
-void Quaternion_RungeKutta( Quaternion *pNumQ, fp32 GyrX, fp32 GyrY, fp32 GyrZ, fp32 helfTimes );
+void PID_Init( PID_ST *PID, fp32 Kp, fp32 Ki, fp32 Kd );
+fp32 PID_IncCal( PID_ST *PID, fp32 CurrentVal );
+fp32 PID_PosCal( PID_ST *PID, fp32 CurrentVal );
+fp32 PID_AHRS_Cal( PID_ST *PID, fp32 Angle, fp32 Gyroscope );
+fp32 PID_AHRS_CalYaw( PID_ST *PID, fp32 Angle, fp32 Gyroscope );
 /*====================================================================================================*/
 /*====================================================================================================*/
-extern Quaternion NumQ;
-extern EulerAngle AngE;
+extern PID_ST PID_Yaw;
+extern PID_ST PID_Roll;
+extern PID_ST PID_Pitch;
 /*====================================================================================================*/
 /*====================================================================================================*/
-#endif
+#endif	 

@@ -20,16 +20,16 @@
 #define PARAM_TYPE_INT    0x00
 #define PARAM_TYPE_FLOAT  0x10
 
-#define TYPE_S8     ((u8)(PARAM_SIZE_1BYTE | PARAM_SIGNED   | PARAM_TYPE_INT))
-#define TYPE_U8     ((u8)(PARAM_SIZE_1BYTE | PARAM_UNSIGNED | PARAM_TYPE_INT))
-#define TYPE_S16    ((u8)(PARAM_SIZE_2BYTE | PARAM_SIGNED   | PARAM_TYPE_INT))
-#define TYPE_U16    ((u8)(PARAM_SIZE_2BYTE | PARAM_UNSIGNED | PARAM_TYPE_INT))
-#define TYPE_S32    ((u8)(PARAM_SIZE_4BYTE | PARAM_SIGNED   | PARAM_TYPE_INT))
-#define TYPE_U32    ((u8)(PARAM_SIZE_4BYTE | PARAM_UNSIGNED | PARAM_TYPE_INT))
-#define TYPE_S64    ((u8)(PARAM_SIZE_8BYTE | PARAM_SIGNED   | PARAM_TYPE_INT))
-#define TYPE_U64    ((u8)(PARAM_SIZE_8BYTE | PARAM_UNSIGNED | PARAM_TYPE_INT))
-#define TYPE_FP32   ((u8)(PARAM_SIZE_4BYTE | PARAM_SIGNED   | PARAM_TYPE_FLOAT))
-#define TYPE_FP64   ((u8)(PARAM_SIZE_8BYTE | PARAM_SIGNED   | PARAM_TYPE_FLOAT))
+#define TYPE_S8     ((u8)0x00)  // ((u8)(PARAM_SIZE_1BYTE | PARAM_SIGNED   | PARAM_TYPE_INT))
+#define TYPE_U8     ((u8)0x08)  // ((u8)(PARAM_SIZE_1BYTE | PARAM_UNSIGNED | PARAM_TYPE_INT))
+#define TYPE_S16    ((u8)0x01)  // ((u8)(PARAM_SIZE_2BYTE | PARAM_SIGNED   | PARAM_TYPE_INT))
+#define TYPE_U16    ((u8)0x09)  // ((u8)(PARAM_SIZE_2BYTE | PARAM_UNSIGNED | PARAM_TYPE_INT))
+#define TYPE_S32    ((u8)0x02)  // ((u8)(PARAM_SIZE_4BYTE | PARAM_SIGNED   | PARAM_TYPE_INT))
+#define TYPE_U32    ((u8)0x0A)  // ((u8)(PARAM_SIZE_4BYTE | PARAM_UNSIGNED | PARAM_TYPE_INT))
+#define TYPE_S64    ((u8)0x03)  // ((u8)(PARAM_SIZE_8BYTE | PARAM_SIGNED   | PARAM_TYPE_INT))
+#define TYPE_U64    ((u8)0x0B)  // ((u8)(PARAM_SIZE_8BYTE | PARAM_UNSIGNED | PARAM_TYPE_INT))
+#define TYPE_FP32   ((u8)0x12)  // ((u8)(PARAM_SIZE_4BYTE | PARAM_SIGNED   | PARAM_TYPE_FLOAT))
+#define TYPE_FP64   ((u8)0x13)  // ((u8)(PARAM_SIZE_8BYTE | PARAM_SIGNED   | PARAM_TYPE_FLOAT))
 /*=====================================================================================================*/
 /*=====================================================================================================*/
 typedef __IO struct {
@@ -39,12 +39,18 @@ typedef __IO struct {
 } PARAM_ST;
 
 enum {
-  TIME_MIN = 0,
+  INFO = 0,
+  TIME_MIN,
   TIME_SEC,
-  TIME_CNT,
-  PID_KP,
-  PID_KI,
-  PID_KD,
+  PID_P_KP,
+  PID_P_KI,
+  PID_P_KD,
+  PID_R_KP,
+  PID_R_KI,
+  PID_R_KD,
+  PID_Y_KP,
+  PID_Y_KI,
+  PID_Y_KD,
   THROTTLE_CH1,
   THROTTLE_CH2,
   THROTTLE_CH3,

@@ -31,7 +31,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 /* Uncomment the line below to enable peripheral header file inclusion */
-#include "misc.h" /* High level functions for NVIC and SysTick (add-on to CMSIS functions) */
+//#include "misc.h" /* High level functions for NVIC and SysTick (add-on to CMSIS functions) */
 #include "stm32f4xx_adc.h"
 //#include "stm32f4xx_can.h"
 //#include "stm32f4xx_crc.h"
@@ -42,11 +42,11 @@
 #include "stm32f4xx_dma.h"
 //#include "stm32f4xx_dma2d.h"
 //#include "stm32f4xx_exti.h"
-#include "stm32f4xx_flash.h"
+//#include "stm32f4xx_flash.h"
 //#include "stm32f4xx_fmc.h"
 #include "stm32f4xx_gpio.h"
 //#include "stm32f4xx_hash.h"
-#include "stm32f4xx_i2c.h"
+//#include "stm32f4xx_i2c.h"
 //#include "stm32f4xx_iwdg.h"
 //#include "stm32f4xx_ltdc.h"
 //#include "stm32f4xx_pwr.h"
