@@ -2,7 +2,7 @@
 ========
 * Author  : [Hom](https://about.me/Hom)
 * Version : v2.2
-* Update  : 2014/06/24
+* Update  : 2014/06/28
 
 Description
 ========
@@ -25,7 +25,11 @@ Hardware
 * 儲存紀錄 : Micro SD，使用 SDIO 操作
 * 外接介面 : 1*UART、1*SPI ( FFCSPI )、2*ADC、1*USB ( Micro )、1*CAN、8*PWM
 * PCB 尺寸 : 51.5 * 35mm ( Screws M3: 30 * 30mm )
-* 設計軟體 [Altium Designer 14](http://www.altium.com/en/products/altium-designer) ( PcbLib use AD [PcbLib v0.12](https://github.com/OpenPCB/AltiumDesigner_PcbLibrary/releases/tag/v0.12) )
+* 設計軟體 [Altium Designer 14](http://www.altium.com/en/products/altium-designer) ( PcbLib use AD [PcbLib v0.12](https://github.com/OpenPCB/AltiumDesigner_PcbLibrary/releases/tag/v0.12) )  
+
+ > 預計更新：  
+ > ．飛行方向標示
+ > ．微調元件間距
 
 <img src="https://lh6.googleusercontent.com/-DM7NHDq6rQs/U1UsC_ElBbI/AAAAAAAAHq0/5NbuoV3Cs6A/s1600/QCopterFC_System_v2.2.png" />
 
@@ -39,8 +43,6 @@ Software
 * QCopterFC FlightControl
 * QCopterFC FlightRecorder
 * [QCopterFC ADC](https://github.com/QCopter/QCopterFlightControl/tree/master/Software/TEST_QCopterFC_ADC)
-* [QCopterFC CamSPI-Master](https://github.com/QCopter/QCopterFlightControl/tree/master/Software/TEST_QCopterFC_CAMSPI_M)
-* [QCopterFC CamSPI-Slave](https://github.com/QCopter/QCopterFlightControl/tree/master/Software/TEST_QCopterFC_CAMSPI_S)
 * [QCopterFC FFCSPI_TFT22](https://github.com/QCopter/QCopterFlightControl/tree/master/Software/TEST_QCopterFC_FFCSPI_TFT22)
 * [QCopterFC FFCSPI_TFT22_WF](https://github.com/QCopter/QCopterFlightControl/tree/master/Software/TEST_QCopterFC_FFCSPI_TFT22_WF)
 * [QCopterFC FLASH](https://github.com/QCopter/QCopterFlightControl/tree/master/Software/TEST_QCopterFC_FLASH)
