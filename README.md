@@ -28,8 +28,8 @@ Hardware
 * 設計軟體 [Altium Designer 14](http://www.altium.com/en/products/altium-designer) ( PcbLib use AD [PcbLib v0.12](https://github.com/OpenPCB/AltiumDesigner_PcbLibrary/releases/tag/v0.12) )  
 
  > 預計更新：  
- > ．飛行方向標示
- > ．微調元件間距
+ > ．飛行方向標示  
+ > ．微調元件間距  
 
 <img src="https://lh6.googleusercontent.com/-DM7NHDq6rQs/U1UsC_ElBbI/AAAAAAAAHq0/5NbuoV3Cs6A/s1600/QCopterFC_System_v2.2.png" />
 
