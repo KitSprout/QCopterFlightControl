@@ -46,7 +46,7 @@ Software
 * [QCopterFC FFCSPI-TFT22](https://github.com/QCopter/QCopterFlightControl/tree/master/Software/TEST_QCopterFC_FFCSPI_TFT22)
 * [QCopterFC FFCSPI-TFT22_WF](https://github.com/QCopter/QCopterFlightControl/tree/master/Software/TEST_QCopterFC_FFCSPI_TFT22_WF)
 * [QCopterFC FLASH](https://github.com/QCopter/QCopterFlightControl/tree/master/Software/TEST_QCopterFC_FLASH)
-* [QCopterFC FreeRTOS-LED](https://github.com/QCopter/QCopterFlightControl/tree/master/Software/TEST_QCopterFC_FreeRTOS-LED)
+* [QCopterFC FreeRTOS-LED](https://github.com/QCopter/QCopterFlightControl/tree/master/Software/TEST_QCopterFC_FreeRTOS-LED) ( Use [FreeRTOS](http://www.freertos.org/) 8.0.1 )
 * [QCopterFC IAP](https://github.com/QCopter/QCopterFlightControl/tree/master/Software/TEST_QCopterFC_IAP)
 * [QCopterFC IAP-LED](https://github.com/QCopter/QCopterFlightControl/tree/master/Software/TEST_QCopterFC_IAP-LED)
 * [QCopterFC IMU](https://github.com/QCopter/QCopterFlightControl/tree/master/Software/TEST_QCopterFC_IMU) ( Use MPU-9250 )
