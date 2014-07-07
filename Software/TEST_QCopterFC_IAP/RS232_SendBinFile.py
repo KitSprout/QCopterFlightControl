@@ -77,19 +77,21 @@ def RS232_Send_Data(SendData, DataLen):
 def RS232_Send_File(SendFile):
     device.flushInput()
 
+    SendCodeSize     = 4096
+    SendCodeSizePage = 12    # SendCodeSize = 2^SendCodeSizePage
     WriteCnt = 0
     FileSize = len(SendFile)
 
     ErrCnt = 0
     PrintStr = " ErrCnt = "
-    for i in range(0, FileSize>>10) :
-        RS232_Send_Data(SendData[WriteCnt:WriteCnt+1024], 1024)
-        RecvData = device.read(1024)
-        for j in range(0, 1024) :
+    for i in range(0, FileSize>>SendCodeSizePage) :
+        RS232_Send_Data(SendData[WriteCnt:WriteCnt+SendCodeSize], SendCodeSize)
+        RecvData = device.read(SendCodeSize)
+        for j in range(0, SendCodeSize) :
             if(RecvData[j] != SendData[WriteCnt+j]) :
                 ErrCnt += 1
         PrintStr += (str(ErrCnt) + ", ")
-        WriteCnt += 1024
+        WriteCnt += SendCodeSize
     TempSize = FileSize - WriteCnt
     if TempSize != 0 :
         RS232_Send_Data(SendData[WriteCnt:FileSize], TempSize)

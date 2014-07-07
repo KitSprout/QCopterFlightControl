@@ -7,9 +7,7 @@
 #include "module_rs232.h"
 /*====================================================================================================*/
 /*====================================================================================================*/
-#define RecvCodeSize 1024
-
-static u8 RecvBuf[RecvCodeSize] = {0};
+static u8 RecvBuf[4096] = {0};
 /*====================================================================================================*/
 /*====================================================================================================*
 **函數 : IAP_Init
@@ -32,46 +30,73 @@ void IAP_Init( void )
 **使用 : IAP_Download();
 **====================================================================================================*/
 /*====================================================================================================*/
+#define RecvCodeSize 4096
 void IAP_Download( void )
 {
-  u32 i = 0;
+  u32 WriteAddr = 0;
   u32 CodeSize = 0;
-  u32 TempSize = 0;
+  u32 tmpCodeSize = 0;
+
+  u8 FileInfo[4] = {0};
 
   LED_G = 0;
-  RS232_RecvData((u8*)RecvBuf, 4);
-  CodeSize = (RecvBuf[0]<<24) | (RecvBuf[1]<<16) | (RecvBuf[2]<<8) | (RecvBuf[3]);
+  RS232_RecvData((u8*)FileInfo, 4);
+  CodeSize = (FileInfo[0]<<24) | (FileInfo[1]<<16) | (FileInfo[2]<<8) | (FileInfo[3]);
 
-  Flash_EraseSectors(Flash_GetSector(IAP_APP_ADDR), Flash_GetSector(IAP_APP_ADDR + CodeSize));
+  RS232_SendData((u8*)FileInfo, 4);
+  RS232_RecvData((u8*)FileInfo, 1);
+  tmpCodeSize = CodeSize;
 
-  RS232_SendData((u8*)RecvBuf, 4);
-  RS232_RecvData((u8*)RecvBuf, 1);
-  TempSize = CodeSize;
-
-  if(RecvBuf[0] == 0xF0) {
-    while(TempSize) {
+  if(FileInfo[0] == 0xF0) {
+    // Download BinaryFile
+    while(tmpCodeSize) {
       LED_G = !LED_G;
-      if(TempSize>=RecvCodeSize) {
-        RS232_RecvData(RecvBuf, RecvCodeSize);
-        Flash_WriteDataU8(IAP_APP_ADDR+i, RecvBuf, RecvCodeSize);
-        Flash_ReadDataU8(IAP_APP_ADDR+i,  RecvBuf, RecvCodeSize);
-        RS232_SendData(RecvBuf, RecvCodeSize);
-        i += RecvCodeSize;
-        TempSize -= RecvCodeSize;
+      if(tmpCodeSize>=RecvCodeSize) {
+        RS232_RecvData(RecvBuf+WriteAddr, RecvCodeSize);
+        RS232_SendData(RecvBuf+WriteAddr, RecvCodeSize);
+        WriteAddr += RecvCodeSize;
+        tmpCodeSize -= RecvCodeSize;
       }
       else {
-        RS232_RecvData(RecvBuf, TempSize);
-        if(TempSize%2 != 0)
-          RecvBuf[CodeSize-TempSize] = 0;
-        Flash_WriteDataU8(IAP_APP_ADDR+i, RecvBuf, TempSize);
-        Flash_ReadDataU8(IAP_APP_ADDR+i,  RecvBuf, TempSize);
-        RS232_SendData(RecvBuf, TempSize);
-        TempSize = 0;
+        RS232_RecvData(RecvBuf+WriteAddr, tmpCodeSize);
+        RS232_SendData(RecvBuf+WriteAddr, tmpCodeSize);
+        tmpCodeSize = 0;
       }
     }
+
+    IAP_UpdateApp(RecvBuf, CodeSize);
   }
   else {
     LED_R = 0;
+  }
+}
+/*====================================================================================================*/
+/*====================================================================================================*
+**函數 : IAP_UpdateApp
+**功能 : IAP Update App
+**輸入 : None
+**輸出 : None
+**使用 : IAP_UpdateApp(BinaryCode, CodeSize);
+**====================================================================================================*/
+/*====================================================================================================*/
+#define UpdateSize 4096
+void IAP_UpdateApp( u8* BinaryCode, uc32 CodeSize )
+{
+  u32 WriteAddr = 0;
+  u32 tmpSize = CodeSize;
+
+  Flash_EraseSectors(IAP_APP_ADDR, IAP_APP_ADDR + CodeSize);
+
+  while(tmpSize) {
+    if(tmpSize >= UpdateSize) {
+      Flash_WriteDataU8(IAP_APP_ADDR + WriteAddr, BinaryCode + WriteAddr, UpdateSize);
+      WriteAddr += UpdateSize;
+      tmpSize -= UpdateSize;
+    }
+    else {
+      Flash_WriteDataU8(IAP_APP_ADDR + WriteAddr, BinaryCode + WriteAddr, tmpSize);
+      tmpSize = 0;
+    }
   }
 }
 /*====================================================================================================*/
