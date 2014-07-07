@@ -43,13 +43,14 @@ Software
 * QCopterFC FlightControl
 * QCopterFC FlightRecorder
 * [QCopterFC ADC](https://github.com/QCopter/QCopterFlightControl/tree/master/Software/TEST_QCopterFC_ADC)
-* [QCopterFC FFCSPI_TFT22](https://github.com/QCopter/QCopterFlightControl/tree/master/Software/TEST_QCopterFC_FFCSPI_TFT22)
-* [QCopterFC FFCSPI_TFT22_WF](https://github.com/QCopter/QCopterFlightControl/tree/master/Software/TEST_QCopterFC_FFCSPI_TFT22_WF)
+* [QCopterFC FFCSPI-TFT22](https://github.com/QCopter/QCopterFlightControl/tree/master/Software/TEST_QCopterFC_FFCSPI_TFT22)
+* [QCopterFC FFCSPI-TFT22_WF](https://github.com/QCopter/QCopterFlightControl/tree/master/Software/TEST_QCopterFC_FFCSPI_TFT22_WF)
 * [QCopterFC FLASH](https://github.com/QCopter/QCopterFlightControl/tree/master/Software/TEST_QCopterFC_FLASH)
+* [QCopterFC FreeRTOS-LED](https://github.com/QCopter/QCopterFlightControl/tree/master/Software/TEST_QCopterFC_FreeRTOS-LED)
 * [QCopterFC IAP](https://github.com/QCopter/QCopterFlightControl/tree/master/Software/TEST_QCopterFC_IAP)
-* [QCopterFC IAP_LED](https://github.com/QCopter/QCopterFlightControl/tree/master/Software/TEST_QCopterFC_IAP-LED)
+* [QCopterFC IAP-LED](https://github.com/QCopter/QCopterFlightControl/tree/master/Software/TEST_QCopterFC_IAP-LED)
 * [QCopterFC IMU](https://github.com/QCopter/QCopterFlightControl/tree/master/Software/TEST_QCopterFC_IMU) ( Use MPU-9250 )
-* [QCopterFC IMU_WaveFrom](https://github.com/QCopter/QCopterFlightControl/tree/master/Software/TEST_QCopterFC_IMU_WaveFrom)
+* [QCopterFC IMU-WaveFrom](https://github.com/QCopter/QCopterFlightControl/tree/master/Software/TEST_QCopterFC_IMU_WaveFrom)
 * [QCopterFC LED](https://github.com/QCopter/QCopterFlightControl/tree/master/Software/TEST_QCopterFC_LED)
 * [QCopterFC NRF](https://github.com/QCopter/QCopterFlightControl/tree/master/Software/TEST_QCopterFC_NRF) ( Use nRF24L01P )
 * [QCopterFC PWM](https://github.com/QCopter/QCopterFlightControl/tree/master/Software/TEST_QCopterFC_PWM)
