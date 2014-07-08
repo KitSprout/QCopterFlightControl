@@ -2,7 +2,7 @@
 ========
 * Author  : [Hom](https://about.me/Hom)
 * Version : v2.2
-* Update  : 2014/07/08
+* Update  : 2014/07/09
 
 Description
 ========
@@ -43,16 +43,16 @@ Software
 * QCopterFC FlightControl
 * QCopterFC FlightRecorder
 * [QCopterFC ADC](https://github.com/QCopter/QCopterFlightControl/tree/master/Software/TEST_QCopterFC_ADC)
-* [QCopterFC FFCSPI-TFT22](https://github.com/QCopter/QCopterFlightControl/tree/master/Software/TEST_QCopterFC_FFCSPI_TFT22)
-* [QCopterFC FFCSPI-TFT22_WF](https://github.com/QCopter/QCopterFlightControl/tree/master/Software/TEST_QCopterFC_FFCSPI_TFT22_WF)
+* [QCopterFC FFCSPI_TFT22](https://github.com/QCopter/QCopterFlightControl/tree/master/Software/TEST_QCopterFC_FFCSPI_TFT22) ( Use [TFT_2.2-inch](https://github.com/OpenPCB/TFT_2.2-inch)] )
+* [QCopterFC FFCSPI_TFT22_WF](https://github.com/QCopter/QCopterFlightControl/tree/master/Software/TEST_QCopterFC_FFCSPI_TFT22_WF)
 * [QCopterFC FLASH](https://github.com/QCopter/QCopterFlightControl/tree/master/Software/TEST_QCopterFC_FLASH)
-* [QCopterFC FreeRTOS-LED](https://github.com/QCopter/QCopterFlightControl/tree/master/Software/TEST_QCopterFC_FreeRTOS-LED) ( Use [FreeRTOS](http://www.freertos.org/) 8.0.1 )
+* [QCopterFC FreeRTOS_LED](https://github.com/QCopter/QCopterFlightControl/tree/master/Software/TEST_QCopterFC_FreeRTOS_LED) ( Use [FreeRTOS](http://www.freertos.org/) 8.0.1 )
 * [QCopterFC IAP](https://github.com/QCopter/QCopterFlightControl/tree/master/Software/TEST_QCopterFC_IAP)
-* [QCopterFC IAP-LED](https://github.com/QCopter/QCopterFlightControl/tree/master/Software/TEST_QCopterFC_IAP-LED)
-* [QCopterFC IMU](https://github.com/QCopter/QCopterFlightControl/tree/master/Software/TEST_QCopterFC_IMU) ( Use MPU-9250 )
-* [QCopterFC IMU-WaveFrom](https://github.com/QCopter/QCopterFlightControl/tree/master/Software/TEST_QCopterFC_IMU_WaveFrom)
+* [QCopterFC IAP_LED](https://github.com/QCopter/QCopterFlightControl/tree/master/Software/TEST_QCopterFC_IAP_LED)
+* [QCopterFC IMU](https://github.com/QCopter/QCopterFlightControl/tree/master/Software/TEST_QCopterFC_IMU) ( Use [SmartIMU](https://github.com/Hom-Wang/SmartIMU) )
+* [QCopterFC IMU_WF](https://github.com/QCopter/QCopterFlightControl/tree/master/Software/TEST_QCopterFC_IMU_WF)
 * [QCopterFC LED](https://github.com/QCopter/QCopterFlightControl/tree/master/Software/TEST_QCopterFC_LED)
-* [QCopterFC NRF](https://github.com/QCopter/QCopterFlightControl/tree/master/Software/TEST_QCopterFC_NRF) ( Use nRF24L01P )
+* [QCopterFC NRF](https://github.com/QCopter/QCopterFlightControl/tree/master/Software/TEST_QCopterFC_NRF) ( Use [nRF24L01+](https://www.nordicsemi.com/chi/node_176/2.4GHz-RF/nRF24L01P) )
 * [QCopterFC PWM](https://github.com/QCopter/QCopterFlightControl/tree/master/Software/TEST_QCopterFC_PWM)
 * [QCopterFC SDIO](https://github.com/QCopter/QCopterFlightControl/tree/master/Software/TEST_QCopterFC_SDIO) ( Use [Fatfs](http://elm-chan.org/fsw/ff/00index_e.html) 0.10a )
 * [QCopterFC UART](https://github.com/QCopter/QCopterFlightControl/tree/master/Software/TEST_QCopterFC_UART)
