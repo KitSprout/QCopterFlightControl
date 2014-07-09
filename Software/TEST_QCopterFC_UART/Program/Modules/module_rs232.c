@@ -3,7 +3,6 @@
 #include "stm32f4_system.h"
 #include "stm32f4_usart.h"
 #include "module_rs232.h"
-#include "algorithm_string.h"
 /*====================================================================================================*/
 /*====================================================================================================*/
 #define USARTx                USART1
@@ -21,7 +20,7 @@
 #define USARTx_RX_SOURCE      GPIO_PinSource7
 #define USARTx_RX_AF          GPIO_AF_USART1
 
-#define USARTx_BAUDRATE       115200
+#define USARTx_BAUDRATE       9600
 #define USARTx_BYTESIZE       USART_WordLength_8b
 #define USARTx_STOPBITS       USART_StopBits_1
 #define USARTx_PARITY         USART_Parity_No
@@ -99,7 +98,7 @@ void RS232_SendStr( u8 *pWord )
 **使用 : RS232_SendNum(Type_O, 6, 1024);
 **====================================================================================================*/
 /*====================================================================================================*/
-void RS232_SendNum( u8 Type, u8 NumLen, s32 SendData )
+void RS232_SendNum( StrType Type, u8 NumLen, s32 SendData )
 {
   u8 TrData[32] = {0};
   u8 *pWord = TrData;
@@ -153,52 +152,6 @@ void RS232_RecvStr( u8 *pWord )
 void RS232_RecvData( u8 *RecvData, u16 DataLen )
 {
   UART_RecvData(USARTx, RecvData, DataLen);
-}
-/*====================================================================================================*/
-/*====================================================================================================*
-**函數 : RS232_VisualScope_CRC16
-**功能 : VisualScope CRC
-**輸入 : *SendData, Len
-**輸出 : UART_CRC
-**使用 : UART_CRC = RS232_VisualScope_CRC16(SendData, DataLen);
-**====================================================================================================*/
-/*====================================================================================================*/
-static u16 RS232_VisualScope_CRC16( u8 *SendData, u8 DataLen )
-{
-  u16 UART_IX, UART_IY, UART_CRC;
-
-  UART_CRC = 0xffff;
-  for(UART_IX=0; UART_IX<DataLen; UART_IX++) {
-    UART_CRC = UART_CRC^(u16)(SendData[UART_IX]);
-    for(UART_IY=0; UART_IY<=7; UART_IY++) {
-      if((UART_CRC&0x01)!=0x00)
-        UART_CRC = (UART_CRC>>1)^0xA001;
-      else
-        UART_CRC = UART_CRC>>1;
-    }
-  }
-  return(UART_CRC);
-}
-/*====================================================================================================*/
-/*====================================================================================================*
-**函數 : RS232_VisualScope
-**功能 : VisualScope
-**輸入 : *SendBuf
-**輸出 : None
-**使用 : RS232_VisualScope(SendBuf);
-**====================================================================================================*/
-/*====================================================================================================*/
-void RS232_VisualScope( u8 *SendBuf )
-{
-  u8 SendCRC[2] = {0};
-  u16 UART_CRC;
-
-  UART_CRC = RS232_VisualScope_CRC16(SendBuf, 8);
-  SendCRC[0] = UART_CRC&0x00ff;
-  SendCRC[1] = (UART_CRC&0xff00)>>8;
-
-  UART_SendData(USARTx, SendBuf, 8);
-  UART_SendData(USARTx, SendCRC, 2);
 }
 /*====================================================================================================*/
 /*====================================================================================================*/

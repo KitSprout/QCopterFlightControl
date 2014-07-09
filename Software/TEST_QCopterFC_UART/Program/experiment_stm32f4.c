@@ -1,33 +1,61 @@
 /*====================================================================================================*/
 /*====================================================================================================*/
 #include "stm32f4_system.h"
-#include "stm32f4_usart.h"
 #include "experiment_stm32f4.h"
 #include "module_rs232.h"
-#include "algorithm_string.h"
+#include "module_visualScope.h"
 /*====================================================================================================*/
 /*====================================================================================================*/
-int main( void )
-{
-  u8 i = 0;
+#define USE_RS232
+//#define USE_VISUALSCOPE
 
-  SystemInit();
-  GPIO_Config();
-  RS232_Config();
+#ifdef USE_RS232
+int UART_RUN( void )
+{
+  u8 RecvData = 0;
+
+  RS232_SendStr((u8*)"\r\nHellow World!\r\n\r\n");
 
   while(1) {
     LED_G = !LED_G;
 
-    i++;
-
-    RS232_SendStr((u8*)"i = ");
-    RS232_SendNum(Type_D, 3, i);
-    RS232_SendStr((u8*)"\r\n");
-
-    if(i==255)  i = 0;
-
-    Delay_100ms(1);
+    RS232_RecvData(&RecvData, 1);
+    if(RecvData == 0x0D)  // if press enter
+      RS232_SendStr((u8*)"\r\n");
+    else
+      RS232_SendData(&RecvData, 1);
   }
+}
+#endif
+
+#ifdef USE_VISUALSCOPE
+int UART_RUN( void )
+{
+  s16 i = 0;
+  u8 SendBuf[8] = {0};
+
+  while(1) {
+    LED_G = !LED_G;
+    Delay_100ms(1);
+
+    i += 1000;
+    if(i==S16_MAX)  i = S16_MIN;
+
+    SendBuf[0] = Byte8L(i);
+    SendBuf[1] = Byte8H(i);
+    VisualScope(SendBuf);
+  }
+}
+#endif
+/*====================================================================================================*/
+/*====================================================================================================*/
+int main( void )
+{
+  SystemInit();
+  GPIO_Config();
+  RS232_Config();
+
+  UART_RUN();
 }
 /*====================================================================================================*/
 /*====================================================================================================*/

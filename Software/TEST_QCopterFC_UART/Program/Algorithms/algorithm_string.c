@@ -11,7 +11,7 @@
 **使用 : Str_NumToChar(Type_O, 6, TrData, Data);
 **====================================================================================================*/
 /*====================================================================================================*/
-void Str_NumToChar( u8 Type, u8 NumLen, u8 *CharData, s32 NumData )
+void Str_NumToChar( StrType Type, u8 NumLen, u8 *CharData, s32 NumData )
 {
   u8 i = 0;
   u32 TmpStr[48] = {0};

@@ -1,17 +1,12 @@
-/* #include "stm32f4_delay.h" */
+/* #include "module_visualScope.h" */
 
-#ifndef __STM32F4_DELAY_H
-#define __STM32F4_DELAY_H
+#ifndef __STM32F4_VISUALSCOPR_H
+#define __STM32F4_VISUALSCOPR_H
 
 #include "stm32f4xx.h"
 /*====================================================================================================*/
 /*====================================================================================================*/
-void Delay_1us( vu32 nCnt_1us );
-void Delay_10us( vu32 nCnt_10us );
-void Delay_100us( vu32 nCnt_100us );
-void Delay_1ms( vu32 nCnt_1ms );
-void Delay_10ms( vu32 nCnt_10ms );
-void Delay_100ms( vu32 nCnt_100ms );
+void VisualScope( u8 *SendBuf );
 /*====================================================================================================*/
 /*====================================================================================================*/
-#endif
+#endif	 

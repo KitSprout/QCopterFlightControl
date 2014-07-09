@@ -43,8 +43,7 @@ u8 UART_RecvByte( USART_TypeDef *USARTx )
 void UART_SendData( USART_TypeDef *USARTx, u8 *SendData, u16 DataLen )
 {
   do {
-    USART_SendData(USARTx, *SendData);
-    while(USART_GetFlagStatus(USARTx, USART_FLAG_TXE) == RESET);
+    UART_SendByte(USARTx, *SendData);
     SendData++;
     DataLen--;
   } while(DataLen);
@@ -61,8 +60,7 @@ void UART_SendData( USART_TypeDef *USARTx, u8 *SendData, u16 DataLen )
 void UART_RecvData( USART_TypeDef *USARTx, u8 *RecvData, u16 DataLen )
 {
   do {
-    while(USART_GetFlagStatus(USARTx, USART_FLAG_RXNE) == RESET);
-    *RecvData = USART_ReceiveData(USARTx);
+    *RecvData = UART_RecvByte(USARTx);
     RecvData++;
     DataLen--;
   } while(DataLen);
