@@ -63,21 +63,21 @@ int main( void )
   GPIO_Config();
 
 #if FLASH_RW_U8
-  Flash_EraseSector(Flash_GetSector(FLASH_SECTOR_6));
+  Flash_EraseSector(FLASH_SECTOR_6);
   Flash_WriteDataU8(FLASH_SECTOR_6, WriteDataU8, 1024);
   Flash_ReadDataU8(FLASH_SECTOR_6, ReadDataU8, 1024);
   LED_R = (Cmp_ArrU8(WriteDataU8, ReadDataU8, 1024) == SUCCESS) ? 0 : 1;
 #endif
 
 #if FLASH_RW_U16
-  Flash_EraseSector(Flash_GetSector(FLASH_SECTOR_6));
+  Flash_EraseSector(FLASH_SECTOR_6);
   Flash_WriteDataU16(FLASH_SECTOR_6, WriteDataU16, 512);
   Flash_ReadDataU16(FLASH_SECTOR_6, ReadDataU16, 512);
   LED_G = (Cmp_ArrU16(WriteDataU16, ReadDataU16, 512) == SUCCESS) ? 0 : 1;
 #endif
 
 #if FLASH_RW_U32
-  Flash_EraseSector(Flash_GetSector(FLASH_SECTOR_6));
+  Flash_EraseSector(FLASH_SECTOR_6);
   Flash_WriteDataU32(FLASH_SECTOR_6, WriteDataU32, 256);
   Flash_ReadDataU32(FLASH_SECTOR_6, ReadDataU32, 256);
   LED_B = (Cmp_ArrU32(WriteDataU32, ReadDataU32, 256) == SUCCESS) ? 0 : 1;

@@ -80,7 +80,7 @@ u8 Cmp_ArrU8U16( uc8* Arr1, uc16* Arr2, u32 DataLen )
 
   while(DataLen) {
     DataLen--;
-    if(Byte16(Arr1[(DataLen<<1)], Arr1[(DataLen<<1)+1]) != Arr2[DataLen])
+    if(Byte16(u16, Arr1[(DataLen<<1)], Arr1[(DataLen<<1)+1]) != Arr2[DataLen])
       ErrCount++;
   }
 

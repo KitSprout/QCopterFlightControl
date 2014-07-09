@@ -6,15 +6,15 @@
 #include "stm32f4xx.h"
 /*====================================================================================================*/
 /*====================================================================================================*/
-#define KEY_ON  1
-#define KEY_OFF 0
-#define KEY     PBI(2)
+#define LED_ON    0
+#define LED_OFF   1
+#define LED_R     PCO(15)
+#define LED_G     PCO(14)
+#define LED_B     PCO(13)
 
-#define LED_ON  0
-#define LED_OFF 1
-#define LED_R   PCO(15)
-#define LED_G   PCO(14)
-#define LED_B   PCO(13)
+#define KEY_ON    1
+#define KEY_OFF   0
+#define KEY       PBI(2)
 /*====================================================================================================*/
 /*====================================================================================================*/
 void GPIO_Config( void );

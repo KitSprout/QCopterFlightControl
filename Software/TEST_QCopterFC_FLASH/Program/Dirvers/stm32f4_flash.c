@@ -143,72 +143,79 @@ u32 Flash_GetSector( u32 Address )
 
   if((Address >= FLASH_SECTOR_0) && (Address < FLASH_SECTOR_1))
     Sector = FLASH_Sector_0;
-  else if((Address >= FLASH_SECTOR_1) && (Address < FLASH_SECTOR_2))
+  else if((Address >= FLASH_SECTOR_1)  && (Address < FLASH_SECTOR_2))
     Sector = FLASH_Sector_1;
-  else if((Address >= FLASH_SECTOR_2) && (Address < FLASH_SECTOR_3))
+  else if((Address >= FLASH_SECTOR_2)  && (Address < FLASH_SECTOR_3))
     Sector = FLASH_Sector_2;
-  else if((Address >= FLASH_SECTOR_3) && (Address < FLASH_SECTOR_4))
+  else if((Address >= FLASH_SECTOR_3)  && (Address < FLASH_SECTOR_4))
     Sector = FLASH_Sector_3;
-  else if((Address >= FLASH_SECTOR_4) && (Address < FLASH_SECTOR_5))
+  else if((Address >= FLASH_SECTOR_4)  && (Address < FLASH_SECTOR_5))
     Sector = FLASH_Sector_4;
-  else if((Address >= FLASH_SECTOR_5) && (Address < FLASH_SECTOR_6))
+  else if((Address >= FLASH_SECTOR_5)  && (Address < FLASH_SECTOR_6))
     Sector = FLASH_Sector_5;
-  else if((Address >= FLASH_SECTOR_6) && (Address < FLASH_SECTOR_7))
+  else if((Address >= FLASH_SECTOR_6)  && (Address < FLASH_SECTOR_7))
     Sector = FLASH_Sector_6;
-  else if((Address >= FLASH_SECTOR_7) && (Address < FLASH_SECTOR_8))
+  else if((Address >= FLASH_SECTOR_7)  && (Address < FLASH_SECTOR_8))
     Sector = FLASH_Sector_7;
-  else if((Address >= FLASH_SECTOR_8) && (Address < FLASH_SECTOR_9))
+  else if((Address >= FLASH_SECTOR_8)  && (Address < FLASH_SECTOR_9))
     Sector = FLASH_Sector_8;
-  else if((Address >= FLASH_SECTOR_9) && (Address < FLASH_SECTOR_10))
+  else if((Address >= FLASH_SECTOR_9)  && (Address < FLASH_SECTOR_10))
     Sector = FLASH_Sector_9;
   else if((Address >= FLASH_SECTOR_10) && (Address < FLASH_SECTOR_11))
     Sector = FLASH_Sector_10;
   else
     Sector = FLASH_Sector_11;
 
-  return Sector;
+  return Sector;  // Lib default sector
 }
 /*====================================================================================================*/
 /*====================================================================================================*
-**函數 : Flash_ErasePage
-**功能 : 擦除 FLASH
-**輸入 : ErasePage
+**函數 : Flash_EraseSector
+**功能 : 擦除單扇區 FLASH
+**輸入 : EraseSector
 **輸出 : None
-**使用 : Flash_ErasePage(FLASH_Sector_8);
+**使用 : Flash_EraseSector(FLASH_SECTOR_2);
 **====================================================================================================*/
 /*====================================================================================================*/
 void Flash_EraseSector( u32 EraseSector )
 {
   FLASH_Status FLASHStatus;
+
+  EraseSector = Flash_GetSector(EraseSector);
+
   FLASH_Unlock();
-  FLASH_ClearFlag(FLASH_FLAG_EOP | FLASH_FLAG_OPERR | FLASH_FLAG_WRPERR |
+
+  FLASH_ClearFlag(FLASH_FLAG_EOP    | FLASH_FLAG_OPERR  | FLASH_FLAG_WRPERR |
                   FLASH_FLAG_PGAERR | FLASH_FLAG_PGPERR | FLASH_FLAG_PGSERR);
   FLASHStatus = FLASH_EraseSector(EraseSector, VoltageRange_3);
   while(FLASHStatus != FLASH_COMPLETE);
+
   FLASH_Lock();
 }
 /*====================================================================================================*/
 /*====================================================================================================*
-**函數 : Flash_ErasePages
-**功能 : 擦除 FLASH
-**輸入 : ErasePageStart, ErasePageEnd
+**函數 : Flash_EraseSectors
+**功能 : 擦除多扇區 FLASH
+**輸入 : EraseSectorStart, EraseSectorEnd
 **輸出 : None
-**使用 : Flash_ErasePages(FLASH_Sector_8, FLASH_Sector_11);
+**使用 : Flash_EraseSectors(FLASH_SECTOR_8, FLASH_SECTOR_11);
 **====================================================================================================*/
 /*====================================================================================================*/
 void Flash_EraseSectors( u32 EraseSectorStart, u32 EraseSectorEnd )
 {
-  u32 EraseSector = EraseSectorStart;
   FLASH_Status FLASHStatus;
+
+  EraseSectorStart = Flash_GetSector(EraseSectorStart);
+  EraseSectorEnd   = Flash_GetSector(EraseSectorEnd);
 
   FLASH_Unlock();
 
-  FLASH_ClearFlag(FLASH_FLAG_EOP | FLASH_FLAG_OPERR | FLASH_FLAG_WRPERR |
+  FLASH_ClearFlag(FLASH_FLAG_EOP    | FLASH_FLAG_OPERR  | FLASH_FLAG_WRPERR |
                   FLASH_FLAG_PGAERR | FLASH_FLAG_PGPERR | FLASH_FLAG_PGSERR);
-  while(EraseSector <= EraseSectorEnd) {
-    FLASHStatus = FLASH_EraseSector(EraseSector, VoltageRange_3);
+  while(EraseSectorStart <= EraseSectorEnd) {
+    FLASHStatus = FLASH_EraseSector(EraseSectorStart, VoltageRange_3);
     while(FLASHStatus != FLASH_COMPLETE);
-    EraseSector += (EraseSector == FLASH_Sector_11)? 40 : 8;
+    EraseSectorStart += (EraseSectorStart == FLASH_Sector_11)? 40 : 8;
   }
 
   FLASH_Lock();

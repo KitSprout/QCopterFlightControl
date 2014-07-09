@@ -355,10 +355,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>14</ColumnNumber>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>34</TopLine>
-      <CurrentLine>41</CurrentLine>
+      <TopLine>103</TopLine>
+      <CurrentLine>207</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\Program\Dirvers\stm32f4_flash.c</PathWithFileName>
       <FilenameWithoutPath>stm32f4_flash.c</FilenameWithoutPath>
@@ -379,10 +379,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>1</ColumnNumber>
+      <ColumnNumber>19</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>78</TopLine>
-      <CurrentLine>120</CurrentLine>
+      <TopLine>1</TopLine>
+      <CurrentLine>88</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\Program\experiment_stm32f4.c</PathWithFileName>
       <FilenameWithoutPath>experiment_stm32f4.c</FilenameWithoutPath>
@@ -411,10 +411,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>18</ColumnNumber>
+      <ColumnNumber>14</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>1</TopLine>
-      <CurrentLine>18</CurrentLine>
+      <TopLine>47</TopLine>
+      <CurrentLine>82</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\Program\Algorithms\algorithm_compare.c</PathWithFileName>
       <FilenameWithoutPath>algorithm_compare.c</FilenameWithoutPath>
