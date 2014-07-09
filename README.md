@@ -43,7 +43,7 @@ Software
 * QCopterFC FlightControl
 * QCopterFC FlightRecorder
 * [QCopterFC ADC](https://github.com/QCopter/QCopterFlightControl/tree/master/Software/TEST_QCopterFC_ADC)
-* [QCopterFC FFCSPI_TFT22](https://github.com/QCopter/QCopterFlightControl/tree/master/Software/TEST_QCopterFC_FFCSPI_TFT22) ( Use [TFT_2.2-inch](https://github.com/OpenPCB/TFT_2.2-inch)] )
+* [QCopterFC FFCSPI_TFT22](https://github.com/QCopter/QCopterFlightControl/tree/master/Software/TEST_QCopterFC_FFCSPI_TFT22) ( Use [TFT_2.2-inch](https://github.com/OpenPCB/TFT_2.2-inch) )
 * [QCopterFC FFCSPI_TFT22_WF](https://github.com/QCopter/QCopterFlightControl/tree/master/Software/TEST_QCopterFC_FFCSPI_TFT22_WF)
 * [QCopterFC FLASH](https://github.com/QCopter/QCopterFlightControl/tree/master/Software/TEST_QCopterFC_FLASH)
 * [QCopterFC FreeRTOS_LED](https://github.com/QCopter/QCopterFlightControl/tree/master/Software/TEST_QCopterFC_FreeRTOS_LED) ( Use [FreeRTOS](http://www.freertos.org/) 8.0.1 )
