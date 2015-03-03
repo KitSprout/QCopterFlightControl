@@ -2,7 +2,7 @@
 ========
 * Author  : [Hom](https://about.me/Hom)
 * Version : v2.2
-* Update  : 2014/07/09
+* Update  : 2015/03/04
 
 Description
 ========
@@ -28,6 +28,8 @@ Hardware
 * 設計軟體 [Altium Designer 14](http://www.altium.com/en/products/altium-designer) ( PcbLib use AD [PcbLib v0.12](https://github.com/OpenPCB/AltiumDesigner_PcbLibrary/releases/tag/v0.12) )  
 
  > 預計更新：  
+ > ．更換微控制器 [STM32F446](http://www.st.com/web/en/catalog/mmc/SC1169/SS1577/LN1875?sc=stm32f446) 以增加處理效能  
+ > ．無線傳輸部分改用 [nRF51422](https://www.nordicsemi.com/eng/Products/ANT/nRF51422) 傳輸，以相容 BLE & ANT+  
  > ．飛行方向標示  
  > ．微調元件間距  
 
