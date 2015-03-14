@@ -1,0 +1,6 @@
+DRC Rules Export File for PCB: E:\My_Research\My Product\QCopterFC\Hardware\Schematic v2.2_M\QCopterFC_M_Pcb.PcbDoc
+RuleKind=ShortCircuit|RuleName=ShortCircuit|Scope=Board|Allowed=0
+RuleKind=Clearance|RuleName=Clearance|Scope=Board|Minimum=6.00
+RuleKind=Width|RuleName=Width|Scope=Board|Minimum=6.00
+RuleKind=SolderMaskExpansion|RuleName=SolderMaskExpansion|Scope=Board|Minimum=0.00
+RuleKind=Clearance|RuleName=Polygon|Scope=Board|Minimum=6.00

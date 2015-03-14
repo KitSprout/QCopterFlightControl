@@ -2,13 +2,18 @@
 /*=====================================================================================================*/
 #include "stm32f4_system.h"
 #include "QCopterFC.h"
-#include "QCopterFC_param.h"
+#include "QCopterFC_ctrl.h"
 #include "QCopterFC_transport.h"
 #include "module_nrf24l01.h"
+#include "module_imu.h"
+#include "algorithm_pid.h"
+#include "algorithm_ahrs.h"
 /*=====================================================================================================*/
 /*=====================================================================================================*/
 TR_RECV_DATA RF_RecvData = {0};
-TR_SEND_DATA RF_SendData = {0};
+
+extern u8 Time_Min;
+extern u8 Time_Sec;
 /*=====================================================================================================*/
 /*=====================================================================================================*
 **函數 : Transport_Recv
@@ -76,140 +81,68 @@ void Transport_Recv( u8* RecvBuf )
 /*=====================================================================================================*/
 void Transport_Send( u8* SendBuf )
 {
-  SendBuf[0] = (u8)(RF_SendData.Packet);
-  SendBuf[1] = (u8)(*(u8*)PARAM[TIME_MIN].ADDR);
-  SendBuf[2] = (u8)(*(u8*)PARAM[TIME_SEC].ADDR);
-  SendBuf[3] = (u8)((*(u16*)PARAM[TIME_CNT].ADDR)%250);
+  s16 TMP_BUF[16] = {0};
 
-  switch(RF_SendData.Packet) {
+//  TMP_BUF[0]  = (s16)(Acc.X); // 1 mg/LSB
+//  TMP_BUF[1]  = (s16)(Acc.Y); // 1 mg/LSB
+//  TMP_BUF[2]  = (s16)(Acc.Z); // 1 mg/LSB
+//  TMP_BUF[3]  = (s16)(Gyr.X); // 10 mdps/LSB
+//  TMP_BUF[4]  = (s16)(Gyr.Y); // 10 mdps/LSB
+//  TMP_BUF[5]  = (s16)(Gyr.Z); // 10 mdps/LSB
+  TMP_BUF[0]  = (s16)(Acc.TrueX*1000);  // 1 mg/LSB
+  TMP_BUF[1]  = (s16)(Acc.TrueY*1000);  // 1 mg/LSB
+  TMP_BUF[2]  = (s16)(Acc.TrueZ*1000);  // 1 mg/LSB
+  TMP_BUF[3]  = (s16)(Gyr.TrueX*10);   // 10 mdps/LSB
+  TMP_BUF[4]  = (s16)(Gyr.TrueY*10);   // 10 mdps/LSB
+  TMP_BUF[5]  = (s16)(Gyr.TrueZ*10);   // 10 mdps/LSB
+//  TMP_BUF[6]  = (s16)(PID_Pitch.Kp);
+//  TMP_BUF[7]  = (s16)(PID_Pitch.Ki);
+//  TMP_BUF[8]  = (s16)(PID_Pitch.Kd);
+//  TMP_BUF[6]  = (s16)(PID_Pitch.Kp*1000);
+//  TMP_BUF[7]  = (s16)(PID_Pitch.Ki*1000);
+//  TMP_BUF[8]  = (s16)(PID_Pitch.Kd*1000);
+  TMP_BUF[6]  = (s16)(PID_Yaw.Kp*1000);
+  TMP_BUF[7]  = (s16)(PID_Yaw.Ki*1000);
+  TMP_BUF[8]  = (s16)(PID_Yaw.Kd*1000);
+  TMP_BUF[9]  = (s16)(AngE.Pitch*100);
+  TMP_BUF[10] = (s16)(AngE.Roll*100);
+  TMP_BUF[11] = (s16)(AngE.Yaw*10);
+  TMP_BUF[12] = (s16)((BasicThr-BLDC_PWM_MIN)/0.12f);
+  TMP_BUF[13] = (s16)(Time_Sec);
+  TMP_BUF[14] = (s16)(Time_Min);
 
-    case 0x01:
-
-      RF_SendData.PID.KP = (u16)((*((fp32*)PARAM[PID_KP].ADDR))*1000);
-      RF_SendData.PID.KI = (u16)((*((fp32*)PARAM[PID_KI].ADDR))*1000);
-      RF_SendData.PID.KD = (u16)((*((fp32*)PARAM[PID_KD].ADDR))*1000);
-
-//      SendBuf[4]  = (u8)Byte8H(RF_SendData.PID.KP);
-//      SendBuf[5]  = (u8)Byte8L(RF_SendData.PID.KP);
-//      SendBuf[6]  = (u8)Byte8H(RF_SendData.PID.KI);
-//      SendBuf[7]  = (u8)Byte8L(RF_SendData.PID.KI);
-//      SendBuf[8]  = (u8)Byte8H(RF_SendData.PID.KD);
-//      SendBuf[9]  = (u8)Byte8L(RF_SendData.PID.KD);
-//      SendBuf[10] = (u8)Byte8H(RF_SendData.Thr.CH1);
-//      SendBuf[11] = (u8)Byte8L(RF_SendData.Thr.CH1);
-//      SendBuf[12] = (u8)Byte8H(RF_SendData.Thr.CH2);
-//      SendBuf[13] = (u8)Byte8L(RF_SendData.Thr.CH2);
-//      SendBuf[14] = (u8)Byte8H(RF_SendData.Thr.CH3);
-//      SendBuf[15] = (u8)Byte8L(RF_SendData.Thr.CH3);
-//      SendBuf[16] = (u8)Byte8H(RF_SendData.Thr.CH4);
-//      SendBuf[17] = (u8)Byte8L(RF_SendData.Thr.CH4);
-//      SendBuf[18] = (u8)Byte8H(RF_SendData.Thr.CH5);
-//      SendBuf[19] = (u8)Byte8L(RF_SendData.Thr.CH5);
-//      SendBuf[20] = (u8)Byte8H(RF_SendData.Thr.CH6);
-//      SendBuf[21] = (u8)Byte8L(RF_SendData.Thr.CH6);
-//      SendBuf[22] = (u8)RF_SendData.Batery.Vol;
-//      SendBuf[23] = (u8)RF_SendData.Batery.Cur;
-//      SendBuf[24] = (u8)Byte8H(RF_SendData.Batery.Cap);
-//      SendBuf[25] = (u8)Byte8L(RF_SendData.Batery.Cap);
-      SendBuf[26] = (u8)(0);
-      SendBuf[27] = (u8)(0);
-      SendBuf[28] = (u8)(0);
-      SendBuf[29] = (u8)(0);
-      SendBuf[30] = (u8)(0);
-      SendBuf[31] = (u8)(0);
-      break;
-
-    case 0x02:
-
-      RF_SendData.Acc.X = (s16)((*((fp32*)PARAM[SENSOR_ACC_X].ADDR))*1000);
-      RF_SendData.Acc.Y = (s16)((*((fp32*)PARAM[SENSOR_ACC_Y].ADDR))*1000);
-      RF_SendData.Acc.Z = (s16)((*((fp32*)PARAM[SENSOR_ACC_Z].ADDR))*1000);
-      RF_SendData.Gyr.X = (s16)((*((fp32*)PARAM[SENSOR_GYR_X].ADDR))*100);
-      RF_SendData.Gyr.Y = (s16)((*((fp32*)PARAM[SENSOR_GYR_Y].ADDR))*100);
-      RF_SendData.Gyr.Z = (s16)((*((fp32*)PARAM[SENSOR_GYR_Z].ADDR))*100);
-      RF_SendData.Mag.X = (s16)((*((fp32*)PARAM[SENSOR_MAG_X].ADDR)));
-      RF_SendData.Mag.Y = (s16)((*((fp32*)PARAM[SENSOR_MAG_Y].ADDR)));
-      RF_SendData.Mag.Z = (s16)((*((fp32*)PARAM[SENSOR_MAG_Z].ADDR)));
-      RF_SendData.Baro.Temp   = (u16)((*((fp32*)PARAM[BARO_TEMP].ADDR)));   // 0.01 degC/LSB
-      RF_SendData.Baro.Press  = (u32)((*((fp32*)PARAM[BARO_PRESS].ADDR)));  // 0.1 mbar/LSB
-      RF_SendData.Baro.Height = (u32)((*((fp32*)PARAM[BARO_HEIGHT].ADDR))); // 
-
-      SendBuf[4]  = (u8)Byte8L(RF_SendData.Acc.X);
-      SendBuf[5]  = (u8)Byte8H(RF_SendData.Acc.X);
-      SendBuf[6]  = (u8)Byte8L(RF_SendData.Acc.Y);
-      SendBuf[7]  = (u8)Byte8H(RF_SendData.Acc.Y);
-      SendBuf[8]  = (u8)Byte8L(RF_SendData.Acc.Z);
-      SendBuf[9]  = (u8)Byte8H(RF_SendData.Acc.Z);
-      SendBuf[10] = (u8)Byte8L(RF_SendData.Gyr.X);
-      SendBuf[11] = (u8)Byte8H(RF_SendData.Gyr.X);
-      SendBuf[12] = (u8)Byte8L(RF_SendData.Gyr.Y);
-      SendBuf[13] = (u8)Byte8H(RF_SendData.Gyr.Y);
-      SendBuf[14] = (u8)Byte8L(RF_SendData.Gyr.Z);
-      SendBuf[15] = (u8)Byte8H(RF_SendData.Gyr.Z);
-      SendBuf[16] = (u8)Byte8L(RF_SendData.Mag.X);
-      SendBuf[17] = (u8)Byte8H(RF_SendData.Mag.X);
-      SendBuf[18] = (u8)Byte8L(RF_SendData.Mag.Y);
-      SendBuf[19] = (u8)Byte8H(RF_SendData.Mag.Y);
-      SendBuf[20] = (u8)Byte8L(RF_SendData.Mag.Z);
-      SendBuf[21] = (u8)Byte8H(RF_SendData.Mag.Z);
-      SendBuf[22] = (u8)Byte8L(RF_SendData.Baro.Temp);
-      SendBuf[23] = (u8)Byte8H(RF_SendData.Baro.Temp);
-      SendBuf[24] = (u8)(RF_SendData.Baro.Press);
-      SendBuf[25] = (u8)(RF_SendData.Baro.Press>>8);
-      SendBuf[26] = (u8)(RF_SendData.Baro.Press>>16);
-      SendBuf[27] = (u8)(RF_SendData.Baro.Height);
-      SendBuf[28] = (u8)(RF_SendData.Baro.Height>>8);
-      SendBuf[29] = (u8)(RF_SendData.Baro.Height>>16);
-      SendBuf[30] = (u8)(0);
-      SendBuf[31] = (u8)(0);
-      break;
-
-    case 0x03:
-
-      RF_SendData.Ang.X = (s16)((*((fp32*)PARAM[MOTION_ANG_X].ADDR))*100);  // 10 mdeg/LSB
-      RF_SendData.Ang.X = (s16)((*((fp32*)PARAM[MOTION_ANG_Y].ADDR))*100);  // 10 mdeg/LSB
-      RF_SendData.Ang.X = (s16)((*((fp32*)PARAM[MOTION_ANG_Z].ADDR))*10);   // 10 mdeg/LSB
-      RF_SendData.Vel.X = (s16)((*((fp32*)PARAM[MOTION_VEL_X].ADDR)));  // 10 mdeg/LSB
-      RF_SendData.Vel.Y = (s16)((*((fp32*)PARAM[MOTION_VEL_Y].ADDR)));  // 10 mdeg/LSB
-      RF_SendData.Vel.Z = (s16)((*((fp32*)PARAM[MOTION_VEL_Z].ADDR)));  // 10 mdeg/LSB
-      RF_SendData.Pos.X = (s16)((*((fp32*)PARAM[MOTION_POS_X].ADDR)));  // 10 mdeg/LSB
-      RF_SendData.Pos.Y = (s16)((*((fp32*)PARAM[MOTION_POS_Y].ADDR)));  // 10 mdeg/LSB
-      RF_SendData.Pos.Z = (s16)((*((fp32*)PARAM[MOTION_POS_Z].ADDR)));  // 10 mdeg/LSB
-
-      SendBuf[4]  = (u8)Byte8H(RF_SendData.Ang.X);
-      SendBuf[5]  = (u8)Byte8L(RF_SendData.Ang.X);
-      SendBuf[6]  = (u8)Byte8H(RF_SendData.Ang.Y);
-      SendBuf[7]  = (u8)Byte8L(RF_SendData.Ang.Y);
-      SendBuf[8]  = (u8)Byte8H(RF_SendData.Ang.Z);
-      SendBuf[9]  = (u8)Byte8L(RF_SendData.Ang.Z);
-//      SendBuf[10] = (u8)Byte8H(RF_SendData.Vel.X);
-//      SendBuf[11] = (u8)Byte8L(RF_SendData.Vel.X);
-//      SendBuf[12] = (u8)Byte8H(RF_SendData.Vel.Y);
-//      SendBuf[13] = (u8)Byte8L(RF_SendData.Vel.Y);
-//      SendBuf[14] = (u8)Byte8H(RF_SendData.Vel.Z);
-//      SendBuf[15] = (u8)Byte8L(RF_SendData.Vel.Z);
-//      SendBuf[16] = (u8)Byte8H(RF_SendData.Pos.X);
-//      SendBuf[17] = (u8)Byte8L(RF_SendData.Pos.X);
-//      SendBuf[18] = (u8)Byte8H(RF_SendData.Pos.Y);
-//      SendBuf[19] = (u8)Byte8L(RF_SendData.Pos.Y);
-//      SendBuf[20] = (u8)Byte8H(RF_SendData.Pos.Z);
-//      SendBuf[21] = (u8)Byte8L(RF_SendData.Pos.Z);
-      SendBuf[22] = (u8)(0);
-      SendBuf[23] = (u8)(0);
-      SendBuf[24] = (u8)(0);
-      SendBuf[25] = (u8)(0);
-      SendBuf[26] = (u8)(0);
-      SendBuf[27] = (u8)(0);
-      SendBuf[28] = (u8)(0);
-      SendBuf[29] = (u8)(0);
-      SendBuf[30] = (u8)(0);
-      SendBuf[31] = (u8)(0);
-      break;
-
-    default:
-      // ERROR
-      break;
-  }
+  SendBuf[0]  = (u8)(0x01);
+  SendBuf[1]  = (u8)(0x02);
+  SendBuf[2]  = (u8)Byte8L(TMP_BUF[0]);
+  SendBuf[3]  = (u8)Byte8H(TMP_BUF[0]);
+  SendBuf[4]  = (u8)Byte8L(TMP_BUF[1]);
+  SendBuf[5]  = (u8)Byte8H(TMP_BUF[1]);
+  SendBuf[6]  = (u8)Byte8L(TMP_BUF[2]);
+  SendBuf[7]  = (u8)Byte8H(TMP_BUF[2]);
+  SendBuf[8]  = (u8)Byte8L(TMP_BUF[3]);
+  SendBuf[9]  = (u8)Byte8H(TMP_BUF[3]);
+  SendBuf[10] = (u8)Byte8L(TMP_BUF[4]);
+  SendBuf[11] = (u8)Byte8H(TMP_BUF[4]);
+  SendBuf[12] = (u8)Byte8L(TMP_BUF[5]);
+  SendBuf[13] = (u8)Byte8H(TMP_BUF[5]);
+  SendBuf[14] = (u8)Byte8L(TMP_BUF[6]);
+  SendBuf[15] = (u8)Byte8H(TMP_BUF[6]);
+  SendBuf[16] = (u8)Byte8L(TMP_BUF[7]);
+  SendBuf[17] = (u8)Byte8H(TMP_BUF[7]);
+  SendBuf[18] = (u8)Byte8L(TMP_BUF[8]);
+  SendBuf[19] = (u8)Byte8H(TMP_BUF[8]);
+  SendBuf[20] = (u8)Byte8L(TMP_BUF[9]);
+  SendBuf[21] = (u8)Byte8H(TMP_BUF[9]);
+  SendBuf[22] = (u8)Byte8L(TMP_BUF[10]);
+  SendBuf[23] = (u8)Byte8H(TMP_BUF[10]);
+  SendBuf[24] = (u8)Byte8L(TMP_BUF[11]);
+  SendBuf[25] = (u8)Byte8H(TMP_BUF[11]);
+  SendBuf[26] = (u8)Byte8L(TMP_BUF[12]);
+  SendBuf[27] = (u8)Byte8H(TMP_BUF[12]);
+  SendBuf[28] = (u8)(0);
+  SendBuf[29] = (u8)(0);
+  SendBuf[30] = (u8)(TMP_BUF[13]);
+  SendBuf[31] = (u8)(TMP_BUF[14]);
 }
 /*=====================================================================================================*/
 /*=====================================================================================================*/

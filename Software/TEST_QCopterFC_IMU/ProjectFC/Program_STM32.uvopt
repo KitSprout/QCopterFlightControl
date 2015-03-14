@@ -21,7 +21,7 @@
   </DaveTm>
 
   <Target>
-    <TargetName>STM32F405RGT</TargetName>
+    <TargetName>STM32F405R</TargetName>
     <ToolsetNumber>0x4</ToolsetNumber>
     <ToolsetName>ARM-ADS</ToolsetName>
     <TargetOption>
@@ -76,6 +76,53 @@
         <IsCurrentTarget>1</IsCurrentTarget>
       </OPTFL>
       <CpuCode>255</CpuCode>
+      <Books>
+        <Book>
+          <Number>0</Number>
+          <Title>Getting Started (STM32F4-Discovery)</Title>
+          <Path>D:\Keil\ARM\PACK\Keil\STM32F4xx_DFP\1.0.6\Documents\DM00037368.pdf</Path>
+        </Book>
+        <Book>
+          <Number>1</Number>
+          <Title>User Manual (STM32F4-Discovery)</Title>
+          <Path>D:\Keil\ARM\PACK\Keil\STM32F4xx_DFP\1.0.6\Documents\DM00039084.pdf</Path>
+        </Book>
+        <Book>
+          <Number>2</Number>
+          <Title>User Manual (MCBSTM32F400)</Title>
+          <Path>D:\Keil\ARM\PACK\Keil\STM32F4xx_DFP\1.0.6\Documents\mcbstm32f200.chm</Path>
+        </Book>
+        <Book>
+          <Number>3</Number>
+          <Title>Schematics (MCBSTM32F400)</Title>
+          <Path>D:\Keil\ARM\PACK\Keil\STM32F4xx_DFP\1.0.6\Documents\mcbstm32f400-schematics.pdf</Path>
+        </Book>
+        <Book>
+          <Number>4</Number>
+          <Title>Bill of Materials (STM32F4-Discovery)</Title>
+          <Path>D:\Keil\ARM\PACK\Keil\STM32F4xx_DFP\1.0.6\Documents\stm32f4discovery_bom.zip</Path>
+        </Book>
+        <Book>
+          <Number>5</Number>
+          <Title>Gerber Files (STM32F4-Discovery)</Title>
+          <Path>D:\Keil\ARM\PACK\Keil\STM32F4xx_DFP\1.0.6\Documents\stm32f4discovery_gerber.zip</Path>
+        </Book>
+        <Book>
+          <Number>6</Number>
+          <Title>Schematics (STM32F4-Discovery)</Title>
+          <Path>D:\Keil\ARM\PACK\Keil\STM32F4xx_DFP\1.0.6\Documents\stm32f4discovery_sch.zip</Path>
+        </Book>
+        <Book>
+          <Number>7</Number>
+          <Title>MCBSTM32F400 Evaluation Board Web Page (MCBSTM32F400)</Title>
+          <Path>http://www.keil.com/mcbstm32f400/</Path>
+        </Book>
+        <Book>
+          <Number>8</Number>
+          <Title>STM32F4-Discovery Web Page (STM32F4-Discovery)</Title>
+          <Path>http://www.st.com/web/catalog/tools/FM116/SC959/SS1532/LN1199/PF252419</Path>
+        </Book>
+      </Books>
       <DllOpt>
         <SimDllName>SARMCM3.DLL</SimDllName>
         <SimDllArguments>-MPU -REMAP</SimDllArguments>
@@ -104,6 +151,8 @@
         <tRfunc>0</tRfunc>
         <tRbox>1</tRbox>
         <tRtrace>0</tRtrace>
+        <sRSysVw>1</sRSysVw>
+        <tRSysVw>1</tRSysVw>
         <sRunDeb>0</sRunDeb>
         <sLrtime>0</sLrtime>
         <nTsel>7</nTsel>
@@ -223,22 +272,6 @@
       <TopLine>0</TopLine>
       <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\Libraries\STM32F4xx_StdPeriph_Driver\src\misc.c</PathWithFileName>
-      <FilenameWithoutPath>misc.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>2</GroupNumber>
-      <FileNumber>4</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <Focus>0</Focus>
-      <ColumnNumber>0</ColumnNumber>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>0</TopLine>
-      <CurrentLine>0</CurrentLine>
-      <bDave2>0</bDave2>
       <PathWithFileName>..\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_rcc.c</PathWithFileName>
       <FilenameWithoutPath>stm32f4xx_rcc.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
@@ -246,23 +279,7 @@
     </File>
     <File>
       <GroupNumber>2</GroupNumber>
-      <FileNumber>5</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <Focus>0</Focus>
-      <ColumnNumber>0</ColumnNumber>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>0</TopLine>
-      <CurrentLine>0</CurrentLine>
-      <bDave2>0</bDave2>
-      <PathWithFileName>..\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_dma.c</PathWithFileName>
-      <FilenameWithoutPath>stm32f4xx_dma.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>2</GroupNumber>
-      <FileNumber>6</FileNumber>
+      <FileNumber>4</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
@@ -278,7 +295,7 @@
     </File>
     <File>
       <GroupNumber>2</GroupNumber>
-      <FileNumber>7</FileNumber>
+      <FileNumber>5</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
@@ -294,23 +311,23 @@
     </File>
     <File>
       <GroupNumber>2</GroupNumber>
-      <FileNumber>8</FileNumber>
+      <FileNumber>6</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>0</ColumnNumber>
+      <ColumnNumber>28</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
       <TopLine>0</TopLine>
       <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_i2c.c</PathWithFileName>
-      <FilenameWithoutPath>stm32f4xx_i2c.c</FilenameWithoutPath>
+      <PathWithFileName>..\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_spi.c</PathWithFileName>
+      <FilenameWithoutPath>stm32f4xx_spi.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>2</GroupNumber>
-      <FileNumber>9</FileNumber>
+      <FileNumber>7</FileNumber>
       <FileType>5</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
@@ -334,7 +351,7 @@
     <RteFlg>0</RteFlg>
     <File>
       <GroupNumber>3</GroupNumber>
-      <FileNumber>10</FileNumber>
+      <FileNumber>8</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
@@ -350,7 +367,7 @@
     </File>
     <File>
       <GroupNumber>3</GroupNumber>
-      <FileNumber>11</FileNumber>
+      <FileNumber>9</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
@@ -374,11 +391,11 @@
     <RteFlg>0</RteFlg>
     <File>
       <GroupNumber>4</GroupNumber>
-      <FileNumber>12</FileNumber>
+      <FileNumber>10</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>0</ColumnNumber>
+      <ColumnNumber>103</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
       <TopLine>0</TopLine>
       <CurrentLine>0</CurrentLine>
@@ -390,7 +407,7 @@
     </File>
     <File>
       <GroupNumber>4</GroupNumber>
-      <FileNumber>13</FileNumber>
+      <FileNumber>11</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
@@ -406,17 +423,17 @@
     </File>
     <File>
       <GroupNumber>4</GroupNumber>
-      <FileNumber>14</FileNumber>
+      <FileNumber>12</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>40</ColumnNumber>
+      <ColumnNumber>4</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>1</TopLine>
-      <CurrentLine>10</CurrentLine>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\Program\Dirvers\stm32f4_i2c.c</PathWithFileName>
-      <FilenameWithoutPath>stm32f4_i2c.c</FilenameWithoutPath>
+      <PathWithFileName>..\Program\Dirvers\stm32f4_spi.c</PathWithFileName>
+      <FilenameWithoutPath>stm32f4_spi.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -430,14 +447,14 @@
     <RteFlg>0</RteFlg>
     <File>
       <GroupNumber>5</GroupNumber>
-      <FileNumber>15</FileNumber>
+      <FileNumber>13</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>31</ColumnNumber>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>67</TopLine>
-      <CurrentLine>85</CurrentLine>
+      <TopLine>57</TopLine>
+      <CurrentLine>103</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\Program\experiment_stm32f4.c</PathWithFileName>
       <FilenameWithoutPath>experiment_stm32f4.c</FilenameWithoutPath>
@@ -446,49 +463,17 @@
     </File>
     <File>
       <GroupNumber>5</GroupNumber>
-      <FileNumber>16</FileNumber>
+      <FileNumber>14</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>24</ColumnNumber>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>71</TopLine>
-      <CurrentLine>29</CurrentLine>
+      <TopLine>161</TopLine>
+      <CurrentLine>179</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\Program\experiment_stm32f4_it.c</PathWithFileName>
       <FilenameWithoutPath>experiment_stm32f4_it.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>5</GroupNumber>
-      <FileNumber>17</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <Focus>0</Focus>
-      <ColumnNumber>18</ColumnNumber>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>0</TopLine>
-      <CurrentLine>0</CurrentLine>
-      <bDave2>0</bDave2>
-      <PathWithFileName>..\Program\QCopterFC_board.c</PathWithFileName>
-      <FilenameWithoutPath>QCopterFC_board.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>5</GroupNumber>
-      <FileNumber>18</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <Focus>0</Focus>
-      <ColumnNumber>22</ColumnNumber>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>0</TopLine>
-      <CurrentLine>0</CurrentLine>
-      <bDave2>0</bDave2>
-      <PathWithFileName>..\Program\QCopterFC_ahrs.c</PathWithFileName>
-      <FilenameWithoutPath>QCopterFC_ahrs.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -502,14 +487,14 @@
     <RteFlg>0</RteFlg>
     <File>
       <GroupNumber>6</GroupNumber>
-      <FileNumber>19</FileNumber>
+      <FileNumber>15</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>55</ColumnNumber>
+      <ColumnNumber>11</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>161</TopLine>
-      <CurrentLine>182</CurrentLine>
+      <TopLine>122</TopLine>
+      <CurrentLine>148</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\Program\Modules\module_rs232.c</PathWithFileName>
       <FilenameWithoutPath>module_rs232.c</FilenameWithoutPath>
@@ -518,49 +503,33 @@
     </File>
     <File>
       <GroupNumber>6</GroupNumber>
-      <FileNumber>20</FileNumber>
+      <FileNumber>16</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>15</ColumnNumber>
+      <ColumnNumber>53</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>0</TopLine>
-      <CurrentLine>0</CurrentLine>
+      <TopLine>7</TopLine>
+      <CurrentLine>161</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\Program\Modules\module_sensor.c</PathWithFileName>
-      <FilenameWithoutPath>module_sensor.c</FilenameWithoutPath>
+      <PathWithFileName>..\Program\Modules\module_mpu9250.c</PathWithFileName>
+      <FilenameWithoutPath>module_mpu9250.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>6</GroupNumber>
-      <FileNumber>21</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <Focus>0</Focus>
-      <ColumnNumber>11</ColumnNumber>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>1</TopLine>
-      <CurrentLine>18</CurrentLine>
-      <bDave2>0</bDave2>
-      <PathWithFileName>..\Program\Modules\module_mpu9150.c</PathWithFileName>
-      <FilenameWithoutPath>module_mpu9150.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>6</GroupNumber>
-      <FileNumber>22</FileNumber>
+      <FileNumber>17</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>0</TopLine>
-      <CurrentLine>0</CurrentLine>
+      <TopLine>1</TopLine>
+      <CurrentLine>1</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\Program\Modules\module_ms5611.c</PathWithFileName>
-      <FilenameWithoutPath>module_ms5611.c</FilenameWithoutPath>
+      <PathWithFileName>..\Program\Modules\module_imu.c</PathWithFileName>
+      <FilenameWithoutPath>module_imu.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -574,7 +543,23 @@
     <RteFlg>0</RteFlg>
     <File>
       <GroupNumber>7</GroupNumber>
-      <FileNumber>23</FileNumber>
+      <FileNumber>18</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <Focus>0</Focus>
+      <ColumnNumber>43</ColumnNumber>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>1</TopLine>
+      <CurrentLine>6</CurrentLine>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\Program\Algorithms\algorithm_crc.c</PathWithFileName>
+      <FilenameWithoutPath>algorithm_crc.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>7</GroupNumber>
+      <FileNumber>19</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
@@ -590,11 +575,11 @@
     </File>
     <File>
       <GroupNumber>7</GroupNumber>
-      <FileNumber>24</FileNumber>
+      <FileNumber>20</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>10</ColumnNumber>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
       <TopLine>0</TopLine>
       <CurrentLine>0</CurrentLine>
@@ -606,11 +591,27 @@
     </File>
     <File>
       <GroupNumber>7</GroupNumber>
-      <FileNumber>25</FileNumber>
+      <FileNumber>21</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>37</ColumnNumber>
+      <ColumnNumber>0</ColumnNumber>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>1</TopLine>
+      <CurrentLine>12</CurrentLine>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\Program\Algorithms\algorithm_ahrs.c</PathWithFileName>
+      <FilenameWithoutPath>algorithm_ahrs.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>7</GroupNumber>
+      <FileNumber>22</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <Focus>0</Focus>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
       <TopLine>0</TopLine>
       <CurrentLine>0</CurrentLine>
@@ -630,7 +631,7 @@
     <RteFlg>0</RteFlg>
     <File>
       <GroupNumber>8</GroupNumber>
-      <FileNumber>26</FileNumber>
+      <FileNumber>23</FileNumber>
       <FileType>5</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>

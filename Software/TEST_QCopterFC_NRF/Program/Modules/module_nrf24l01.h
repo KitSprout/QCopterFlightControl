@@ -4,10 +4,8 @@
 #define __MODULE_NRF24L01_H
 
 #include "stm32f4xx.h"
-/*=====================================================================================================*/
-/*=====================================================================================================*/
-#define NRF_SPI           SPI2    // nRF 使用 SPI2
-
+/*====================================================================================================*/
+/*====================================================================================================*/
 #define NRF_PIPE_WIDTH    (5)     // 發射/接收地址寬度
 #define NRF_CHANAL        (40)    // 頻道選擇
 
@@ -52,37 +50,19 @@
 #define NRF_FIFO_STATUS   ((u8)0x17)
 #define NRF_DYNPD         ((u8)0x1C)
 #define NRF_FEATURE       ((u8)0x1D)
-/*=====================================================================================================*/
-/*=====================================================================================================*/
-#define NRF_CSN   PBO(12) // PB12
-#define NRF_CE    PCO(4)  // PC4
-#define NRF_IRQ   PCI(5)  // PC5
-/*=====================================================================================================*/
-/*=====================================================================================================*/
+/*====================================================================================================*/
+/*====================================================================================================*/
 void NRF24L01_Config( void );
-void NRF24L01_Init( u8 NRF_INIT_MODE );
+void NRF24L01_Init( u8 RF_MODE );
 
-static u8 NRF_ReadReg( u8 ReadAddr );
-static void NRF_WriteReg( u8 WriteAddr, u8 WriteData );
-static void NRF_ReadBuf( u8 ReadAddr, u8 *ReadBuf, u8 Bytes );
-static void NRF_WriteBuf( u8 WriteAddr, u8 *WriteBuf, u8 Bytes );
+u8   NRF_Check( void );
 
-//static u8 NRF_NOP( void );
-//static u8 NRF_GetStatus( void );
-static void NRF_SetChannel( u8 Channel );
-static void NRF_SetDataRate( u8 DataRate );
-static void NRF_SetAddr( u8 RegAddr, u8 *Address );
-static void NRF_FlushTxFIFO( void );
-static void NRF_FlushRxFIFO( void );
-
-u8 NRF_Check( void );
-
-//void NRF_TX_Mode( void );   // 直接在 NRF_Tx_Data 中實現
+void NRF_TX_Mode( void );
 void NRF_RX_Mode( void );
 void NRF_TxData( u8 *TxBuf );
 void NRF_RxData( u8 *RxBuf );
-u8 NRF_TxPacket( u8 *TxBuf );
-u8 NRF_RxPacket( u8 *RxBuf );
+u8   NRF_TxPacket( u8 *TxBuf );
+u8   NRF_RxPacket( u8 *RxBuf );
 /*====================================================================================================*/
 /*====================================================================================================*/
 extern u8 TxBuf[NRF_TX_PL_WIDTH];

@@ -1,7 +1,7 @@
 QCopterFC IMU Example
 ========
-* Author  : [Hom](https://github.com/Hom19910422)
-* Update  : 2014/01/24
+* Author  : [Hom](http://about.me/Hom)
+* Update  : 2014/06/10
 
 Description
 ========
@@ -27,8 +27,16 @@ PB11 - UART Rx
 > Parity = 'N'  
 > HardwareFlowControl = None  
 
-* I2C  
-PB8  - I2C_SCL  
-PB9  - I2C_SDA  
-> I2Cx       = I2C1  
-> ClockSpeed = 400KHz  
+* SPI  
+PB13 - SPI_SCK  
+PB14 - SPI_SDO  
+PB15 - SPI_SDI  
+PC2  - SPI_CSM  
+> SPIx = SPI2  
+> Dir = 2Lines_FullDuplex  
+> Mode = Slave  
+> CPOL = High  
+> CPHA = 2Edge  
+> FirstBit = MSB  
+> DataSize = 8 bits  
+> BaudRate = Prescaler_256  

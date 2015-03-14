@@ -1,151 +1,88 @@
 /*=====================================================================================================*/
 /*=====================================================================================================*/
 #include "stm32f4_system.h"
+#include "QCopterFC.h"
 #include "QCopterFC_param.h"
-#include "module_sensor.h"
+#include "module_imu.h"
+#include "algorithm_pid.h"
 #include "algorithm_quaternion.h"
 /*=====================================================================================================*/
 /*=====================================================================================================*/
-extern u8 Time_Min;
-extern u8 Time_Sec;
-extern u16 SysTick_Cnt;
-
-PARAM_ST PARAM[PARAM_SIZE] = {0};
-/*=====================================================================================================*/
-/*=====================================================================================================*/
-void Param_Init( PARAM_ST *PARAM_INIT )
+PARAM_ST PARAM[PARAM_SIZE] =
 {
+  /* Board Info*/
+  [INFO]         = { .TYPE = TYPE_U8,   .NAME = (u8*)"INFO",     (void*)(NULL) },
+
   /* Time */
-  PARAM_INIT[TIME_MIN].TYPE = TYPE_U8;
-  PARAM_INIT[TIME_MIN].NAME = (u8*)"TIME.M";
-  PARAM_INIT[TIME_MIN].ADDR = (void*)(&Time_Min);
-  PARAM_INIT[TIME_SEC].TYPE = TYPE_U8;
-  PARAM_INIT[TIME_SEC].NAME = (u8*)"TIME.S";
-  PARAM_INIT[TIME_SEC].ADDR = (void*)(&Time_Sec);
-  PARAM_INIT[TIME_CNT].TYPE = TYPE_U16;
-  PARAM_INIT[TIME_CNT].NAME = (u8*)"TIME.C";
-  PARAM_INIT[TIME_CNT].ADDR = (void*)(&SysTick_Cnt);
+  [TIME_MIN]     = { .TYPE = TYPE_U8,   .NAME = (u8*)"TIME.M",   (void*)(&Time_Min) },
+  [TIME_SEC]     = { .TYPE = TYPE_U8,   .NAME = (u8*)"TIME.S",   (void*)(&Time_Sec) },
 
-PARAM_INIT[PID_KP].TYPE = TYPE_FP32;
-PARAM_INIT[PID_KP].NAME = (u8*)"PID.KP";
-PARAM_INIT[PID_KP].ADDR = NULL;
-PARAM_INIT[PID_KI].TYPE = TYPE_FP32;
-PARAM_INIT[PID_KI].NAME = (u8*)"PID.KI";
-PARAM_INIT[PID_KI].ADDR = NULL;
-PARAM_INIT[PID_KD].TYPE = TYPE_FP32;
-PARAM_INIT[PID_KD].NAME = (u8*)"PID.KD";
-PARAM_INIT[PID_KD].ADDR = NULL;
+  /* PID Paramter */
+  [PID_P_KP]     = { .TYPE = TYPE_FP32, .NAME = (u8*)"PID_P.KP", (void*)(&PID_Pitch.Kp) },
+  [PID_P_KI]     = { .TYPE = TYPE_FP32, .NAME = (u8*)"PID_P.KI", (void*)(&PID_Pitch.Ki) },
+  [PID_P_KD]     = { .TYPE = TYPE_FP32, .NAME = (u8*)"PID_P.KD", (void*)(&PID_Pitch.Kd) },
+  [PID_R_KP]     = { .TYPE = TYPE_FP32, .NAME = (u8*)"PID_I.KP", (void*)(&PID_Roll.Kp) },
+  [PID_R_KI]     = { .TYPE = TYPE_FP32, .NAME = (u8*)"PID_I.KI", (void*)(&PID_Roll.Ki) },
+  [PID_R_KD]     = { .TYPE = TYPE_FP32, .NAME = (u8*)"PID_I.KD", (void*)(&PID_Roll.Kd) },
+  [PID_Y_KP]     = { .TYPE = TYPE_FP32, .NAME = (u8*)"PID_D.KP", (void*)(&PID_Yaw.Kp) },
+  [PID_Y_KI]     = { .TYPE = TYPE_FP32, .NAME = (u8*)"PID_D.KI", (void*)(&PID_Yaw.Ki) },
+  [PID_Y_KD]     = { .TYPE = TYPE_FP32, .NAME = (u8*)"PID_D.KD", (void*)(&PID_Yaw.Kd) },
 
-PARAM_INIT[THROTTLE_CH1].TYPE = TYPE_U16;
-PARAM_INIT[THROTTLE_CH1].NAME = (u8*)"THR.CH1";
-PARAM_INIT[THROTTLE_CH1].ADDR = NULL;
-PARAM_INIT[THROTTLE_CH2].TYPE = TYPE_U16;
-PARAM_INIT[THROTTLE_CH2].NAME = (u8*)"THR.CH2";
-PARAM_INIT[THROTTLE_CH2].ADDR = NULL;
-PARAM_INIT[THROTTLE_CH3].TYPE = TYPE_U16;
-PARAM_INIT[THROTTLE_CH3].NAME = (u8*)"THR.CH3";
-PARAM_INIT[THROTTLE_CH3].ADDR = NULL;
-PARAM_INIT[THROTTLE_CH4].TYPE = TYPE_U16;
-PARAM_INIT[THROTTLE_CH4].NAME = (u8*)"THR.CH4";
-PARAM_INIT[THROTTLE_CH4].ADDR = NULL;
-PARAM_INIT[THROTTLE_CH5].TYPE = TYPE_U16;
-PARAM_INIT[THROTTLE_CH5].NAME = (u8*)"THR.CH5";
-PARAM_INIT[THROTTLE_CH5].ADDR = NULL;
-PARAM_INIT[THROTTLE_CH6].TYPE = TYPE_U16;
-PARAM_INIT[THROTTLE_CH6].NAME = (u8*)"THR.CH6";
-PARAM_INIT[THROTTLE_CH6].ADDR = NULL;
+  /* Throttle */
+  [THROTTLE_CH1] = { .TYPE = TYPE_U16,  .NAME = (u8*)"THR.CH1",  (void*)(NULL) },
+  [THROTTLE_CH2] = { .TYPE = TYPE_U16,  .NAME = (u8*)"THR.CH2",  (void*)(NULL) },
+  [THROTTLE_CH3] = { .TYPE = TYPE_U16,  .NAME = (u8*)"THR.CH3",  (void*)(NULL) },
+  [THROTTLE_CH4] = { .TYPE = TYPE_U16,  .NAME = (u8*)"THR.CH4",  (void*)(NULL) },
+  [THROTTLE_CH5] = { .TYPE = TYPE_U16,  .NAME = (u8*)"THR.CH5",  (void*)(NULL) },
+  [THROTTLE_CH6] = { .TYPE = TYPE_U16,  .NAME = (u8*)"THR.CH6",  (void*)(NULL) },
 
-PARAM_INIT[BATTERY_VOL].TYPE = TYPE_FP32;
-PARAM_INIT[BATTERY_VOL].NAME = (u8*)"BAT.VOL";
-PARAM_INIT[BATTERY_VOL].ADDR = NULL;
-PARAM_INIT[BATTERY_CUR].TYPE = TYPE_FP32;
-PARAM_INIT[BATTERY_CUR].NAME = (u8*)"BAT.CUR";
-PARAM_INIT[BATTERY_CUR].ADDR = NULL;
-PARAM_INIT[BATTERY_CAP].TYPE = TYPE_FP32;
-PARAM_INIT[BATTERY_CAP].NAME = (u8*)"BAT.CAP";
-PARAM_INIT[BATTERY_CAP].ADDR = NULL;
+  /* Battery */
+  [BATTERY_VOL]  = { .TYPE = TYPE_FP32, .NAME = (u8*)"BAT.VOL",  (void*)(NULL) },
+  [BATTERY_CUR]  = { .TYPE = TYPE_FP32, .NAME = (u8*)"BAT.CUR",  (void*)(NULL) },
+  [BATTERY_CAP]  = { .TYPE = TYPE_FP32, .NAME = (u8*)"BAT.CAP",  (void*)(NULL) },
 
   /* Accelerometer */
-  PARAM_INIT[SENSOR_ACC_X].TYPE = TYPE_FP32;
-  PARAM_INIT[SENSOR_ACC_X].NAME = (u8*)"ACC.X";
-  PARAM_INIT[SENSOR_ACC_X].ADDR = (void*)(&Acc.TrueX);
-  PARAM_INIT[SENSOR_ACC_Y].TYPE = TYPE_FP32;
-  PARAM_INIT[SENSOR_ACC_Y].NAME = (u8*)"ACC.Y";
-  PARAM_INIT[SENSOR_ACC_Y].ADDR = (void*)(&Acc.TrueY);
-  PARAM_INIT[SENSOR_ACC_Z].TYPE = TYPE_FP32;
-  PARAM_INIT[SENSOR_ACC_Z].NAME = (u8*)"ACC.Z";
-  PARAM_INIT[SENSOR_ACC_Z].ADDR = (void*)(&Acc.TrueZ);
+  [SENSOR_ACC_X] = { .TYPE = TYPE_FP32, .NAME = (u8*)"ACC.X",    (void*)(&Acc.TrueX) },
+  [SENSOR_ACC_Y] = { .TYPE = TYPE_FP32, .NAME = (u8*)"ACC.Y",    (void*)(&Acc.TrueY) },
+  [SENSOR_ACC_Z] = { .TYPE = TYPE_FP32, .NAME = (u8*)"ACC.Z",    (void*)(&Acc.TrueZ) },
 
   /* Gyroscope */
-  PARAM_INIT[SENSOR_GYR_X].TYPE = TYPE_FP32;
-  PARAM_INIT[SENSOR_GYR_X].NAME = (u8*)"GYR.X";
-  PARAM_INIT[SENSOR_GYR_X].ADDR = (void*)(&Gyr.TrueX);
-  PARAM_INIT[SENSOR_GYR_Y].TYPE = TYPE_FP32;
-  PARAM_INIT[SENSOR_GYR_Y].NAME = (u8*)"GYR.Y";
-  PARAM_INIT[SENSOR_GYR_Y].ADDR = (void*)(&Gyr.TrueY);
-  PARAM_INIT[SENSOR_GYR_Z].TYPE = TYPE_FP32;
-  PARAM_INIT[SENSOR_GYR_Z].NAME = (u8*)"GYR.Z";
-  PARAM_INIT[SENSOR_GYR_Z].ADDR = (void*)(&Gyr.TrueZ);
+  [SENSOR_GYR_X] = { .TYPE = TYPE_FP32, .NAME = (u8*)"GYR.X",    (void*)(&Gyr.TrueX) },
+  [SENSOR_GYR_Y] = { .TYPE = TYPE_FP32, .NAME = (u8*)"GYR.Y",    (void*)(&Gyr.TrueY) },
+  [SENSOR_GYR_Z] = { .TYPE = TYPE_FP32, .NAME = (u8*)"GYR.Z",    (void*)(&Gyr.TrueZ) },
 
+#ifdef USE_SENSOR_MAG
   /* Magnetometer */
-  PARAM_INIT[SENSOR_MAG_X].TYPE = TYPE_FP32;
-  PARAM_INIT[SENSOR_MAG_X].NAME = (u8*)"MAG.X";
-  PARAM_INIT[SENSOR_MAG_X].ADDR = (void*)(&Mag.TrueX);
-  PARAM_INIT[SENSOR_MAG_Y].TYPE = TYPE_FP32;
-  PARAM_INIT[SENSOR_MAG_Y].NAME = (u8*)"MAG.Y";
-  PARAM_INIT[SENSOR_MAG_Y].ADDR = (void*)(&Mag.TrueY);
-  PARAM_INIT[SENSOR_MAG_Z].TYPE = TYPE_FP32;
-  PARAM_INIT[SENSOR_MAG_Z].NAME = (u8*)"MAG.Z";
-  PARAM_INIT[SENSOR_MAG_Z].ADDR = (void*)(&Mag.TrueZ);
+  [SENSOR_MAG_X] = { .TYPE = TYPE_FP32, .NAME = (u8*)"MAG.X",    (void*)(&Mag.TrueX) },
+  [SENSOR_MAG_Y] = { .TYPE = TYPE_FP32, .NAME = (u8*)"MAG.Y",    (void*)(&Mag.TrueY) },
+  [SENSOR_MAG_Z] = { .TYPE = TYPE_FP32, .NAME = (u8*)"MAG.Z",    (void*)(&Mag.TrueZ) },
+#endif
 
   /* Barometer */
-  PARAM_INIT[BARO_TEMP].TYPE   = TYPE_FP32;
-  PARAM_INIT[BARO_TEMP].NAME   = (u8*)"BARO.T";
-  PARAM_INIT[BARO_TEMP].ADDR   = (void*)(&Baro.Temp);
-  PARAM_INIT[BARO_PRESS].TYPE  = TYPE_FP32;
-  PARAM_INIT[BARO_PRESS].NAME  = (u8*)"BARO.P";
-  PARAM_INIT[BARO_PRESS].ADDR  = (void*)(&Baro.Press);
-  PARAM_INIT[BARO_HEIGHT].TYPE = TYPE_FP32;
-  PARAM_INIT[BARO_HEIGHT].NAME = (u8*)"BARO.H";
-  PARAM_INIT[BARO_HEIGHT].ADDR = (void*)(&Baro.Height);
+#ifdef USE_SENSOR_BARO
+  [BARO_TEMP]    = { .TYPE = TYPE_FP32, .NAME = (u8*)"BARO.T",   (void*)(&Baro.Temp) },
+  [BARO_PRESS]   = { .TYPE = TYPE_FP32, .NAME = (u8*)"BARO.P",   (void*)(&Baro.Press) },
+  [BARO_HEIGHT]  = { .TYPE = TYPE_FP32, .NAME = (u8*)"BARO.H",   (void*)(&Baro.Height) },
+#endif
 
   /* Attitude Angle */
-  PARAM_INIT[MOTION_ANG_X].TYPE = TYPE_FP32;
-  PARAM_INIT[MOTION_ANG_X].NAME = (u8*)"ANG.X";
-  PARAM_INIT[MOTION_ANG_X].ADDR = (void*)(&AngE.Pitch);
-  PARAM_INIT[MOTION_ANG_Y].TYPE = TYPE_FP32;
-  PARAM_INIT[MOTION_ANG_Y].NAME = (u8*)"ANG.Y";
-  PARAM_INIT[MOTION_ANG_Y].ADDR = (void*)(&AngE.Roll);
-  PARAM_INIT[MOTION_ANG_Z].TYPE = TYPE_FP32;
-  PARAM_INIT[MOTION_ANG_Z].NAME = (u8*)"ANG.Z";
-  PARAM_INIT[MOTION_ANG_Z].ADDR = (void*)(&AngE.Yaw);
+  [MOTION_ANG_X] = { .TYPE = TYPE_FP32, .NAME = (u8*)"ANG.X",    (void*)(&AngE.Pitch) },
+  [MOTION_ANG_Y] = { .TYPE = TYPE_FP32, .NAME = (u8*)"ANG.Y",    (void*)(&AngE.Roll) },
+  [MOTION_ANG_Z] = { .TYPE = TYPE_FP32, .NAME = (u8*)"ANG.Z",    (void*)(&AngE.Yaw) },
 
-PARAM_INIT[MOTION_VEL_X].TYPE = TYPE_FP32;
-PARAM_INIT[MOTION_VEL_X].NAME = (u8*)"VEL.X";
-PARAM_INIT[MOTION_VEL_X].ADDR = NULL;
-PARAM_INIT[MOTION_VEL_Y].TYPE = TYPE_FP32;
-PARAM_INIT[MOTION_VEL_Y].NAME = (u8*)"VEL.Y";
-PARAM_INIT[MOTION_VEL_Y].ADDR = NULL;
-PARAM_INIT[MOTION_VEL_Z].TYPE = TYPE_FP32;
-PARAM_INIT[MOTION_VEL_Z].NAME = (u8*)"VEL.Z";
-PARAM_INIT[MOTION_VEL_Z].ADDR = NULL;
+  /* Velocity */
+  [MOTION_VEL_X] = { .TYPE = TYPE_FP32, .NAME = (u8*)"VEL.X",    (void*)(NULL) },
+  [MOTION_VEL_Y] = { .TYPE = TYPE_FP32, .NAME = (u8*)"VEL.Y",    (void*)(NULL) },
+  [MOTION_VEL_Z] = { .TYPE = TYPE_FP32, .NAME = (u8*)"VEL.Z",    (void*)(NULL) },
 
-PARAM_INIT[MOTION_POS_X].TYPE = TYPE_FP32;
-PARAM_INIT[MOTION_POS_X].NAME = (u8*)"POS.X";
-PARAM_INIT[MOTION_POS_X].ADDR = NULL;
-PARAM_INIT[MOTION_POS_Y].TYPE = TYPE_FP32;
-PARAM_INIT[MOTION_POS_Y].NAME = (u8*)"POS.Y";
-PARAM_INIT[MOTION_POS_Y].ADDR = NULL;
-PARAM_INIT[MOTION_POS_Z].TYPE = TYPE_FP32;
-PARAM_INIT[MOTION_POS_Z].NAME = (u8*)"POS.Z";
-PARAM_INIT[MOTION_POS_Z].ADDR = NULL;
+  /* Position */
+  [MOTION_POS_X] = { .TYPE = TYPE_FP32, .NAME = (u8*)"POS.X",    (void*)(NULL) },
+  [MOTION_POS_Y] = { .TYPE = TYPE_FP32, .NAME = (u8*)"POS.Y",    (void*)(NULL) },
+  [MOTION_POS_Z] = { .TYPE = TYPE_FP32, .NAME = (u8*)"POS.Z",    (void*)(NULL) },
 
-PARAM_INIT[GPS_LON].TYPE = TYPE_FP32;
-PARAM_INIT[GPS_LON].NAME = (u8*)"GPS.LON";
-PARAM_INIT[GPS_LON].ADDR = NULL;
-PARAM_INIT[GPS_LAT].TYPE = TYPE_FP32;
-PARAM_INIT[GPS_LAT].NAME = (u8*)"GPS.LAT";
-PARAM_INIT[GPS_LAT].ADDR = NULL;
-}
+  /* GPS */
+  [GPS_LON]      = { .TYPE = TYPE_FP32, .NAME = (u8*)"GPS.LON",  (void*)(NULL) },
+  [GPS_LAT]      = { .TYPE = TYPE_FP32, .NAME = (u8*)"GPS.LAT",  (void*)(NULL) },
+};
 /*=====================================================================================================*/
 /*=====================================================================================================*/
