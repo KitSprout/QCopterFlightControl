@@ -2,7 +2,7 @@ QCopterFC
 ========
 [![GitHub version](https://img.shields.io/badge/QFC%20version-v2.2-brightgreen.svg)](https://github.com/KitSprout/QCopterFlightControl/tree/b4c5a7a2395dcd7b22ef3b991fd287610df9cdff)
 [![GitHub version](https://img.shields.io/badge/QFCs%20version-v1.0-brightgreen.svg)](https://github.com/KitSprout/QCopterFlightControl)
-[![GitHub license](https://img.shields.io/badge/license-%20MIT%20%2F%20CC%20BY--SA%204.0-blue.svg)](https://github.com/KitSprout/QCopterRemoteControl/blob/master/LICENSE)
+[![GitHub license](https://img.shields.io/badge/license-%20MIT%20%2F%20CC%20BY--SA%204.0-blue.svg)](https://github.com/KitSprout/QCopterFlightControl/blob/master/LICENSE)
 [![GitHub pcb library](https://img.shields.io/badge/pcb%20library-%20v2.16-yellow.svg)](https://github.com/KitSprout/AltiumDesigner_PcbLibrary/releases/tag/v2.16)
 
 
