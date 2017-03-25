@@ -6,7 +6,7 @@ QCopterFC
 [![GitHub pcb library](https://img.shields.io/badge/pcb%20library-%20v2.16-yellow.svg)](https://github.com/KitSprout/AltiumDesigner_PcbLibrary/releases/tag/v2.16)
 
 
-QCopterFC 是一個基於 STM32F4 的飛行控制器，主要用來實現濾波、平衡、控制等演算法的平台。集成微控制器 9 DOF 慣性測量元件以及氣壓計，目前遙控器有 QCopterFC 與 QCopterFCs 兩種版本，前者使用芯片效能較高、功能多、硬體完善，後者功能較為簡潔，以擴充方式實現不同需求，較為靈活。目前開發著重於 QCopterFCs，想了解 QCopterFC 的可以進入該分支 [branche](https://github.com/KitSprout/QCopterFlightControl/tree/QCopterFC)
+QCopterFC 是一個基於 STM32F4 的飛行控制器，主要用來實現濾波、平衡、控制等演算法的平台。集成微控制器 9 DOF 慣性測量元件以及氣壓計，目前有 QCopterFC 與 QCopterFCs 兩種版本，前者使用芯片效能較高、功能多、硬體完善，後者功能較為簡潔，以擴充方式實現不同需求，靈活度高。目前開發著重於 QCopterFCs，想了解 QCopterFC 的可以進入該分支 [branche](https://github.com/KitSprout/QCopterFlightControl/tree/QCopterFC)
 
 Hardware
 ========
