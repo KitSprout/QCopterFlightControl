@@ -8,7 +8,7 @@
   * 
   * @file    mpu9250.c
   * @author  KitSprout
-  * @date    19-Mar-2017
+  * @date    27-Mar-2017
   * @brief   
   * 
   */
@@ -24,8 +24,6 @@
 
 /* Private typedef -------------------------------------------------------------------------*/
 /* Private define --------------------------------------------------------------------------*/
-#define MAG_READ_DELAY 256
-
 /* Private macro ---------------------------------------------------------------------------*/
 /* Private variables -----------------------------------------------------------------------*/
 /* Private function prototypes -------------------------------------------------------------*/
@@ -84,12 +82,14 @@ void MPU92_ReadRegs( uint8_t readAddr, uint8_t *readData, uint8_t lens )
 }
 
 #if defined(__USE_MAGNETOMETER)
+#define MAG_READ_DELAY 256
+
 /**
   * @brief  MPU92_Mag_WriteReg
   */
 void MPU92_Mag_WriteReg( uint8_t writeAddr, uint8_t writeData )
 {
-  uint8_t  status = 0;
+  uint8_t  status;
   uint32_t timeout = MAG_READ_DELAY;
 
   MPU92_WriteReg(MPU6500_I2C_SLV4_ADDR, AK8963_I2C_ADDR);
@@ -112,7 +112,7 @@ void MPU92_Mag_WriteReg( uint8_t writeAddr, uint8_t writeData )
   */
 void MPU92_Mag_WriteRegs( uint8_t writeAddr, uint8_t *writeData, uint8_t lens )
 {
-  uint8_t  status = 0;
+  uint8_t  status;
   uint32_t timeout = MAG_READ_DELAY;
 
   MPU92_WriteReg(MPU6500_I2C_SLV4_ADDR, AK8963_I2C_ADDR);
@@ -136,8 +136,8 @@ void MPU92_Mag_WriteRegs( uint8_t writeAddr, uint8_t *writeData, uint8_t lens )
   */
 uint8_t MPU92_Mag_ReadReg( uint8_t readAddr )
 {
-  uint8_t status = 0;
-  uint8_t readData = 0;
+  uint8_t status;
+  uint8_t readData;
   uint32_t timeout = MAG_READ_DELAY;
 
   MPU92_WriteReg(MPU6500_I2C_SLV4_ADDR, AK8963_I2C_ADDR | 0x80);
@@ -162,7 +162,7 @@ uint8_t MPU92_Mag_ReadReg( uint8_t readAddr )
   */
 void MPU92_Mag_ReadRegs( uint8_t readAddr, uint8_t *readData, uint8_t lens )
 {
-  uint8_t status = 0;
+  uint8_t status;
   uint32_t timeout = MAG_READ_DELAY;
 
   MPU92_WriteReg(MPU6500_I2C_SLV4_ADDR, AK8963_I2C_ADDR | 0x80);
@@ -206,9 +206,9 @@ void MPU92_Config( void )
   */
 #define MPU6500_InitRegNum  11
 #define AK8963_InitRegNum   5
-int8_t MPU92_Init( MPU_ConfigTypeDef *MPUx )
+int8_t MPU92_Init( MPU_ConfigTypeDef *mpux )
 {
-  int8_t status = ERROR;
+  int8_t status;
   uint8_t MPU6500_InitData[MPU6500_InitRegNum][2] = {
     {0x80, MPU6500_PWR_MGMT_1},     /* [0]  Reset Device                  */
     {0x04, MPU6500_PWR_MGMT_1},     /* [1]  Clock Source                  */
@@ -232,10 +232,11 @@ int8_t MPU92_Init( MPU_ConfigTypeDef *MPUx )
     {0x06, AK8963_CNTL1},           /* [4]  Continuous measurement mode 2 */
   };
 #endif
-  MPU6500_InitData[6][0] = MPUx->MPU_Gyr_FullScale;       /* [6] MPU6500_GYRO_CONFIG */
-  MPU6500_InitData[7][0] = MPUx->MPU_Acc_FullScale;       /* [7] MPU6500_ACCEL_CONFIG */
-  MPU6500_InitData[8][0] = MPUx->MPU_Gyr_LowPassFilter;   /* [8] MPU6500_CONFIG */
-  MPU6500_InitData[9][0] = MPUx->MPU_Acc_LowPassFilter;   /* [9] MPU6500_ACCEL_CONFIG_2 */
+
+  MPU6500_InitData[6][0] = mpux->MPU_Gyr_FullScale;       /* [6] MPU6500_GYRO_CONFIG */
+  MPU6500_InitData[7][0] = mpux->MPU_Acc_FullScale;       /* [7] MPU6500_ACCEL_CONFIG */
+  MPU6500_InitData[8][0] = mpux->MPU_Gyr_LowPassFilter;   /* [8] MPU6500_CONFIG */
+  MPU6500_InitData[9][0] = mpux->MPU_Acc_LowPassFilter;   /* [9] MPU6500_ACCEL_CONFIG_2 */
 
   for (uint32_t i = 0; i < MPU6500_InitRegNum; i++) {
     delay_ms(2);
@@ -248,7 +249,7 @@ int8_t MPU92_Init( MPU_ConfigTypeDef *MPUx )
     return ERROR;
 
 #if defined(__USE_MAGNETOMETER)
-  AK8963_InitData[4][0] |= MPUx->MPU_Mag_FullScale;        /* [4] AK8963_CNTL1 */
+  AK8963_InitData[4][0] |= mpux->MPU_Mag_FullScale;       /* [4] AK8963_CNTL1 */
 
   delay_ms(2);
   MPU92_Mag_WriteReg(AK8963_InitData[0][1], AK8963_InitData[0][0]);
@@ -256,6 +257,7 @@ int8_t MPU92_Init( MPU_ConfigTypeDef *MPUx )
   MPU92_Mag_WriteReg(AK8963_InitData[1][1], AK8963_InitData[1][0]);
   delay_ms(2);
   MPU92_Mag_WriteReg(AK8963_InitData[2][1], AK8963_InitData[2][0]);
+
 #if 0   /* ASA read */
   uint8_t ASA[3] = {0};
   float32_t sensAdj[3] = {0};
@@ -268,6 +270,7 @@ int8_t MPU92_Init( MPU_ConfigTypeDef *MPUx )
 //  printf("ASA = %i, %i, %i\r\n", ASA[0], ASA[1], ASA[2]);
 //  printf("sensAdj = %f, %f, %f\r\n", sensAdj[0], sensAdj[1], sensAdj[2]);
 #endif
+
   delay_ms(2);
   MPU92_Mag_WriteReg(AK8963_InitData[3][1], AK8963_InitData[3][0]);
   delay_ms(2);
@@ -314,50 +317,49 @@ int8_t MPU92_DeviceCheck( void )
 }
 
 /**
-  * @brief  MPU92_GetRawData
+  * @brief  MPU92_GetSensitivity
   * @param  sensitivity: point to float32_t
             sensitivity[0] - gyro
             sensitivity[1] - accel
             sensitivity[2] - magnetic
             sensitivity[3] - temperature scale
             sensitivity[4] - temperature offset
-  * @retval None
   */
-void MPU92_GetSensitivity( MPU_ConfigTypeDef *MPUx, float32_t *sensitivity )
+void MPU92_GetSensitivity( MPU_ConfigTypeDef *mpux, float32_t *sensitivity )
 {
   float64_t scale;
 
   /* Set gyroscope sensitivity (dps/LSB) */
 #if defined(__USE_GYROSCOPE)
-  switch (MPUx->MPU_Gyr_FullScale) {
+  switch (mpux->MPU_Gyr_FullScale) {
     case MPU_GyrFS_250dps:    scale = 250.0;    break;
     case MPU_GyrFS_500dps:    scale = 500.0;    break;
     case MPU_GyrFS_1000dps:   scale = 1000.0;   break;
     case MPU_GyrFS_2000dps:   scale = 2000.0;   break;
     default:                  scale = 0.0;      break;
   }
-  sensitivity[0] = scale / 32768.0;
+  sensitivity[0] = scale / 32768;
 #else
   sensitivity[0] = 0.0f;
 #endif
 
   /* Set accelerometer sensitivity (g/LSB) */
 #if defined(__USE_ACCELEROMETER)
-  switch (MPUx->MPU_Acc_FullScale) {
+  switch (mpux->MPU_Acc_FullScale) {
     case MPU_AccFS_2g:    scale = 2.0;    break;
     case MPU_AccFS_4g:    scale = 4.0;    break;
     case MPU_AccFS_8g:    scale = 8.0;    break;
     case MPU_AccFS_16g:   scale = 16.0;   break;
-    default:              scale = 0.0f;   break;
+    default:              scale = 0.0;    break;
   }
-  sensitivity[1] = scale / 32768.0;
+  sensitivity[1] = scale / 32768;
 #else
   sensitivity[1] = 0.0f;
 #endif
 
   /* Set magnetometer sensitivity (uT/LSB) */
 #if defined(__USE_MAGNETOMETER)
-  sensitivity[2] = 0.6;  /* +-4800uT */
+  sensitivity[2] = 0.6;   /* +-4800uT */
 #else
   sensitivity[2] = 0.0f;
 #endif
@@ -365,7 +367,7 @@ void MPU92_GetSensitivity( MPU_ConfigTypeDef *MPUx, float32_t *sensitivity )
   /* Set ictemperature sensitivity (degC/LSB) */
 #if defined(__USE_ICTEMPERATURE)
   sensitivity[3] = 1.0 / 333.87;
-  sensitivity[4] = 21.0f;
+  sensitivity[4] = 21.0;
 #else
   sensitivity[3] = 0.0f;
   sensitivity[4] = 0.0f;
@@ -382,19 +384,19 @@ int8_t MPU92_GetRawData( int16_t *data )
 {
 #if defined(__USE_MAGNETOMETER)
   uint8_t readBuf[22] = {0};
-  MPU92_ReadRegs(MPU6500_ACCEL_XOUT_H, readBuf, 22);    /* Read Gyr, Acc, Mag */
+  MPU92_ReadRegs(MPU6500_ACCEL_XOUT_H, readBuf, 22);    /* Gyr, Acc, Mag, Temp */
 #else
   uint8_t readBuf[14] = {0};
-  MPU92_ReadRegs(MPU6500_ACCEL_XOUT_H, readBuf, 14);    /* Read Gyr, Acc */
+  MPU92_ReadRegs(MPU6500_ACCEL_XOUT_H, readBuf, 14);    /* Gyr, Acc, Temp */
 #endif
 
-  data[0] = (int16_t)(readBuf[8]  << 8) | readBuf[9];   /* Gyr.X */
-  data[1] = (int16_t)(readBuf[10] << 8) | readBuf[11];  /* Gyr.Y */
-  data[2] = (int16_t)(readBuf[12] << 8) | readBuf[13];  /* Gyr.Z */
-  data[3] = (int16_t)(readBuf[0]  << 8) | readBuf[1];   /* Acc.X */
-  data[4] = (int16_t)(readBuf[2]  << 8) | readBuf[3];   /* Acc.Y */
-  data[5] = (int16_t)(readBuf[4]  << 8) | readBuf[5];   /* Acc.Z */
-  data[6] = (int16_t)(readBuf[6]  << 8) | readBuf[7];   /* ICTemp */
+  data[0] = (int16_t)(readBuf[6]  << 8) | readBuf[7];   /* ICTemp */
+  data[1] = (int16_t)(readBuf[8]  << 8) | readBuf[9];   /* Gyr.X */
+  data[2] = (int16_t)(readBuf[10] << 8) | readBuf[11];  /* Gyr.Y */
+  data[3] = (int16_t)(readBuf[12] << 8) | readBuf[13];  /* Gyr.Z */
+  data[4] = (int16_t)(readBuf[0]  << 8) | readBuf[1];   /* Acc.X */
+  data[5] = (int16_t)(readBuf[2]  << 8) | readBuf[3];   /* Acc.Y */
+  data[6] = (int16_t)(readBuf[4]  << 8) | readBuf[5];   /* Acc.Z */
 
 #if defined(__USE_MAGNETOMETER)
   if (!(!(readBuf[14] & AK8963_STATUS_DRDY) || (readBuf[14] & AK8963_STATUS_DOR) || (readBuf[21] & AK8963_STATUS_HOFL))) {
@@ -404,6 +406,7 @@ int8_t MPU92_GetRawData( int16_t *data )
     return 1;
   }
 #endif
+
   return 0;
 }
 

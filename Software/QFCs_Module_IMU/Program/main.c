@@ -30,8 +30,7 @@
 
 /* Private macro ---------------------------------------------------------------------------*/
 /* Private variables -----------------------------------------------------------------------*/
-extern IMU_DataTypeDef IMU;
-static int16_t sendBuf[PACKET_LENS] = {0};
+extern IMU_DataTypeDef imu;
 
 /* Private function prototypes -------------------------------------------------------------*/
 /* Private functions -----------------------------------------------------------------------*/
@@ -48,39 +47,39 @@ int main( void )
 #if 1
     LED_B_Toggle();
     delay_ms(100);
-    IMU_GetRawData(&IMU);
-    printf("GX:%5.0f\tGY:%5.0f\tGZ:%5.0f\tAX:%5.0f\tAY:%5.0f\tAZ:%5.0f\tMX:%5.0f\tMY:%5.0f\tMZ:%5.0f\r\n",
-      IMU.gyrRaw[0], IMU.gyrRaw[1], IMU.gyrRaw[2],
-      IMU.accRaw[0], IMU.accRaw[1], IMU.accRaw[2],
-      IMU.magRaw[0], IMU.magRaw[1], IMU.magRaw[2]
+    IMU_GetRealData(&imu);
+    printf("GX:%5i\tGY:%5i\tGZ:%5i\tAX:%5i\tAY:%5i\tAZ:%5i\tMX:%5i\tMY:%5i\tMZ:%5i\r\n",
+      imu.gyrRaw[0], imu.gyrRaw[1], imu.gyrRaw[2],
+      imu.accRaw[0], imu.accRaw[1], imu.accRaw[2],
+      imu.magRaw[0], imu.magRaw[1], imu.magRaw[2]
     );
 #endif
 
 #if 0
     LED_B_Toggle();
     delay_ms(100);
-    IMU_GetScaleData(&IMU);
+    IMU_GetRealData(&imu);
     printf("GX:%8.2f\tGY:%8.2f\tG8:%5.2f\tAX:%7.4f\tAY:%7.4f\tAZ:%7.4f\tMX:%6.1f\tMY:%6.1f\tMZ:%6.1f\r\n",
-      IMU.gyrData[0], IMU.gyrData[1], IMU.gyrData[2],
-      IMU.accData[0], IMU.accData[1], IMU.accData[2],
-      IMU.magData[0], IMU.magData[1], IMU.magData[2]
+      imu.gyrData[0], imu.gyrData[1], imu.gyrData[2],
+      imu.accData[0], imu.accData[1], imu.accData[2],
+      imu.magData[0], imu.magData[1], imu.magData[2]
     );
 #endif
 
 #if 0
+    int16_t sendBuf[PACKET_LENS];
     LED_B_Toggle();
-    IMU_GetRawData(&IMU);
-    sendBuf[0] = IMU.gyrRaw[0];
-    sendBuf[1] = IMU.gyrRaw[1];
-    sendBuf[2] = IMU.gyrRaw[2];
-    sendBuf[3] = IMU.accRaw[0];
-    sendBuf[4] = IMU.accRaw[1];
-    sendBuf[5] = IMU.accRaw[2];
-    sendBuf[6] = IMU.magRaw[0];
-    sendBuf[7] = IMU.magRaw[1];
-    sendBuf[8] = IMU.magRaw[2];
+    IMU_GetRealData(&imu);
+    sendBuf[0] = imu.gyrRaw[0];
+    sendBuf[1] = imu.gyrRaw[1];
+    sendBuf[2] = imu.gyrRaw[2];
+    sendBuf[3] = imu.accRaw[0];
+    sendBuf[4] = imu.accRaw[1];
+    sendBuf[5] = imu.accRaw[2];
+    sendBuf[6] = imu.magRaw[0];
+    sendBuf[7] = imu.magRaw[1];
+    sendBuf[8] = imu.magRaw[2];
     kSerial_SendData(sendBuf, PACKET_LENS, KS_INT16);
-
 #endif
 
   }

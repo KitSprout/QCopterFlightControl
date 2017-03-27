@@ -8,7 +8,7 @@
   * 
   * @file    imu.c
   * @author  KitSprout
-  * @date    19-Mar-2017
+  * @date    27-Mar-2017
   * @brief   
   * 
   */
@@ -32,13 +32,12 @@
 static uint8_t IMU_TX_BUFFER[IMU_MAX_TXBUF] = {0};
 static uint8_t IMU_RX_BUFFER[IMU_MAX_RXBUF] = {0};
 
-IMU_DataTypeDef IMU;
+IMU_DataTypeDef imu;
 
 /* Private function prototypes -------------------------------------------------------------*/
 static void IMU_InitData( IMU_DataTypeDef *imux );
-static void IMU_SetSensitivity( IMU_InitTypeDef *IMUx );
-static void IMU_MergeScaleStrength( IMU_DataTypeDef *imux );
-//static void IMU_MergeScaleCalib( IMU_DataTypeDef *imux );
+static void IMU_SetSensitivity( IMU_InitTypeDef *imux );
+static void IMU_UpdateDataFactor( IMU_DataTypeDef *imux );
 
 /* Private functions -----------------------------------------------------------------------*/
 
@@ -79,19 +78,19 @@ void IMU_Config( void )
 /**
   * @brief  IMU_Init
   */
-int8_t IMU_Init( IMU_InitTypeDef *IMUx )
+int8_t IMU_Init( IMU_InitTypeDef *imux )
 {
   int8_t status;
 
 #if defined(__MPU92)
-  status = MPU92_Init(&IMUx->InitMPU);
+  status = MPU92_Init(&imux->InitMPU);
   if (status != SUCCESS) {
     return ERROR;
   }
 #endif
 
 #if defined(__LPS22)
-  status = LPS22_Init(&IMUx->InitLPS);
+  status = LPS22_Init(&imux->InitLPS);
   if (status != SUCCESS) {
     return ERROR;
   }
@@ -100,10 +99,9 @@ int8_t IMU_Init( IMU_InitTypeDef *IMUx )
   SPI_SetSpeed(hImu.handle, IMU_SPIx_SPEED_HIGH);
   delay_ms(10);
 
-  IMU_InitData(IMUx->Data);
-  IMU_SetSensitivity(IMUx);
-  IMU_MergeScaleStrength(IMUx->Data);
-//  IMU_MergeScaleCalib(IMUx->Data);
+  IMU_InitData(imux->Data);
+  IMU_SetSensitivity(imux);
+  IMU_UpdateDataFactor(imux->Data);
 
   return SUCCESS;
 }
@@ -117,15 +115,21 @@ int8_t IMU_GetRawData( IMU_DataTypeDef *imux )
 
 #if defined(__MPU92)
   int16_t data16[10];
+#endif
 
+#if defined(__LPS22)
+  int32_t data32[2];
+#endif
+
+#if defined(__MPU92)
   status = MPU92_GetRawData(data16);
-  imux->gyrRaw[0] = data16[0];    /* Gyr.X */
-  imux->gyrRaw[1] = data16[1];    /* Gyr.Y */
-  imux->gyrRaw[2] = data16[2];    /* Gyr.Z */
-  imux->accRaw[0] = data16[3];    /* Acc.X */
-  imux->accRaw[1] = data16[4];    /* Acc.Y */
-  imux->accRaw[2] = data16[5];    /* Acc.Z */
-  imux->ictempRaw = data16[6];    /* ICTemp */
+  imux->ictempRaw = data16[0];    /* ICTemp */
+  imux->gyrRaw[0] = data16[1];    /* Gyr.X */
+  imux->gyrRaw[1] = data16[2];    /* Gyr.Y */
+  imux->gyrRaw[2] = data16[3];    /* Gyr.Z */
+  imux->accRaw[0] = data16[4];    /* Acc.X */
+  imux->accRaw[1] = data16[5];    /* Acc.Y */
+  imux->accRaw[2] = data16[6];    /* Acc.Z */
 
 #if defined(__USE_MAGNETOMETER)
   if (status == 1) {
@@ -134,17 +138,17 @@ int8_t IMU_GetRawData( IMU_DataTypeDef *imux )
     imux->magRaw[2] = data16[9];  /* Mag.Z */
   }
 #endif
+
 #endif
 
 #if defined(__LPS22)
-  int32_t data32[2];
-
   status = LPS22_GetRawData(data32);
   if (status == 1) {
     imux->baroRaw[0] = data32[0];
     imux->baroRaw[1] = data32[1];
   }
 #endif
+
   return status;
 }
 
@@ -153,30 +157,51 @@ int8_t IMU_GetRawData( IMU_DataTypeDef *imux )
   */
 void IMU_GetCalibData( IMU_DataTypeDef *imux )
 {
-#if defined(__USE_MAGNETOMETER)
   float32_t tmp[3] = {0};
-#endif
 
   IMU_GetRawData(imux);
 
-  imux->gyrData[0] = (imux->gyrRaw[0] - imux->gyrOffset[0]) * imux->gyrCalib[0];   /* Gyr.X */
-  imux->gyrData[1] = (imux->gyrRaw[1] - imux->gyrOffset[1]) * imux->gyrCalib[1];   /* Gyr.Y */
-  imux->gyrData[2] = (imux->gyrRaw[2] - imux->gyrOffset[2]) * imux->gyrCalib[2];   /* Gyr.Z */
+#if defined(__USE_GYROSCOPE)
+//  tmp[0] = imux->gyrRaw[0] - imux->gyrOffset[0];  /* Gyr.X */
+//  tmp[1] = imux->gyrRaw[1] - imux->gyrOffset[1];  /* Gyr.Y */
+//  tmp[2] = imux->gyrRaw[2] - imux->gyrOffset[2];  /* Gyr.Z */
+//  imux->gyrData[0] = imux->gyrCalib[0] * tmp[0];
+//  imux->gyrData[1] = imux->gyrCalib[1] * tmp[1];
+//  imux->gyrData[2] = imux->gyrCalib[2] * tmp[2];
+  imux->gyrData[0] = imux->gyrRaw[0] - imux->gyrOffset[0];  /* Gyr.X */
+  imux->gyrData[1] = imux->gyrRaw[1] - imux->gyrOffset[1];  /* Gyr.Y */
+  imux->gyrData[2] = imux->gyrRaw[2] - imux->gyrOffset[2];  /* Gyr.Z */
+  imux->gyrRaw[0]  = imux->gyrData[0];
+  imux->gyrRaw[1]  = imux->gyrData[1];
+  imux->gyrRaw[2]  = imux->gyrData[2];
+#endif
 
-  imux->accData[0] = (imux->accCalib[0] * imux->accRaw[0] + imux->accCalib[1] * imux->accRaw[1] + imux->accCalib[2] * imux->accRaw[2]) + imux->accOffset[0];  /* Acc.X */
-  imux->accData[1] = (imux->accCalib[3] * imux->accRaw[0] + imux->accCalib[4] * imux->accRaw[1] + imux->accCalib[5] * imux->accRaw[2]) + imux->accOffset[1];  /* Acc.X */
-  imux->accData[2] = (imux->accCalib[6] * imux->accRaw[0] + imux->accCalib[7] * imux->accRaw[1] + imux->accCalib[8] * imux->accRaw[2]) + imux->accOffset[2];  /* Acc.X */
-
-  imux->ictempData = imux->ictempRaw * imux->ictempScale + imux->ictempOffset;
+#if defined(__USE_ACCELEROMETER)
+  tmp[0] = imux->accRaw[0] - imux->accOffset[0];  /* Acc.X */
+  tmp[1] = imux->accRaw[1] - imux->accOffset[1];  /* Acc.Y */
+  tmp[2] = imux->accRaw[2] - imux->accOffset[2];  /* Acc.Z */
+  imux->accData[0] = imux->accCalib[0] * tmp[0] + imux->accCalib[1] * tmp[1] + imux->accCalib[2] * tmp[2];
+  imux->accData[1] = imux->accCalib[3] * tmp[0] + imux->accCalib[4] * tmp[1] + imux->accCalib[5] * tmp[2];
+  imux->accData[2] = imux->accCalib[6] * tmp[0] + imux->accCalib[7] * tmp[1] + imux->accCalib[8] * tmp[2];
+  imux->accRaw[0]  = imux->accData[0];
+  imux->accRaw[1]  = imux->accData[1];
+  imux->accRaw[2]  = imux->accData[2];
+#endif
 
 #if defined(__USE_MAGNETOMETER)
-  tmp[0] = imux->magRaw[0] - imux->magOffset[0];   /* Mag.X */
-  tmp[1] = imux->magRaw[1] - imux->magOffset[1];   /* Mag.Y */
-  tmp[2] = imux->magRaw[2] - imux->magOffset[2];   /* Mag.Z */
-
+  tmp[0] = imux->magRaw[0] - imux->magOffset[0];  /* Mag.X */
+  tmp[1] = imux->magRaw[1] - imux->magOffset[1];  /* Mag.Y */
+  tmp[2] = imux->magRaw[2] - imux->magOffset[2];  /* Mag.Z */
   imux->magData[0] = imux->magCalib[0] * tmp[0] + imux->magCalib[1] * tmp[1] + imux->magCalib[2] * tmp[2];
   imux->magData[1] = imux->magCalib[3] * tmp[0] + imux->magCalib[4] * tmp[1] + imux->magCalib[5] * tmp[2];
   imux->magData[2] = imux->magCalib[6] * tmp[0] + imux->magCalib[7] * tmp[1] + imux->magCalib[8] * tmp[2];
+  imux->magRaw[0]  = imux->magData[0];
+  imux->magRaw[1]  = imux->magData[1];
+  imux->magRaw[2]  = imux->magData[2];
+#endif
+
+#if defined(__USE_ICTEMPERATURE)
+  imux->ictempData = imux->ictempRaw * imux->ictempScale + imux->ictempOffset;
 #endif
 
 #if defined(__USE_BAROMETER)
@@ -186,29 +211,33 @@ void IMU_GetCalibData( IMU_DataTypeDef *imux )
 }
 
 /**
-  * @brief  IMU_GetScaleData
+  * @brief  IMU_GetRealData
   */
-void IMU_GetScaleData( IMU_DataTypeDef *imux )
+void IMU_GetRealData( IMU_DataTypeDef *imux )
 {
   IMU_GetCalibData(imux);
 
-  imux->gyrData[0] = imux->gyrData[0] * imux->gyrScale[0];    /* Gyr.X */
-  imux->gyrData[1] = imux->gyrData[1] * imux->gyrScale[1];    /* Gyr.Y */
-  imux->gyrData[2] = imux->gyrData[2] * imux->gyrScale[2];    /* Gyr.Z */
+#if defined(__USE_GYROSCOPE)
+  imux->gyrData[0] = imux->gyrData[0] * imux->gyrFactor[0]; /* Gyr.X */
+  imux->gyrData[1] = imux->gyrData[1] * imux->gyrFactor[1]; /* Gyr.Y */
+  imux->gyrData[2] = imux->gyrData[2] * imux->gyrFactor[2]; /* Gyr.Z */
+#endif
 
-  imux->accData[0] = imux->accData[0] * imux->accScale[0];    /* Acc.X */
-  imux->accData[1] = imux->accData[1] * imux->accScale[1];    /* Acc.Y */
-  imux->accData[2] = imux->accData[2] * imux->accScale[2];    /* Acc.Z */
+#if defined(__USE_ACCELEROMETER)
+  imux->accData[0] = imux->accData[0] * imux->accFactor[0]; /* Acc.X */
+  imux->accData[1] = imux->accData[1] * imux->accFactor[1]; /* Acc.Y */
+  imux->accData[2] = imux->accData[2] * imux->accFactor[2]; /* Acc.Z */
+#endif
 
 #if defined(__USE_MAGNETOMETER)
-  imux->magData[0] = imux->magData[0] * imux->magScale[0];    /* Mag.X */
-  imux->magData[1] = imux->magData[1] * imux->magScale[1];    /* Mag.Y */
-  imux->magData[2] = imux->magData[2] * imux->magScale[2];    /* Mag.Z */
+  imux->magData[0] = imux->magData[0] * imux->magFactor[0]; /* Mag.X */
+  imux->magData[1] = imux->magData[1] * imux->magFactor[1]; /* Mag.Y */
+  imux->magData[2] = imux->magData[2] * imux->magFactor[2]; /* Mag.Z */
 #endif
 
 #if defined(__USE_BAROMETER)
-  imux->baroData[0] = imux->baroData[0] * imux->baroScale[0]; /* Mag.X */
-  imux->baroData[1] = imux->baroData[1] * imux->baroScale[1]; /* Mag.Y */
+  imux->baroData[0] = imux->baroData[0] * imux->baroFactor[0];  /* Pressure */
+  imux->baroData[1] = imux->baroData[1] * imux->baroFactor[1];  /* Temperature */
 #endif
 }
 
@@ -217,58 +246,58 @@ void IMU_GetScaleData( IMU_DataTypeDef *imux )
   */
 static void IMU_InitData( IMU_DataTypeDef *imux )
 {
-  memset(imux, 0, sizeof(IMU_DataTypeDef));
+  if (imux->calibState != ENABLE) {
+    memset(imux, 0, sizeof(IMU_DataTypeDef));
 
-  imux->gyrCalib[0] = 1.0f;
-  imux->gyrCalib[1] = 1.0f;
-  imux->gyrCalib[2] = 1.0f;
-
-  imux->accStrength = 1.0f;
-  imux->accCalib[0] = 1.0f;
-  imux->accCalib[4] = 1.0f;
-  imux->accCalib[8] = 1.0f;
-
-  imux->magStrength = 1.0f;
-  imux->magCalib[0] = 1.0f;
-  imux->magCalib[4] = 1.0f;
-  imux->magCalib[8] = 1.0f;
+    imux->gyrCalib[0] = 1.0f;
+    imux->gyrCalib[1] = 1.0f;
+    imux->gyrCalib[2] = 1.0f;
+    imux->accStrength = 1.0f;
+    imux->accCalib[0] = 1.0f;
+    imux->accCalib[4] = 1.0f;
+    imux->accCalib[8] = 1.0f;
+    imux->magStrength = 1.0f;
+    imux->magCalib[0] = 1.0f;
+    imux->magCalib[4] = 1.0f;
+    imux->magCalib[8] = 1.0f;
 
 #if 0
-  /* set gyroscope parameters */
-  imux->gyrOffset[0] = -5.266666666666667f;
-  imux->gyrOffset[1] = -7.883333333333334f;
-  imux->gyrOffset[2] = -8.783333333333333f;
+    /* set gyroscope parameters */
+    imux->gyrOffset[0] = -5.266666666666667f;
+    imux->gyrOffset[1] = -7.883333333333334f;
+    imux->gyrOffset[2] = -8.783333333333333f;
 
-  /* set accelerometer parameters */
-  imux->accStrength  =  9.8f;
-  imux->accCalib[0]  =  1.000591271010064f;
-  imux->accCalib[1]  =  0.000586893913887f;
-  imux->accCalib[2]  = -0.003436732180952f;
-  imux->accCalib[3]  = -0.001485988936797f;
-  imux->accCalib[4]  =  1.000157846160545f;
-  imux->accCalib[5]  = -0.011743938010525f;
-  imux->accCalib[6]  = -0.007978426891497f;
-  imux->accCalib[7]  = -0.000416245697376f;
-  imux->accCalib[8]  =  0.995341160302247f;
-  imux->accOffset[0] =  42.55588470081017f;
-  imux->accOffset[1] = -97.96568104396205f;
-  imux->accOffset[2] =  316.0875468994960f;
+    /* set accelerometer parameters */
+    imux->accStrength  =  9.8f;
+    imux->accCalib[0]  =  1.000591271010064f;
+    imux->accCalib[1]  =  0.000586893913887f;
+    imux->accCalib[2]  = -0.003436732180952f;
+    imux->accCalib[3]  = -0.001485988936797f;
+    imux->accCalib[4]  =  1.000157846160545f;
+    imux->accCalib[5]  = -0.011743938010525f;
+    imux->accCalib[6]  = -0.007978426891497f;
+    imux->accCalib[7]  = -0.000416245697376f;
+    imux->accCalib[8]  =  0.995341160302247f;
+    imux->accOffset[0] =  42.55588470081017f;
+    imux->accOffset[1] = -97.96568104396205f;
+    imux->accOffset[2] =  316.0875468994960f;
 
-  /* set magnetometer parameters */
-//  imux->magStrength  =  212.4818615767788f;
-  imux->magCalib[0]  =  1.019823067566470f;
-  imux->magCalib[1]  = -0.003356411418474f;
-  imux->magCalib[2]  = -0.014430324672665f;
-  imux->magCalib[3]  = -0.003356411418474f;
-  imux->magCalib[4]  =  1.015454920456150f;
-  imux->magCalib[5]  =  0.018734747904013f;
-  imux->magCalib[6]  = -0.014430324672665f;
-  imux->magCalib[7]  =  0.018734747904013f;
-  imux->magCalib[8]  =  0.966196977587016f;
-  imux->magOffset[0] =  16.228349462609184f;
-  imux->magOffset[1] =  170.7384291607371f;
-  imux->magOffset[2] = -58.094694639781515f;
+    /* set magnetometer parameters */
+    imux->magStrength  =  212.4818615767788f;
+    imux->magCalib[0]  =  1.019823067566470f;
+    imux->magCalib[1]  = -0.003356411418474f;
+    imux->magCalib[2]  = -0.014430324672665f;
+    imux->magCalib[3]  = -0.003356411418474f;
+    imux->magCalib[4]  =  1.015454920456150f;
+    imux->magCalib[5]  =  0.018734747904013f;
+    imux->magCalib[6]  = -0.014430324672665f;
+    imux->magCalib[7]  =  0.018734747904013f;
+    imux->magCalib[8]  =  0.966196977587016f;
+    imux->magOffset[0] =  16.228349462609184f;
+    imux->magOffset[1] =  170.7384291607371f;
+    imux->magOffset[2] = -58.094694639781515f;
 #endif
+  }
 }
 
 /**
@@ -313,53 +342,37 @@ static void IMU_SetSensitivity( IMU_InitTypeDef *IMUx )
 }
 
 /**
-  * @brief  IMU_MergeScaleStrength
+  * @brief  IMU_UpdateDataFactor
   */
-static void IMU_MergeScaleStrength( IMU_DataTypeDef *imux )
+static void IMU_UpdateDataFactor( IMU_DataTypeDef *imux )
 {
-  /* Merge accelerometer scale and sensitivity (g/LSB) */
-  imux->accScale[0] = imux->accScale[0] * imux->accStrength;
-  imux->accScale[1] = imux->accScale[1] * imux->accStrength;
-  imux->accScale[2] = imux->accScale[2] * imux->accStrength;
+#if defined(__USE_GYROSCOPE)
+  /* Combine gyroscope scale and sensitivity (dps/LSB) */
+  imux->gyrFactor[0] = imux->gyrScale[0];
+  imux->gyrFactor[1] = imux->gyrScale[1];
+  imux->gyrFactor[2] = imux->gyrScale[2];
+#endif
 
-  /* Merge magnetometer scale and sensitivity (uT/LSB) */
-  imux->magScale[0] = imux->magScale[0] * imux->magStrength;
-  imux->magScale[1] = imux->magScale[1] * imux->magStrength;
-  imux->magScale[2] = imux->magScale[2] * imux->magStrength;
+#if defined(__USE_ACCELEROMETER)
+  /* Combine accelerometer scale and sensitivity (g/LSB) */
+  imux->accFactor[0] = imux->accScale[0] * imux->accStrength;
+  imux->accFactor[1] = imux->accScale[1] * imux->accStrength;
+  imux->accFactor[2] = imux->accScale[2] * imux->accStrength;
+#endif
+
+#if defined(__USE_MAGNETOMETER)
+  /* Combine magnetometer scale and sensitivity (uT/LSB) */
+  imux->magFactor[0] = imux->magScale[0] * imux->accStrength;
+  imux->magFactor[1] = imux->magScale[1] * imux->accStrength;
+  imux->magFactor[2] = imux->magScale[2] * imux->accStrength;
+#endif
+
+#if defined(__USE_BAROMETER)
+  /* Combine barometer scale and sensitivity (hPa/LSB) (degC/LSB) */
+  imux->baroFactor[0] = imux->baroScale[0];
+  imux->baroFactor[1] = imux->baroScale[1];
+#endif
 }
-
-/**
-  * @brief  IMU_MergeScaleCalib
-  */
-//static void IMU_MergeScaleCalib( IMU_DataTypeDef *imux )
-//{
-//  /* Merge gyroscope scale and calibration (dps/LSB) */
-//  imux->gyrCalib[0] = imux->gyrCalib[0] * imux->gyrScale[0];
-//  imux->gyrCalib[1] = imux->gyrCalib[1] * imux->gyrScale[1];
-//  imux->gyrCalib[2] = imux->gyrCalib[2] * imux->gyrScale[2];
-
-//  /* Merge accelerometer scale and sensitivity (g/LSB) */
-//  imux->accCalib[0] = imux->accCalib[0] * imux->accScale[0];
-//  imux->accCalib[1] = imux->accCalib[1] * imux->accScale[1];
-//  imux->accCalib[2] = imux->accCalib[2] * imux->accScale[2];
-//  imux->accCalib[3] = imux->accCalib[3] * imux->accScale[0];
-//  imux->accCalib[4] = imux->accCalib[4] * imux->accScale[1];
-//  imux->accCalib[5] = imux->accCalib[5] * imux->accScale[2];
-//  imux->accCalib[6] = imux->accCalib[6] * imux->accScale[0];
-//  imux->accCalib[7] = imux->accCalib[7] * imux->accScale[1];
-//  imux->accCalib[8] = imux->accCalib[8] * imux->accScale[2];
-
-//  /* Merge magnetometer scale and sensitivity (uT/LSB) */
-//  imux->magCalib[0] = imux->magCalib[0] * imux->magScale[0];
-//  imux->magCalib[1] = imux->magCalib[1] * imux->magScale[1];
-//  imux->magCalib[2] = imux->magCalib[2] * imux->magScale[2];
-//  imux->magCalib[3] = imux->magCalib[3] * imux->magScale[0];
-//  imux->magCalib[4] = imux->magCalib[4] * imux->magScale[1];
-//  imux->magCalib[5] = imux->magCalib[5] * imux->magScale[2];
-//  imux->magCalib[6] = imux->magCalib[6] * imux->magScale[0];
-//  imux->magCalib[7] = imux->magCalib[7] * imux->magScale[1];
-//  imux->magCalib[8] = imux->magCalib[8] * imux->magScale[2];
-//}
 
 /**
   * @brief  IMU_PrintData
@@ -367,15 +380,15 @@ static void IMU_MergeScaleStrength( IMU_DataTypeDef *imux )
 void IMU_PrintData( IMU_DataTypeDef *imux )
 {
   printf("\r\n");
-  printf("- Print IMU Data -----------------\r\n");
-  printf("G_raw : %f, %f, %f\r\n", imux->gyrRaw[0], imux->gyrRaw[1], imux->gyrRaw[2]);
-  printf("A_raw : %f, %f, %f\r\n", imux->accRaw[0], imux->accRaw[1], imux->accRaw[2]);
+  printf("- IMU Data -----------------------\r\n");
+  printf("G_raw : %5i, %5i, %5i\r\n", imux->gyrRaw[0], imux->gyrRaw[1], imux->gyrRaw[2]);
+  printf("A_raw : %5i, %5i, %5i\r\n", imux->accRaw[0], imux->accRaw[1], imux->accRaw[2]);
 #if defined(__USE_MAGNETOMETER)
-  printf("M_raw : %f, %f, %f\r\n", imux->magRaw[0], imux->magRaw[1], imux->magRaw[2]);
+  printf("M_raw : %5i, %5i, %5i\r\n", imux->magRaw[0], imux->magRaw[1], imux->magRaw[2]);
 #endif
-  printf("T_raw : %f\r\n", imux->ictempRaw);
+  printf("T_raw : %5i\r\n", imux->ictempRaw);
 #if defined(__USE_BAROMETER)
-  printf("B_raw : %f, %f\r\n", imux->baroRaw[0], imux->baroRaw[1]);
+  printf("B_raw : %5i, %5i\r\n", imux->baroRaw[0], imux->baroRaw[1]);
 #endif
 
   printf("\r\n");

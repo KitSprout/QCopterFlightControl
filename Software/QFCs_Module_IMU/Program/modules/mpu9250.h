@@ -8,7 +8,7 @@
   * 
   * @file    mpu9250.h
   * @author  KitSprout
-  * @date    19-Mar-2017
+  * @date    27-Mar-2017
   * @brief   
   * 
   */
@@ -223,6 +223,7 @@ typedef struct {
 #define MPU6500_I2C_SLV4_DONE       ((uint8_t)0x40)
 #define MPU6500_I2C_SLV4_NACK       ((uint8_t)0x10)
 
+
 /* ---- AK8963 Reg In MPU9250 ----------------------------------------------- */
 
 #define AK8963_I2C_ADDR             ((uint8_t)0x0C)
@@ -239,6 +240,7 @@ typedef struct {
 #define AK8963_HZL                  ((uint8_t)0x07)
 #define AK8963_HZH                  ((uint8_t)0x08)
 #define AK8963_ST2                  ((uint8_t)0x09)
+
 /* Write/Read Reg */
 #define AK8963_CNTL1                ((uint8_t)0x0A)
 #define AK8963_CNTL2                ((uint8_t)0x0B)
@@ -246,17 +248,16 @@ typedef struct {
 #define AK8963_TS1                  ((uint8_t)0x0D)
 #define AK8963_TS2                  ((uint8_t)0x0E)
 #define AK8963_I2CDIS               ((uint8_t)0x0F)
+
 /* Read-only Reg ( ROM ) */
 #define AK8963_ASAX                 ((uint8_t)0x10)
 #define AK8963_ASAY                 ((uint8_t)0x11)
 #define AK8963_ASAZ                 ((uint8_t)0x12)
+
 /* Status */
 #define AK8963_STATUS_DRDY          ((uint8_t)0x01)
 #define AK8963_STATUS_DOR           ((uint8_t)0x02)
 #define AK8963_STATUS_HOFL          ((uint8_t)0x08)
-
-/* number of mpu92 device */
-#define MPU92_DEVICE_NUM 1
 
 /* Exported functions ----------------------------------------------------------------------*/  
 void      MPU92_WriteReg( uint8_t writeAddr, uint8_t writeData );
@@ -269,9 +270,9 @@ uint8_t   MPU92_Mag_ReadReg( uint8_t readAddr );
 void      MPU92_Mag_ReadRegs( uint8_t readAddr, uint8_t *readData, uint8_t lens );
 
 void      MPU92_Config( void );
-int8_t    MPU92_Init( MPU_ConfigTypeDef *MPUx );
+int8_t    MPU92_Init( MPU_ConfigTypeDef *mpux );
 int8_t    MPU92_DeviceCheck( void );
-void      MPU92_GetSensitivity( MPU_ConfigTypeDef *MPUx, float32_t *sensitivity );
+void      MPU92_GetSensitivity( MPU_ConfigTypeDef *mpux, float32_t *sensitivity );
 int8_t    MPU92_GetRawData( int16_t *data );
 
 #ifdef __cplusplus

@@ -28,7 +28,7 @@
 /* Private define --------------------------------------------------------------------------*/
 /* Private macro ---------------------------------------------------------------------------*/
 /* Private variables -----------------------------------------------------------------------*/
-extern IMU_DataTypeDef IMU;
+extern IMU_DataTypeDef imu;
 
 /* Private function prototypes -------------------------------------------------------------*/
 /* Private functions -----------------------------------------------------------------------*/
@@ -94,7 +94,8 @@ void BSP_SPI_IMU_Config( void )
   delay_ms(50);
 
   printf("IMU Init ... ");
-  IMU_InitStruct.Data                           = &IMU;
+  IMU_InitStruct.Data                           = &imu;
+  IMU_InitStruct.Data->calibState               = DISABLE;
   IMU_InitStruct.InitMPU.MPU_Gyr_FullScale      = MPU_GyrFS_2000dps;
   IMU_InitStruct.InitMPU.MPU_Gyr_LowPassFilter  = MPU_GyrLPS_41Hz;
   IMU_InitStruct.InitMPU.MPU_Acc_FullScale      = MPU_AccFS_4g;

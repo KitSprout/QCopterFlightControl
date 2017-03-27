@@ -8,7 +8,7 @@
   * 
   * @file    imu.h
   * @author  KitSprout
-  * @date    19-Mar-2017
+  * @date    27-Mar-2017
   * @brief   
   * 
   */
@@ -30,19 +30,13 @@
 /* Exported types --------------------------------------------------------------------------*/
 
 typedef struct {
-  SPI_HandleTypeDef *handle;
-  uint16_t txBufLens;
-  uint16_t rxBufLens;
-  uint8_t *pTxBuf;
-  uint8_t *pRxBuf;
-} __attribute__((aligned)) ImuHandle_st;
+  int8_t calibState;
 
-typedef struct {
-  float32_t gyrRaw[3];      /* x = raw[0], y = raw[1], z = raw[2] */
-  float32_t accRaw[3];
-  float32_t magRaw[3];
-  float32_t ictempRaw;
-  float32_t baroRaw[2];     /* p = raw[0], t = raw[1] */
+  int16_t gyrRaw[3];      /* x = raw[0], y = raw[1], z = raw[2] */
+  int16_t accRaw[3];
+  int16_t magRaw[3];
+  int16_t ictempRaw;
+  int32_t baroRaw[2];     /* p = raw[0], t = raw[1] */
 
   float32_t gyrData[3];
   float32_t accData[3];
@@ -58,12 +52,16 @@ typedef struct {
   float32_t ictempScale;
   float32_t baroScale[2];
 
+  float32_t gyrFactor[3];
+  float32_t accFactor[3];
+  float32_t magFactor[3];
+  float32_t baroFactor[2];
+
   float32_t gyrCalib[3];
   float32_t accCalib[9];
   float32_t magCalib[9];    /* c11 = calib[0], c12 = calib[1], c13 = calib[2],
                                c21 = calib[3], c22 = calib[4], c23 = calib[5],
                                c31 = calib[6], c32 = calib[7], c33 = calib[8] */
-
   float32_t gyrOffset[3];
   float32_t accOffset[3];
   float32_t magOffset[3];
@@ -72,7 +70,7 @@ typedef struct {
   float32_t accStrength;
   float32_t magStrength;
 
-} __attribute__((aligned(4))) IMU_DataTypeDef;
+} __attribute__((aligned)) IMU_DataTypeDef;
 
 typedef struct {
   IMU_DataTypeDef *Data;
@@ -90,12 +88,11 @@ typedef struct {
 /* Exported constants ----------------------------------------------------------------------*/
 /* Exported functions ----------------------------------------------------------------------*/  
 void    IMU_Config( void );
-int8_t  IMU_Init( IMU_InitTypeDef *IMUx );
-
-int8_t  IMU_GetRawData( IMU_DataTypeDef *IMUx );
-void    IMU_GetCalibData( IMU_DataTypeDef *IMUx );
-void    IMU_GetScaleData( IMU_DataTypeDef *IMUx );
-void    IMU_PrintData( IMU_DataTypeDef *IMUx );
+int8_t  IMU_Init( IMU_InitTypeDef *imux );
+int8_t  IMU_GetRawData( IMU_DataTypeDef *imux );
+void    IMU_GetCalibData( IMU_DataTypeDef *imux );
+void    IMU_GetRealData( IMU_DataTypeDef *imux );
+void    IMU_PrintData( IMU_DataTypeDef *imux );
 
 #ifdef __cplusplus
 }
