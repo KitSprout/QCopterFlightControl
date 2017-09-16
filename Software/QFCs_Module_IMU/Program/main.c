@@ -31,6 +31,7 @@
 /* Private macro ---------------------------------------------------------------------------*/
 /* Private variables -----------------------------------------------------------------------*/
 extern IMU_DataTypeDef imu;
+float32_t FIFO_P[16] = {0};
 
 /* Private function prototypes -------------------------------------------------------------*/
 /* Private functions -----------------------------------------------------------------------*/
@@ -44,7 +45,7 @@ int main( void )
 
   while (1) {
 
-#if 1
+#if 0
     LED_B_Toggle();
     delay_ms(100);
     IMU_GetRealData(&imu);
@@ -55,14 +56,30 @@ int main( void )
     );
 #endif
 
-#if 0
+#if 1
     LED_B_Toggle();
     delay_ms(100);
     IMU_GetRealData(&imu);
-    printf("GX:%8.2f\tGY:%8.2f\tG8:%5.2f\tAX:%7.4f\tAY:%7.4f\tAZ:%7.4f\tMX:%6.1f\tMY:%6.1f\tMZ:%6.1f\r\n",
+
+    float32_t tmp = 0;
+    float32_t pressure, temperature, altitude;
+    for (uint8_t i = 0; i < 15; i++) {
+      FIFO_P[i] = FIFO_P[i + 1];
+    }
+    FIFO_P[15] = imu.baroData[0];
+
+    for (uint8_t i = 0; i < 16; i++) {
+      tmp += FIFO_P[i];
+    }
+    pressure    = tmp / 16.0f;
+    temperature = imu.baroData[1];
+    altitude    = (powf(1015.7f / pressure, 0.1902630958f) - 1.0f) * 45869.2308f;
+
+    printf("[GYR]%8.2f, %8.2f, %8.2f [ACC]%7.4f, %7.4f, %7.4f [MAG]%6.1f, %6.1f, %6.1f [BAR] %8.2f, %7.2f, %8.2f\r\n",
       imu.gyrData[0], imu.gyrData[1], imu.gyrData[2],
       imu.accData[0], imu.accData[1], imu.accData[2],
-      imu.magData[0], imu.magData[1], imu.magData[2]
+      imu.magData[0], imu.magData[1], imu.magData[2],
+      pressure, temperature, altitude
     );
 #endif
 

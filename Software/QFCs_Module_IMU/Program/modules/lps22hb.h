@@ -1,17 +1,17 @@
 /**
-  *      __            ____
-  *     / /__ _  __   / __/                      __  
-  *    / //_/(_)/ /_ / /  ___   ____ ___  __ __ / /_ 
-  *   / ,<  / // __/_\ \ / _ \ / __// _ \/ // // __/ 
-  *  /_/|_|/_/ \__//___// .__//_/   \___/\_,_/ \__/  
-  *                    /_/   github.com/KitSprout    
-  * 
-  * @file    lps22hb.h
-  * @author  KitSprout
-  * @date    12-Nov-2016
-  * @brief   
-  * 
-  */
+ *       __            ____
+ *      / /__ _  __   / __/                      __  
+ *     / //_/(_)/ /_ / /  ___   ____ ___  __ __ / /_ 
+ *    / ,<  / // __/_\ \ / _ \ / __// _ \/ // // __/ 
+ *   /_/|_|/_/ \__//___// .__//_/   \___/\_,_/ \__/  
+ *                     /_/   github.com/KitSprout    
+ * 
+ *  @file    lps22hb.h
+ *  @author  KitSprout
+ *  @date    14-Sep-2017
+ *  @brief   
+ * 
+ */
 
 /* Define to prevent recursive inclusion ---------------------------------------------------*/
 #ifndef __LPS22HB_H
@@ -91,10 +91,10 @@ typedef struct {
 
 /* Exported constants ----------------------------------------------------------------------*/
 
-/* ---- LPS25H Reg  --------------------------------------------------------- */
+/* ---- LPS22H Reg  --------------------------------------------------------- */
 
 #define LPS22HB_I2C_ADDR      ((uint8_t)0xB8)   // 1011_10xb
-#define LPS22HB_DeviceID      ((uint8_t)0xB1)
+#define LPS22HB_DEVICE_ID     ((uint8_t)0xB1)
 
 #define LPS22HB_INTERRUPT_CFG ((uint8_t)0x0B)
 #define LPS22HB_THS_P_L       ((uint8_t)0x0C)

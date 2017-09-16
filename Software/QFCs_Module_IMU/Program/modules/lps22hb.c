@@ -1,17 +1,17 @@
 /**
-  *      __            ____
-  *     / /__ _  __   / __/                      __  
-  *    / //_/(_)/ /_ / /  ___   ____ ___  __ __ / /_ 
-  *   / ,<  / // __/_\ \ / _ \ / __// _ \/ // // __/ 
-  *  /_/|_|/_/ \__//___// .__//_/   \___/\_,_/ \__/  
-  *                    /_/   github.com/KitSprout    
-  * 
-  * @file    lps22hb.c
-  * @author  KitSprout
-  * @date    19-Mar-2017
-  * @brief   
-  * 
-  */
+ *       __            ____
+ *      / /__ _  __   / __/                      __  
+ *     / //_/(_)/ /_ / /  ___   ____ ___  __ __ / /_ 
+ *    / ,<  / // __/_\ \ / _ \ / __// _ \/ // // __/ 
+ *   /_/|_|/_/ \__//___// .__//_/   \___/\_,_/ \__/  
+ *                     /_/   github.com/KitSprout    
+ * 
+ *  @file    lps22hb.c
+ *  @author  KitSprout
+ *  @date    14-Sep-2017
+ *  @brief   
+ * 
+ */
 
 /* Includes --------------------------------------------------------------------------------*/
 #include "drivers\stm32f4_system.h"
@@ -19,8 +19,8 @@
 #include "modules\lps22hb.h"
 
 /** @addtogroup STM32_Module
-  * @{
-  */
+ *  @{
+ */
 
 /* Private typedef -------------------------------------------------------------------------*/
 /* Private define --------------------------------------------------------------------------*/
@@ -30,8 +30,8 @@
 /* Private functions -----------------------------------------------------------------------*/
 
 /**
-  * @brief  LPS22_WriteReg
-  */
+ *  @brief  LPS22_WriteReg
+ */
 void LPS22_WriteReg( uint8_t writeAddr, uint8_t writeData )
 {
   IMU_CSB_L();
@@ -41,8 +41,8 @@ void LPS22_WriteReg( uint8_t writeAddr, uint8_t writeData )
 }
 
 /**
-  * @brief  LPS22_WriteRegs
-  */
+ *  @brief  LPS22_WriteRegs
+ */
 void LPS22_WriteRegs( uint8_t writeAddr, uint8_t *writeData, uint8_t lens )
 {
   IMU_CSB_L();
@@ -54,8 +54,8 @@ void LPS22_WriteRegs( uint8_t writeAddr, uint8_t *writeData, uint8_t lens )
 }
 
 /**
-  * @brief  LPS22_ReadReg
-  */
+ *  @brief  LPS22_ReadReg
+ */
 uint8_t LPS22_ReadReg( uint8_t readAddr )
 {
   uint8_t readData;
@@ -69,8 +69,8 @@ uint8_t LPS22_ReadReg( uint8_t readAddr )
 }
 
 /**
-  * @brief  LPS22_ReadRegs
-  */
+ *  @brief  LPS22_ReadRegs
+ */
 void LPS22_ReadRegs( uint8_t readAddr, uint8_t *readData, uint8_t lens )
 {
   IMU_CSB_L();
@@ -82,8 +82,8 @@ void LPS22_ReadRegs( uint8_t readAddr, uint8_t *readData, uint8_t lens )
 }
 
 /**
-  * @brief  LPS22_Config
-  */
+ *  @brief  LPS22_Config
+ */
 void LPS22_Config( void )
 {
   GPIO_InitTypeDef GPIO_InitStruct;
@@ -100,44 +100,71 @@ void LPS22_Config( void )
 }
 
 /**
-  * @brief  LPS22_Init
-  */
+ *  @brief  LPS22_Init
+ */
+//#define LPS22HB_InitRegNum    5
 int8_t LPS22_Init( LPS_ConfigTypeDef *LPSx )
 {
   uint8_t status = ERROR;
+  uint8_t treg = 0;
+//  uint8_t LPS22HB_InitData[LPS22HB_InitRegNum][2] = {
+//    {0x00, LPS22HB_RES_CONF},       /* [0]  Normal mode (low-noise mode)  */
+//  };
 
   delay_ms(2);
   status = LPS22_DeviceCheck();
-  if (status != SUCCESS)
+  if (status != SUCCESS) {
     return ERROR;
+  }
 
-  delay_ms(10);
+  /* Normal mode (low-noise mode) */
+  treg = LPS22_ReadReg(LPS22HB_RES_CONF);
+  treg &= 0x02;
+  treg |= 0x00;
+  LPS22_WriteReg(LPS22HB_RES_CONF, treg);
+  delay_ms(5);
+
+  /* Control register 1 */
+  treg  = 0x00;
+  treg |= 0x50; // Output data rate, 75 Hz
+  treg |= 0x00; // Low-pass filter disabled
+  treg |= 0x02; // Block data update, enable
+  LPS22_WriteReg(LPS22HB_CTRL_REG1, treg);
+  delay_ms(5);
+
+  /* Control register 2 */
+  treg = LPS22_ReadReg(LPS22HB_CTRL_REG2);
+  treg &= 0xED;
+  treg |= 0x10;
+  LPS22_WriteReg(LPS22HB_RES_CONF, treg);
+  delay_ms(5);
 
   return SUCCESS;
 }
 
 /**
-  * @brief  LPS22_DeviceCheck
-  */
+ *  @brief  LPS22_DeviceCheck
+ */
 int8_t LPS22_DeviceCheck( void )
 {
   uint8_t deviceID;
 
   deviceID = LPS22_ReadReg(LPS22HB_WHO_AM_I);
-  if (deviceID != LPS22HB_DeviceID) {
+  if (deviceID != LPS22HB_DEVICE_ID) {
     return ERROR;
   }
+//  printf("device id = 0x%02X\r\n", deviceID);
 
   return SUCCESS;
 }
 
 /**
-  * @brief  LPS22_GetSensitivity
-  * @param  sensitivity: point to float32_t
+ *  @brief  LPS22_GetSensitivity
+ *  @param  sensitivity: point to float32_t
             sensitivity[0] - pressure
             sensitivity[1] - temperature
-  * @retval None
-  */
+ *  @retval None
+ */
 void LPS22_GetSensitivity( float32_t *sensitivity )
 {
   /* Set pressure sensitivity (hPa/LSB) */
@@ -148,14 +175,32 @@ void LPS22_GetSensitivity( float32_t *sensitivity )
 }
 
 /**
-  * @brief  LPS22_GetRawData
-  * @param  data: point to int32_t
-  * @retval state
-  */
+ *  @brief  LPS22_GetRawData
+ *  @param  data: point to int32_t
+ *  @retval state
+ */
 int8_t LPS22_GetRawData( int32_t *data )
 {
-  data[0] = 0;
-  data[1] = 0;
+  uint8_t buffer[3];
+  uint32_t tmp = 0;
+
+  LPS22_ReadRegs(LPS22HB_PRESS_OUT_XL, buffer, 3);
+
+  for(uint32_t i = 0; i < 3; i++) {
+    tmp |= (((uint32_t)buffer[i]) << (i << 3));
+  }
+
+  /* convert the 2's complement 24 bit to 2's complement 32 bit */
+  if (tmp & 0x00800000) {
+    tmp |= 0xFF000000;
+  }
+
+  data[0] = (int32_t)tmp;
+
+  LPS22_ReadRegs(LPS22HB_TEMP_OUT_L, buffer, 2);
+  tmp = ((uint16_t)buffer[1] << 8) + (uint16_t)buffer[0];
+
+  data[1] = (int16_t)tmp;
 
   return SUCCESS;
 }
